@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import {
-  Baseline,
   Eraser,
   MousePointer2,
   Pen,
@@ -23,7 +22,7 @@ interface ToolbarProps {
 const tools: { id: ToolType; label: string; icon: typeof Pen; shortcut: string }[] = [
   { id: "write", label: "Scrivi", icon: Pen, shortcut: "W" },
   { id: "erase", label: "Cancella", icon: Eraser, shortcut: "E" },
-  { id: "select", label: "Seleziona e correggi", icon: MousePointer2, shortcut: "S" },
+  { id: "select", label: "Seleziona", icon: MousePointer2, shortcut: "S" },
 ];
 
 export function Toolbar({
@@ -36,7 +35,7 @@ export function Toolbar({
   isRecognizing,
 }: ToolbarProps) {
   return (
-    <div className="flex items-center gap-1 p-1.5 bg-card/80 backdrop-blur-sm rounded-xl border border-border shadow-lg">
+    <div className="flex items-center gap-1 p-1 sm:p-1.5 bg-card/80 backdrop-blur-sm rounded-xl border border-border shadow-lg shadow-black/10">
       {/* Drawing tools */}
       {tools.map((tool) => {
         const Icon = tool.icon;
@@ -47,37 +46,37 @@ export function Toolbar({
             onClick={() => onToolChange(tool.id)}
             disabled={isRecognizing}
             className={cn(
-              "relative flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+              "relative flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200",
               "disabled:opacity-40 disabled:cursor-not-allowed",
               isActive
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/80",
+                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 scale-[1.02]"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary/80 active:scale-95",
             )}
             title={`${tool.label} (${tool.shortcut})`}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">{tool.label}</span>
           </button>
         );
       })}
 
       {/* Separator */}
-      <div className="w-px h-6 bg-border mx-1" />
+      <div className="w-px h-5 sm:h-6 bg-border mx-0.5 sm:mx-1" />
 
       {/* Undo */}
       <button
         onClick={onUndo}
         disabled={!canUndo || isRecognizing}
         className={cn(
-          "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+          "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200",
           "disabled:opacity-40 disabled:cursor-not-allowed",
           canUndo && !isRecognizing
-            ? "text-muted-foreground hover:text-foreground hover:bg-secondary/80"
+            ? "text-muted-foreground hover:text-foreground hover:bg-secondary/80 active:scale-95"
             : "text-muted-foreground/40",
         )}
         title="Annulla ultimo tratto (Ctrl+Z)"
       >
-        <RotateCcw className="w-4 h-4" />
+        <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         <span className="hidden sm:inline">Annulla</span>
       </button>
 
@@ -86,15 +85,15 @@ export function Toolbar({
         onClick={onClear}
         disabled={!canClear || isRecognizing}
         className={cn(
-          "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+          "flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200",
           "disabled:opacity-40 disabled:cursor-not-allowed",
           canClear && !isRecognizing
-            ? "text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+            ? "text-muted-foreground hover:text-destructive hover:bg-destructive/10 active:scale-95"
             : "text-muted-foreground/40",
         )}
         title="Elimina tutto"
       >
-        <Trash2 className="w-4 h-4" />
+        <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         <span className="hidden sm:inline">Elimina</span>
       </button>
     </div>

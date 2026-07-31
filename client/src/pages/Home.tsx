@@ -173,9 +173,9 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-4 max-w-5xl mx-auto w-full p-4">
+      <main className="flex-1 flex flex-col lg:flex-row gap-4 max-w-5xl mx-auto w-full p-3 sm:p-4">
         {/* Left panel: canvas area */}
-        <div className="flex-1 flex flex-col gap-3 min-w-0">
+        <div className="flex-1 flex flex-col gap-2 sm:gap-3 min-w-0">
           {/* Toolbar */}
           <Toolbar
             activeTool={activeTool}
@@ -217,7 +217,7 @@ export default function Home() {
           )}
 
           {/* Status info */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground flex-wrap">
             {isLoading && (
               <div className="flex items-center gap-1.5">
                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -246,11 +246,12 @@ export default function Home() {
         </div>
 
         {/* Right panel: preview */}
-        <div className="lg:w-96 flex-shrink-0">
-          <div className="sticky top-20">
+        <div className="lg:w-96 flex-shrink-0 mt-4 lg:mt-0">
+          <div className="lg:sticky lg:top-20">
             <PreviewPanel
               latex={recognizedLatex}
               isRecognizing={isRecognizing}
+              onLatexChange={(newLatex) => setRecognizedLatex(newLatex)}
             />
           </div>
         </div>
@@ -258,11 +259,14 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border py-3 mt-auto">
-        <div className="max-w-5xl mx-auto px-4 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-1 text-xs text-muted-foreground text-center sm:text-left">
           <span>
             Basato su CoMER (ECCV 2022) — Riconoscimento 100% nel browser
           </span>
-          <span>Nessun dato inviato a server esterni</span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70"></span>
+            Nessun dato inviato a server esterni
+          </span>
         </div>
       </footer>
     </div>
