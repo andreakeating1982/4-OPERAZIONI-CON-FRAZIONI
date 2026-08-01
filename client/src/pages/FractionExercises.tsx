@@ -414,7 +414,7 @@ export default function FractionExercises() {
          allowNegative
         />
         {/* Linea di frazione */}
-        <div className="flex justify-center py-1">
+        <div className="flex justify-start py-1">
          <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
@@ -447,7 +447,7 @@ export default function FractionExercises() {
          allowNegative
         />
         {/* Linea di frazione */}
-        <div className="flex justify-center py-1">
+        <div className="flex justify-start py-1">
          <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
@@ -1038,7 +1038,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-center py-1">
+       <div className="flex justify-start py-1">
         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
@@ -1082,7 +1082,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-center py-1">
+       <div className="flex justify-start py-1">
         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
