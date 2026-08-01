@@ -1013,7 +1013,7 @@ function MulDivExercise({
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 1:</span> divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span>
        {""}{computed.divCom1
         ? <>per <span className="font-bold">{computed.divCom1}</span></>
-        : <>. Ma non c'è nessun divisore in comune tra {num1} e {computed.actualDen2}. Riscrivo gli stessi numeri</>
+        : <>DOVREI DIVIDERE NUMERATORE ({num1}) E DENOMINATORE ({computed.actualDen2}). MA NON C'È NESSUN DIVISORE COMUNE TRA {num1} E {computed.actualDen2}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
       <div className="flex flex-col gap-3">
@@ -1031,6 +1031,10 @@ function MulDivExercise({
          {num1Semplificato === (computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
+       {/* Linea di frazione */}
+       <div className="flex justify-start py-1">
+        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       </div>
        <NumberInputCanvas
         value={den2Semplificato}
         onChange={setDen2Semplificato}
@@ -1053,7 +1057,7 @@ function MulDivExercise({
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 2:</span> divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span>
        {""}{computed.divCom2
         ? <>per <span className="font-bold">{computed.divCom2}</span></>
-        : <>. Ma non c'è nessun divisore in comune tra {nd1} e {computed.actualNum2}. Riscrivo gli stessi numeri</>
+        : <>DOVREI DIVIDERE DENOMINATORE ({nd1}) E NUMERATORE ({computed.actualNum2}). MA NON C'È NESSUN DIVISORE COMUNE TRA {nd1} E {computed.actualNum2}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
       <div className="flex flex-col gap-3">
@@ -1071,6 +1075,10 @@ function MulDivExercise({
          {(den1Semplificato ?? 1) === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
+       {/* Linea di frazione */}
+       <div className="flex justify-start py-1">
+        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       </div>
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
