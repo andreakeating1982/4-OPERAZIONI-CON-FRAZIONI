@@ -594,7 +594,7 @@ function NotebookGuide({
    </button>
    {open && (
     <div className="px-4 pb-4 pt-1">
-     <div className="notebook-content rounded-lg bg-card border border-border p-3.5 space-y-2 text-sm leading-loose text-foreground text-center">
+     <div className="notebook-content rounded-lg bg-card border border-border p-3.5 space-y-2 text-base leading-loose text-foreground text-center">
       {/* Notebook lines */}
       <div
        className="relative"
@@ -664,15 +664,15 @@ function AddSubExercise({
     {/* Notebook Guide: Step 1 */}
     <div className="space-y-1.5 text-base">
      <p className="font-semibold">1.1 Scomposizione in fattori primi dei denominatori:</p>
-     <p className="font-mono text-xs opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
-     <p className="font-mono text-xs opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
+     <p className="font-mono text-base opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
+     <p className="font-mono text-base opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
      <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
      {nd1 === nd2 ? (
-      <p className="font-mono text-xs opacity-80">
+      <p className="font-mono text-base opacity-80">
        Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè...
       </p>
      ) : (
-      <p className="font-mono text-xs opacity-80">
+      <p className="font-mono text-base opacity-80">
        Il m.c.m. tra {nd1} e {nd2} è {computed.mcmFormula}, cioè...
       </p>
      )}
@@ -703,26 +703,26 @@ function AddSubExercise({
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto}>
      <div className="flex justify-center my-2">
-      <div className="flex items-center gap-3 text-sm font-mono bg-muted px-3.5 py-2 rounded-lg">
+      <div className="flex items-center gap-3 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
        <FractionDisplay numerator={num1} denominator={den1} size="xs"/>
-       <span className="text-sm font-bold">{op}</span>
+       <span className="text-base font-bold">{op}</span>
        <FractionDisplay numerator={num2} denominator={den2} size="xs"/>
       </div>
      </div>
      {nd1 !== nd2 && (
      <>
-     <p className="font-mono text-sm text-center text-primary mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base text-center text-primary mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
+     <p className="font-mono text-base">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
       {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}
      </p>
-     <p className="font-mono text-sm text-primary mt-2">
+     <p className="font-mono text-base text-primary mt-2">
       m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
      </p>
      </>
      )}
      <div className="flex justify-center my-2">
-      <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
        ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
        <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
@@ -776,14 +776,14 @@ function AddSubExercise({
      )}
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto}>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base">
       ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
      </p>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base">
       ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
      </p>
      <div className="flex justify-center my-2">
-      <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
        <span className="font-bold">{computed.val1Corretto}</span> {op} (<span className="font-bold">{computed.val2Corretto}</span>)<br />
        <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
@@ -873,11 +873,11 @@ function AddSubExercise({
      </div>
     )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base">
       {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleRaw}
      </p>
      <div className="flex justify-center my-2">
-      <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
        {computed.denFinaleRaw === 1 ? (
         <span className="font-bold">{computed.numFinaleRaw}</span>
        ) : (
@@ -889,7 +889,7 @@ function AddSubExercise({
       </div>
      </div>
      {(computed.numFinaleRaw !== computed.numFinaleCorretto || computed.denFinaleRaw !== computed.denFinaleCorretto) && (
-      <p className="font-mono text-sm text-center">
+      <p className="font-mono text-base text-center">
        {computed.numFinaleRaw}/{computed.denFinaleRaw} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
       </p>
      )}
@@ -986,21 +986,21 @@ function MulDivExercise({
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct}>
      {op ==="/"&& (
       <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-sm font-mono bg-muted px-3.5 py-2 rounded-lg">
+       <div className="flex items-center gap-2 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-        <span className="text-sm">÷</span>
+        <span className="text-base">÷</span>
         <FractionDisplay numerator={num2} denominator={nd2} size="xs"/>
-        <span className="text-sm">→</span>
+        <span className="text-base">→</span>
         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-        <span className="text-sm">×</span>
+        <span className="text-base">×</span>
         <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="xs"/>
        </div>
       </div>
      )}
      <div className="flex justify-center my-2">
-      <div className="flex items-center gap-2 text-sm bg-muted px-3.5 py-2 rounded-lg">
+      <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
        <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400"denClass="text-sky-400"size="xs"/>
-       <span className="text-sm font-bold">×</span>
+       <span className="text-base font-bold">×</span>
        <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400"denClass="text-blue-400"size="xs"/>
       </div>
      </div>
@@ -1105,40 +1105,40 @@ function MulDivExercise({
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
      {(!computed.divCom1 && !computed.divCom2) ? (
-      <p className="text-sm text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
+      <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
       {op === "/"&& (
        <div className="flex justify-center my-2">
-        <div className="flex items-center gap-2 text-sm bg-muted px-3.5 py-2 rounded-lg">
+        <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
          <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-         <span className="text-sm">÷</span>
+         <span className="text-base">÷</span>
          <FractionDisplay numerator={num2} denominator={nd2} size="xs"/>
-         <span className="text-sm">→</span>
+         <span className="text-base">→</span>
          <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-         <span className="text-sm">×</span>
+         <span className="text-base">×</span>
          <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="xs"/>
         </div>
        </div>
       )}
       <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-sm bg-muted px-3.5 py-2 rounded-lg">
+       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
         <div className="flex flex-col items-center">
-         <span className="text-orange-400 font-bold font-serif text-sm">{dNum1S}</span>
+         <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
          {(dDen1S !== 1 && dDen1S !=="1") && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-sky-400 font-bold font-serif text-sm">{dDen1S}</span>
+          <span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span>
          </>
          )}
         </div>
-        <span className="text-sm font-bold">×</span>
+        <span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
-         <span className="text-red-400 font-bold font-serif text-sm">{dNum2S}</span>
+         <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
          {(dDen2S !== 1 && dDen2S !=="1") && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-blue-400 font-bold font-serif text-sm">{dDen2S}</span>
+          <span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span>
          </>
          )}
         </div>
@@ -1264,20 +1264,20 @@ function MulDivExercise({
      </div>
     )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base">
       {num1Semplificato !== null && num2Semplificato !== null
        ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
        : <span className="italic">... × ... = ?</span>
       }
      </p>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-base">
       {den1Semplificato !== null && den2Semplificato !== null
        ? <span className="font-bold text-primary">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
        : <span className="italic">... × ... = ?</span>
       }
      </p>
      <div className="flex justify-center my-2">
-      <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
        {((den1Semplificato ?? 1) * (den2Semplificato ?? 1)) === 1 ? (
         <span className="font-bold">{(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}</span>
        ) : (
@@ -1289,7 +1289,7 @@ function MulDivExercise({
       </div>
      </div>
      {((num1Semplificato ?? 1) * (num2Semplificato ?? 1) !== computed.numFinaleCorretto || (den1Semplificato ?? 1) * (den2Semplificato ?? 1) !== computed.denFinaleCorretto) && (
-      <p className="font-mono text-sm text-center">
+      <p className="font-mono text-base text-center">
        {(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}/{(den1Semplificato ?? 1) * (den2Semplificato ?? 1)} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
       </p>
      )}

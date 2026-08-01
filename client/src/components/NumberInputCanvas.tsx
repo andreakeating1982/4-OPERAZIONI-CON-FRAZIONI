@@ -118,7 +118,7 @@ export function NumberInputCanvas({
       <div className="flex flex-col items-center gap-1.5 flex-1">
         {/* Label sopra il pulsante */}
         <span className={cn(
-          "text-sm font-bold tracking-widest",
+          "text-base font-bold tracking-widest",
           colorClass,
         )}>
           {label}
@@ -128,7 +128,7 @@ export function NumberInputCanvas({
         <button
           onClick={handleManualRecognize}
           disabled={!hasContent || !isModelReady || isRecognizing}
-          className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-sm font-bold tracking-widest transition-all shadow-sm"
+          className="h-10 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-base font-bold tracking-widest transition-all shadow-sm"
         >
           {isRecognizing ? "..." : "RICONOSCI"}
         </button>
@@ -143,7 +143,7 @@ export function NumberInputCanvas({
           {hasContent && (
             <button
               onClick={handleClear}
-              className="text-sm text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
+              className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
             >
               CANCELLA
             </button>
@@ -152,7 +152,7 @@ export function NumberInputCanvas({
 
         {/* Caricamento AI */}
         {isLoading && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-base text-muted-foreground">
             CARICAMENTO...
           </span>
         )}
