@@ -1018,7 +1018,7 @@ function MulDivExercise({
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 1:</span>{" "}
        {computed.divCom1
-        ? <>divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span> per <span className="font-bold">{computed.divCom1}</span></>
+        ? <>divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span> per <span className="font-bold">{computed.divCom1}</span>, cioè <span className="text-orange-400 font-bold">{num1} : {computed.divCom1}</span> e <span className="text-blue-400 font-bold">{computed.actualDen2} : {computed.divCom1}</span></>
         : <>DOVREI DIVIDERE NUMERATORE ({num1}) E DENOMINATORE ({computed.actualDen2}). MA NON C'È NESSUN DIVISORE COMUNE TRA {num1} E {computed.actualDen2}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
@@ -1062,7 +1062,7 @@ function MulDivExercise({
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 2:</span>{" "}
        {computed.divCom2
-        ? <>divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span> per <span className="font-bold">{computed.divCom2}</span></>
+        ? <>divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span> per <span className="font-bold">{computed.divCom2}</span>, cioè <span className="text-sky-400 font-bold">{nd1} : {computed.divCom2}</span> e <span className="text-red-400 font-bold">{computed.actualNum2} : {computed.divCom2}</span></>
         : <>DOVREI DIVIDERE DENOMINATORE ({nd1}) E NUMERATORE ({computed.actualNum2}). MA NON C'È NESSUN DIVISORE COMUNE TRA {nd1} E {computed.actualNum2}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
