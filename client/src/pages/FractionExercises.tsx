@@ -2,18 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { NumberInputCanvas } from "@/components/NumberInputCanvas";
 import { FractionDisplay } from "@/components/FractionDisplay";
 import { cn } from "@/lib/utils";
-import {
-  Calculator,
-  CheckCircle2,
-  XCircle,
-  ArrowRight,
-  Divide,
-  Plus,
-  Minus,
-  BookOpen,
-  ChevronDown,
-  NotebookPen,
-} from "lucide-react";
+// No icon imports — testo semplice come da foto
 
 // ─── Math utilities ───────────────────────────────────────────────
 function gcd(a: number, b: number): number {
@@ -324,16 +313,8 @@ export default function FractionExercises() {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="/pannello" className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center hover:bg-primary/25 transition-colors" title="Math Input Panel">
-              <span className="text-primary text-sm font-bold">√</span>
-            </a>
-            <div>
-              <h1 className="text-base font-semibold text-foreground">Esercizi con le Frazioni</h1>
-              <p className="text-xs text-muted-foreground">Scrivi i numeri a mano — riconoscimento AI</p>
-            </div>
-          </div>
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-center">
+          <h1 className="text-lg font-bold text-foreground tracking-widest uppercase">OPERAZIONI CON LE FRAZIONI</h1>
         </div>
       </header>
 
@@ -343,49 +324,45 @@ export default function FractionExercises() {
           <button
             onClick={() => { setMode("addsub"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200",
               mode === "addsub"
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+                ? "bg-[#b05f3c] text-white shadow-md"
+                : "text-[#55483d] hover:text-[#221b16] hover:bg-[#f3eee4]",
             )}
           >
-            <Plus className="w-4 h-4" />
-            <Minus className="w-4 h-4 -ml-1" />
-            <span>Addizione / Sottrazione</span>
+            + / − &nbsp;Addizione / Sottrazione
           </button>
           <button
             onClick={() => { setMode("muldiv"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200",
               mode === "muldiv"
-                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+                ? "bg-[#b05f3c] text-white shadow-md"
+                : "text-[#55483d] hover:text-[#221b16] hover:bg-[#f3eee4]",
             )}
           >
-            <span className="text-base font-bold">×</span>
-            <Divide className="w-4 h-4" />
-            <span>Moltiplicazione / Divisione</span>
+            × / ÷ &nbsp;Moltiplicazione / Divisione
           </button>
         </div>
 
         {/* Input phase */}
         {phase === "input" && (
-          <div className="space-y-5">
+          <div className="space-y-6">
             {/* Suggerimento */}
-            <div className="px-4 py-2.5 rounded-xl bg-card/40 border border-border text-center">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
+            <div className="text-center">
+              <span className="text-xs text-[#55483d] uppercase tracking-widest font-semibold">
                 Scrivi il segno della frazione al numeratore
               </span>
             </div>
 
             {/* Operation selector */}
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-medium text-foreground whitespace-nowrap">Operazione:</label>
+            <div className="flex items-center justify-center gap-3">
+              <label className="text-sm font-semibold text-[#221b16] uppercase tracking-wider">Operazione:</label>
               {mode === "addsub" ? (
                 <select
                   value={addSubOp}
                   onChange={(e) => setAddSubOp(e.target.value as "+" | "-")}
-                  className="flex-1 px-3 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-mono cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="px-4 py-2 rounded-lg bg-white border-2 border-[#e2dac9] text-[#221b16] text-sm font-bold cursor-pointer focus:outline-none focus:border-[#b05f3c]"
                 >
                   <option value="+">Addizione (+)</option>
                   <option value="-">Sottrazione (−)</option>
@@ -394,7 +371,7 @@ export default function FractionExercises() {
                 <select
                   value={mulDivOp}
                   onChange={(e) => setMulDivOp(e.target.value as "*" | "/")}
-                  className="flex-1 px-3 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-mono cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="px-4 py-2 rounded-lg bg-white border-2 border-[#e2dac9] text-[#221b16] text-sm font-bold cursor-pointer focus:outline-none focus:border-[#b05f3c]"
                 >
                   <option value="*">Moltiplicazione (×)</option>
                   <option value="/">Divisione (÷)</option>
@@ -402,70 +379,61 @@ export default function FractionExercises() {
               )}
             </div>
 
-            {/* First fraction */}
-            <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-              <p className="text-sm font-semibold text-foreground">Prima frazione:</p>
-              <div className="flex flex-col gap-3">
+            {/* Prima frazione */}
+            <div className="rounded-2xl border-2 border-[#e2dac9] bg-white overflow-hidden">
+              <p className="text-center text-sm font-bold text-[#221b16] uppercase tracking-widest py-3 border-b border-[#e2dac9]">
+                Prima frazione
+              </p>
+              <div className="p-4 space-y-0">
                 <NumberInputCanvas
                   value={num1}
                   onChange={setNum1}
                   label="Numeratore"
-                  colorClass="text-orange-400"
                   allowNegative
                 />
-                <div className="flex justify-center">
-                  <div className="w-3/4 border-t border-border/60" />
+                {/* Linea di frazione */}
+                <div className="flex items-center justify-center py-1">
+                  <div className="w-full h-[2px] bg-[#221b16]" />
                 </div>
                 <NumberInputCanvas
                   value={den1}
                   onChange={setDen1}
                   label="Denominatore"
-                  colorClass="text-sky-400"
                 />
               </div>
-              {num1 !== null && den1 !== null && den1 > 0 && (
-                <div className="flex justify-center mt-2">
-                  <FractionDisplay numerator={num1} denominator={den1} numClass="text-orange-400" denClass="text-sky-400" size="lg" />
-                </div>
-              )}
             </div>
 
-            {/* Second fraction */}
-            <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-              <p className="text-sm font-semibold text-foreground">Seconda frazione:</p>
-              <div className="flex flex-col gap-3">
+            {/* Seconda frazione */}
+            <div className="rounded-2xl border-2 border-[#e2dac9] bg-white overflow-hidden">
+              <p className="text-center text-sm font-bold text-[#221b16] uppercase tracking-widest py-3 border-b border-[#e2dac9]">
+                Seconda frazione
+              </p>
+              <div className="p-4 space-y-0">
                 <NumberInputCanvas
                   value={num2}
                   onChange={setNum2}
                   label="Numeratore"
-                  colorClass="text-red-400"
                   allowNegative
                 />
-                <div className="flex justify-center">
-                  <div className="w-3/4 border-t border-border/60" />
+                {/* Linea di frazione */}
+                <div className="flex items-center justify-center py-1">
+                  <div className="w-full h-[2px] bg-[#221b16]" />
                 </div>
                 <NumberInputCanvas
                   value={den2}
                   onChange={setDen2}
                   label="Denominatore"
-                  colorClass="text-blue-400"
                 />
               </div>
-              {num2 !== null && den2 !== null && den2 > 0 && (
-                <div className="flex justify-center mt-2">
-                  <FractionDisplay numerator={num2} denominator={den2} numClass="text-red-400" denClass="text-blue-400" size="lg" />
-                </div>
-              )}
             </div>
 
             {/* Calculate button */}
             <button
               onClick={handleCalculate}
               disabled={!allFilled}
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed text-primary-foreground font-bold text-base transition-all duration-200 shadow-lg shadow-primary/20"
+              className="w-full py-3.5 rounded-xl bg-[#b05f3c] hover:bg-[#964f32] disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-base uppercase tracking-widest transition-all duration-200 shadow-md"
             >
-              <Calculator className="w-5 h-5" />
-              <span>CALCOLA</span>
+              CALCOLA
             </button>
           </div>
         )}
@@ -550,17 +518,13 @@ function NotebookGuide({
         className="w-full flex items-center justify-between px-4 py-3 hover:bg-amber-500/10 transition-colors text-left"
       >
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-            <NotebookPen className="w-4 h-4 text-amber-400" />
-          </div>
+          <span className="text-amber-400 text-base">📓</span>
           <span className="text-sm font-bold text-amber-300">{title}</span>
         </div>
-        <ChevronDown
-          className={cn(
-            "w-4 h-4 text-amber-400 transition-transform duration-300",
-            isOpen && "rotate-180",
-          )}
-        />
+        <span className={cn(
+          "text-amber-400 text-sm transition-transform duration-300",
+          isOpen && "rotate-180",
+        )}>{isOpen ? "▲" : "▼"}</span>
       </button>
       {isOpen && (
         <div className="px-4 pb-4 pt-1">
@@ -845,8 +809,8 @@ function AddSubExercise({
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto
-              ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              : <XCircle className="w-4 h-4 flex-shrink-0" />
+              ? <span className="text-[#2ecc71] text-base font-bold flex-shrink-0">✓</span>
+              : <span className="text-red-500 text-base font-bold flex-shrink-0">✗</span>
             }
             <span>{feedbackFinale.testo}</span>
           </div>
@@ -858,7 +822,7 @@ function AddSubExercise({
         onClick={onNew}
         className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-semibold transition-all duration-200"
       >
-        <ArrowRight className="w-4 h-4" />
+        <span className="text-base font-bold">→</span>
         <span>Nuovo esercizio</span>
       </button>
     </div>
@@ -1225,8 +1189,8 @@ function MulDivExercise({
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto
-              ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              : <XCircle className="w-4 h-4 flex-shrink-0" />
+              ? <span className="text-[#2ecc71] text-base font-bold flex-shrink-0">✓</span>
+              : <span className="text-red-500 text-base font-bold flex-shrink-0">✗</span>
             }
             <span>{feedbackFinale.testo}</span>
           </div>
@@ -1238,7 +1202,7 @@ function MulDivExercise({
         onClick={onNew}
         className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-semibold transition-all duration-200"
       >
-        <ArrowRight className="w-4 h-4" />
+        <span className="text-base font-bold">→</span>
         <span>Nuovo esercizio</span>
       </button>
     </div>

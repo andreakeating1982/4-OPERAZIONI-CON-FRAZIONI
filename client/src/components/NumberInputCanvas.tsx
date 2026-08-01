@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { MathDrawCanvas, type Stroke } from "@/components/MathDrawCanvas";
 import { useMathRecognition } from "@/hooks/useMathRecognition";
 import { cn } from "@/lib/utils";
-import { Eraser, Check, Loader2, Pencil, Search } from "lucide-react";
 
 interface NumberInputCanvasProps {
   value: number | null;
@@ -26,14 +25,11 @@ export function NumberInputCanvas({
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [isRecognizing, setIsRecognizing] = useState(false);
-  const [justRecognized, setJustRecognized] = useState(false);
   const { recognize, isModelReady, isLoading } = useMathRecognition();
 
   const handleStrokesChange = useCallback(
     (newStrokes: Stroke[]) => {
       setStrokes(newStrokes);
-      setJustRecognized(false);
-
       if (newStrokes.length === 0) {
         setRecognizedText("");
       }
@@ -41,7 +37,6 @@ export function NumberInputCanvas({
     [],
   );
 
-  // Manual recognition
   const handleManualRecognize = useCallback(async () => {
     if (strokes.length === 0 || !isModelReady) return;
     setIsRecognizing(true);
@@ -60,10 +55,7 @@ export function NumberInputCanvas({
       if (!isNaN(parsed)) {
         setRecognizedText(numStr);
         onChange(parsed);
-        setJustRecognized(true);
-        setTimeout(() => {
-          setStrokes([]);
-        }, 1500);
+        setTimeout(() => setStrokes([]), 1200);
       } else {
         setRecognizedText(numStr || "?");
       }
@@ -75,7 +67,6 @@ export function NumberInputCanvas({
     setStrokes([]);
     setRecognizedText("");
     onChange(null);
-    setJustRecognized(false);
   };
 
   const displayValue =
@@ -83,94 +74,69 @@ export function NumberInputCanvas({
       ? value.toString()
       : recognizedText || "";
 
+  const hasContent = strokes.length > 0;
+
   return (
-    <div className={cn("flex flex-col gap-1.5", className)}>
-      {/* Label */}
-      <div className="flex items-center justify-center">
-        <span className={cn("text-xs font-semibold uppercase tracking-wide", colorClass)}>
-          {label}
-        </span>
-        {hint && (
-          <span className="text-[10px] text-muted-foreground ml-2">{hint}</span>
-        )}
-      </div>
+    <div className={cn("flex flex-col gap-2", className)}>
+      {/* Etichetta */}
+      <span className={cn(
+        "text-xs font-semibold uppercase tracking-wider text-center",
+        colorClass,
+      )}>
+        {label}
+      </span>
 
-      {/* Canvas area */}
-      <div className="relative">
-        <MathDrawCanvas
-          strokes={strokes}
-          onStrokesChange={handleStrokesChange}
-          tool="write"
-          height={90}
-          className="rounded-lg border-2 border-border"
-          disabled={isLoading}
-          hideWatermark
-        />
-
-        {/* Overlay: recognized number */}
-        <div className="absolute top-0 right-0 flex items-center gap-1.5 p-2 z-10">
-          {isRecognizing && (
-            <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
-          )}
-          {!isRecognizing && displayValue && (
-            <div
-              className={cn(
-                "flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/15 border border-primary/30 backdrop-blur-sm transition-all duration-300",
-                justRecognized && "animate-pulse",
-              )}
-            >
-              <Check className="w-3 h-3 text-primary" />
-              <span className={cn("text-sm font-bold font-mono", colorClass)}>
-                {displayValue}
-              </span>
-            </div>
-          )}
+      {/* Card con canvas e pulsanti affiancati */}
+      <div className="flex gap-3 items-stretch">
+        {/* Canvas quadrato piccolo */}
+        <div className="flex-shrink-0 w-[120px] h-[100px] rounded-lg border-2 border-[#e2dac9] bg-white shadow-sm overflow-hidden">
+          <MathDrawCanvas
+            strokes={strokes}
+            onStrokesChange={handleStrokesChange}
+            tool="write"
+            height={100}
+            className="border-0 rounded-none shadow-none ring-0"
+            disabled={isLoading || isRecognizing}
+            hideWatermark
+          />
         </div>
 
-        {/* Empty state watermark */}
-        {strokes.length === 0 && !value && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-            <div className="text-center opacity-25">
-              <Pencil className="w-4 h-4 mx-auto mb-1 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Scrivi il numero</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Action buttons */}
-      <div className="flex items-center justify-center gap-2">
-        {/* Manual recognize button */}
-        <button
-          onClick={handleManualRecognize}
-          disabled={strokes.length === 0 || !isModelReady || isRecognizing}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-sm font-semibold transition-all duration-200 shadow-md shadow-primary/20"
-        >
-          {isRecognizing ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-          ) : (
-            <Search className="w-3.5 h-3.5" />
-          )}
-          <span>Riconosci</span>
-        </button>
-
-        {/* Clear button */}
-        {strokes.length > 0 && (
+        {/* Pulsanti a destra */}
+        <div className="flex flex-col justify-center gap-1.5">
           <button
-            onClick={handleClear}
-            className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-200 border border-border"
+            onClick={handleManualRecognize}
+            disabled={!hasContent || !isModelReady || isRecognizing}
+            className="px-3 py-1.5 rounded-md bg-[#b05f3c] hover:bg-[#964f32] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold uppercase tracking-wider transition-colors min-w-[90px]"
           >
-            <Eraser className="w-3 h-3" />
-            <span>Cancella</span>
+            {isRecognizing ? "..." : "RICONOSCI"}
           </button>
-        )}
+          {hasContent && (
+            <button
+              onClick={handleClear}
+              className="px-3 py-1 rounded-md text-xs text-[#55483d] hover:text-red-600 hover:bg-red-50 transition-colors uppercase tracking-wider"
+            >
+              Cancella
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Model loading indicator */}
+      {/* Valore riconosciuto */}
+      {displayValue && (
+        <div className="text-center">
+          <span className={cn(
+            "inline-block px-2.5 py-0.5 rounded-md bg-[#f3eee4] text-sm font-bold font-mono",
+            colorClass,
+          )}>
+            {displayValue}
+          </span>
+        </div>
+      )}
+
+      {/* Caricamento modello AI */}
       {isLoading && (
-        <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
-          <Loader2 className="w-2.5 h-2.5 animate-spin" />
-          <span>Caricamento AI...</span>
+        <div className="text-center text-[10px] text-[#55483d]">
+          Caricamento AI in corso...
         </div>
       )}
     </div>

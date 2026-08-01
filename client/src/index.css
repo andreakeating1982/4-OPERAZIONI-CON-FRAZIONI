@@ -146,8 +146,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased text-center;
+    line-height: 2;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tutti gli elementi testuali ereditano line-height: 2 */
+  p, span, label, button, a, h1, h2, h3, h4, h5, h6, li, td, th, div {
+    line-height: 2;
   }
 
   /* Centrare tutti i pulsanti */
