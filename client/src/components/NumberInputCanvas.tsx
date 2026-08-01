@@ -88,13 +88,13 @@ export function NumberInputCanvas({
 
       {/* Card con canvas e pulsanti affiancati */}
       <div className="flex gap-3 items-stretch">
-        {/* Canvas quadrato piccolo */}
-        <div className="flex-shrink-0 w-[120px] h-[100px] rounded-lg border-2 border-[#e2dac9] bg-white shadow-sm overflow-hidden">
+        {/* Canvas quadrato */}
+        <div className="flex-shrink-0 w-[140px] h-[110px] rounded-lg border-2 border-[#e2dac9] bg-white shadow-sm overflow-hidden">
           <MathDrawCanvas
             strokes={strokes}
             onStrokesChange={handleStrokesChange}
             tool="write"
-            height={100}
+            height={110}
             className="border-0 rounded-none shadow-none ring-0"
             disabled={isLoading || isRecognizing}
             hideWatermark
@@ -102,7 +102,7 @@ export function NumberInputCanvas({
         </div>
 
         {/* Pulsanti a destra */}
-        <div className="flex flex-col justify-center gap-1.5">
+        <div className="flex flex-col justify-center gap-2">
           <button
             onClick={handleManualRecognize}
             disabled={!hasContent || !isModelReady || isRecognizing}

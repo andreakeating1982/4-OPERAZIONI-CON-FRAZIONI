@@ -151,37 +151,24 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Tutti gli elementi testuali ereditano line-height: 2 */
-  p, span, label, button, a, h1, h2, h3, h4, h5, h6, li, td, th, div {
+  /* Interlinea 2 per elementi testuali */
+  p, span, label, button, a, h1, h2, h3, h4, h5, h6, li, td, th {
     line-height: 2;
   }
 
-  /* Centrare tutti i pulsanti */
-  button,
-  [role="button"],
-  a[href] {
-    @apply justify-center;
-  }
-
-  /* Centrare i titoli e testi */
-  h1, h2, h3, h4, h5, h6, p, span, label, div {
+  /* Centrare solo titoli e testi principali */
+  h1, h2, h3 {
     text-align: center;
   }
 
-  /* Forzare centratura flex container */
-  .flex:not([class*="justify-"]) {
+  /* Pulsanti centrati nel loro contenitore */
+  button {
     justify-content: center;
   }
 
   /* Reset per elementi che non devono essere centrati */
   input, textarea, select {
     text-align: left;
-  }
-
-  /* Header - mantenere spazio tra elementi */
-  header .flex,
-  nav .flex {
-    justify-content: space-between;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
