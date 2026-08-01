@@ -41,13 +41,23 @@ function fattorizzazionePrimi(n: number): Record<number, number> {
   return fattori;
 }
 
+// Converte un numero in apice Unicode (es. 2 → ², 12 → ¹²)
+function toSuperscript(n: number): string {
+  const superscriptMap: Record<string, string> = {
+    "0": "\u2070", "1": "\u00B9", "2": "\u00B2", "3": "\u00B3",
+    "4": "\u2074", "5": "\u2075", "6": "\u2076", "7": "\u2077",
+    "8": "\u2078", "9": "\u2079",
+  };
+  return String(n).split("").map(c => superscriptMap[c] || c).join("");
+}
+
 function formatFattori(num: number, fattori: Record<number, number>): string {
   if (num === 1 && fattori[1] === 1) {
     return "Scomposizione in fattori primi di 1 = 1";
   }
   const parts: string[] = [];
   for (const [f, exp] of Object.entries(fattori)) {
-    parts.push(exp === 1 ? f : `${f}${"^".repeat(0)}${exp}`);
+    parts.push(exp === 1 ? f : `${f}${toSuperscript(exp)}`);
   }
   return `Scomposizione in fattori primi di ${num} = ${parts.join(" · ")}`;
 }
@@ -675,7 +685,7 @@ function AddSubExercise({
             <span className="font-mono font-bold text-primary">{op}</span> in mezzo, lasciando spazio sotto per i calcoli:
           </p>
           <div className="flex justify-center my-2">
-            <div className="flex items-center gap-4 text-base font-mono bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-4 text-base font-mono bg-muted px-4 py-2 rounded-lg">
               <FractionDisplay numerator={num1} denominator={den1} size="md" />
               <span className="text-lg font-bold">{op}</span>
               <FractionDisplay numerator={num2} denominator={den2} size="md" />
@@ -685,15 +695,15 @@ function AddSubExercise({
           <p>
             Sotto le frazioni, <span className="italic">scomponi i denominatori in fattori primi</span>:
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
-            Denominatore della <b>prima</b> frazione: {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}<br />
-            Denominatore della <b>seconda</b> frazione: {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+            Denominatore della <b>prima</b> frazione: {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}<br />
+            Denominatore della <b>seconda</b> frazione: {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}
           </p>
           <p className="font-bold text-foreground">4.</p>
           <p>
             Calcola il <span className="font-bold text-primary">m.c.m.</span>: prendi <span className="italic">tutti</span> i fattori, ciascuno con l'esponente <span className="italic">più alto</span>.
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
           </p>
           <p className="font-bold text-foreground">5.</p>
@@ -702,9 +712,9 @@ function AddSubExercise({
             Sopra la linea, scrivi l'espressione con le parentesi vuote:
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-xs text-center bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="font-mono text-xs text-center bg-muted px-4 py-2 rounded-lg">
               ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
-              <span className="border-t border-primary/30 block mt-1 pt-1">{computed.mcmCorretto}</span>
+              <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
             </div>
           </div>
         </NotebookGuide>
@@ -760,14 +770,14 @@ function AddSubExercise({
           <p>
             Per la <span className="font-bold text-primary">prima frazione</span>: dividi il m.c.m. per il denominatore e moltiplica per il numeratore.
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
           </p>
           <p className="font-bold text-foreground">2.</p>
           <p>
             Per la <span className="font-bold text-primary">seconda frazione</span>: stesso procedimento.
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
           </p>
           <p className="font-bold text-foreground">3.</p>
@@ -775,9 +785,9 @@ function AddSubExercise({
             Riscrivi la frazione con denominatore comune sostituendo i risultati al numeratore:
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
               <span className="font-bold">{computed.val1Corretto}</span> {op} (<span className="font-bold">{computed.val2Corretto}</span>)<br />
-              <span className="border-t border-primary/30 block mt-1 pt-1">{computed.mcmCorretto}</span>
+              <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
             </div>
           </div>
           <p className="font-bold text-foreground">4.</p>
@@ -814,8 +824,8 @@ function AddSubExercise({
               colorClass="text-primary"
               allowNegative
             />
-            {/* Linea di frazione */}
-            <div className="flex items-center justify-center">
+            {/* Linea di frazione — allineata sotto i quadratini input */}
+            <div className="flex items-center">
               <div className="w-[100px] h-[2.5px] bg-foreground/80" />
             </div>
             <NumberInputCanvas
@@ -860,7 +870,7 @@ function AddSubExercise({
           <p>
             Esegui l'operazione al <span className="font-bold text-primary">numeratore</span>:
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleCorretto}
           </p>
           <p className="font-bold text-foreground">2.</p>
@@ -868,9 +878,9 @@ function AddSubExercise({
             Scrivi il <span className="font-bold text-primary">risultato come frazione</span> (se il numeratore e il denominatore hanno un divisore comune, semplifica):
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
               <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-              <span className="border-t border-primary/30 block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+              <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
             </div>
           </div>
           {computed.denFinaleCorretto !== computed.mcmCorretto && (
@@ -889,7 +899,7 @@ function AddSubExercise({
               const intero = Math.floor(absNum / computed.denFinaleCorretto);
               const resto = absNum % computed.denFinaleCorretto;
               return (
-                <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+                <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
                   {computed.numFinaleCorretto}/{computed.denFinaleCorretto} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
                 </p>
               );
@@ -1000,7 +1010,7 @@ function MulDivExercise({
                 <span className="italic">trasforma la divisione in moltiplicazione</span>.
               </p>
               <div className="flex justify-center my-2">
-                <div className="flex items-center gap-3 text-sm font-mono bg-primary/5 px-4 py-2 rounded-lg">
+                <div className="flex items-center gap-3 text-sm font-mono bg-muted px-4 py-2 rounded-lg">
                   <FractionDisplay numerator={num1} denominator={nd1} size="sm" />
                   <span className="text-lg">÷</span>
                   <FractionDisplay numerator={num2} denominator={nd2} size="sm" />
@@ -1026,7 +1036,7 @@ function MulDivExercise({
             Sul quaderno, disponi le frazioni in orizzontale:
           </p>
           <div className="flex justify-center my-2">
-            <div className="flex items-center gap-3 text-sm bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-3 text-sm bg-muted px-4 py-2 rounded-lg">
               <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" size="sm" />
               <span className="text-lg font-bold">×</span>
               <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400" denClass="text-blue-400" size="sm" />
@@ -1141,7 +1151,7 @@ function MulDivExercise({
             )}
           </p>
           {computed.divCom1 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
               {num1} : {computed.divCom1} = {Math.abs(num1) / computed.divCom1 * (num1 < 0 ? -1 : 1)}{" "}
               &nbsp;&nbsp;{computed.actualDen2} : {computed.divCom1} = {Math.abs(computed.actualDen2) / computed.divCom1}
             </p>
@@ -1158,7 +1168,7 @@ function MulDivExercise({
             )}
           </p>
           {computed.divCom2 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
               {nd1} : {computed.divCom2} = {Math.abs(nd1) / computed.divCom2}{" "}
               &nbsp;&nbsp;{computed.actualNum2} : {computed.divCom2} = {Math.abs(computed.actualNum2) / computed.divCom2 * (computed.actualNum2 < 0 ? -1 : 1)}
             </p>
@@ -1168,7 +1178,7 @@ function MulDivExercise({
             <span className="italic">Sul quaderno</span>, barra i numeri originali e scrivi quelli semplificati a fianco:
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-xs text-center bg-primary/5 px-4 py-2 rounded-lg leading-relaxed">
+            <div className="font-mono text-xs text-center bg-muted px-4 py-2 rounded-lg leading-relaxed">
               <span className="line-through decoration-red-500/50">{num1}</span>→{num1Semplificato !== null ? num1Semplificato : "?"}{" "}
               &nbsp; &nbsp;
               <span className="line-through decoration-red-500/50">{computed.actualDen2}</span>→{den2Semplificato !== null ? den2Semplificato : "?"}<br />
@@ -1217,7 +1227,7 @@ function MulDivExercise({
         {/* Frazione finale display */}
         {frazFinaleHTML && (
           <div className="flex justify-center mt-3">
-            <div className="px-5 py-3 rounded-xl bg-primary/10 border border-primary/20">
+            <div className="px-5 py-3 rounded-xl bg-primary/10 border border-border">
               <FractionDisplay
                 numerator={numU! < 0 && denU! < 0 ? Math.abs(numU!) : (denU! < 0 ? -Math.abs(numU!) : numU!)}
                 denominator={denU! < 0 ? Math.abs(denU!) : denU!}
@@ -1249,8 +1259,8 @@ function MulDivExercise({
               colorClass="text-primary"
               allowNegative
             />
-            {/* Linea di frazione */}
-            <div className="flex items-center justify-center">
+            {/* Linea di frazione — allineata sotto i quadratini input */}
+            <div className="flex items-center">
               <div className="w-[100px] h-[2.5px] bg-foreground/80" />
             </div>
             <NumberInputCanvas
@@ -1308,7 +1318,7 @@ function MulDivExercise({
           <p>
             <span className="font-bold text-primary">Moltiplica i numeratori</span> tra loro:
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             (numeratore semplificato 1) × (numeratore semplificato 2) ={" "}
             {num1Semplificato !== null && num2Semplificato !== null
               ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
@@ -1319,7 +1329,7 @@ function MulDivExercise({
           <p>
             <span className="font-bold text-primary">Moltiplica i denominatori</span> tra loro:
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-primary/20 ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
             (denominatore semplificato 1) × (denominatore semplificato 2) ={" "}
             {den1Semplificato !== null && den2Semplificato !== null
               ? <span className="font-bold text-primary">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
@@ -1331,9 +1341,9 @@ function MulDivExercise({
             Scrivi il <span className="font-bold text-primary">risultato come frazione</span> (semplifica se possibile):
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-primary/5 px-4 py-2 rounded-lg">
+            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
               <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-              <span className="border-t border-primary/30 block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+              <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
             </div>
           </div>
           {(() => {
