@@ -438,6 +438,28 @@ export default function FractionExercises() {
               </div>
             </div>
 
+            {/* Anteprima espressione inserita */}
+            {allFilled && (
+              <div className="flex items-center justify-center gap-3 py-2 animate-pop-in">
+                {/* Prima frazione */}
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-bold font-serif">{num1}</span>
+                  <div className="w-12 h-[2px] bg-foreground/70 my-0.5" />
+                  <span className="text-lg font-bold font-serif">{den1}</span>
+                </div>
+                {/* Segno operazione */}
+                <span className="text-xl font-bold text-primary">
+                  {mode === "addsub" ? (addSubOp === "+" ? "+" : "\u2212") : (mulDivOp === "*" ? "\u00d7" : "\u00f7")}
+                </span>
+                {/* Seconda frazione */}
+                <div className="flex flex-col items-center">
+                  <span className="text-lg font-bold font-serif">{num2}</span>
+                  <div className="w-12 h-[2px] bg-foreground/70 my-0.5" />
+                  <span className="text-lg font-bold font-serif">{den2}</span>
+                </div>
+              </div>
+            )}
+
             {/* Calculate button */}
             <button
               onClick={handleCalculate}
