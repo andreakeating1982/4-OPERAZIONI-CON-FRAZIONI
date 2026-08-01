@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { NumberInputCanvas } from "@/components/NumberInputCanvas";
 import { FractionDisplay } from "@/components/FractionDisplay";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,9 @@ import {
   Divide,
   Plus,
   Minus,
+  BookOpen,
+  ChevronDown,
+  NotebookPen,
 } from "lucide-react";
 
 // ─── Math utilities ───────────────────────────────────────────────
@@ -527,6 +530,58 @@ export default function FractionExercises() {
   );
 }
 
+// ─── NOTEBOOK GUIDE COMPONENT ──────────────────────────────────────
+
+function NotebookGuide({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="rounded-xl border-2 border-amber-500/30 bg-amber-500/5 overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-4 py-3 hover:bg-amber-500/10 transition-colors text-left"
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+            <NotebookPen className="w-4 h-4 text-amber-400" />
+          </div>
+          <span className="text-sm font-bold text-amber-300">{title}</span>
+        </div>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 text-amber-400 transition-transform duration-300",
+            isOpen && "rotate-180",
+          )}
+        />
+      </button>
+      {isOpen && (
+        <div className="px-4 pb-4 pt-1">
+          <div className="rounded-lg bg-amber-500/5 border border-amber-500/15 p-3.5 space-y-2.5 text-sm leading-relaxed text-amber-100/90">
+            {/* Notebook lines */}
+            <div
+              className="relative"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(transparent, transparent 1.55rem, rgba(251,191,36,0.08) 1.55rem, rgba(251,191,36,0.08) 1.6rem)",
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── ADD/SUB EXERCISE SUB-COMPONENT ─────────────────────────────────
 
 interface AddSubExerciseProps {
@@ -564,6 +619,50 @@ function AddSubExercise({
         <p className="text-sm font-bold text-foreground">1. Calcolo del m.c.m. tra i denominatori</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
 
+        {/* Notebook Guide: Step 1 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: m.c.m.">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>Scrivi il titolo dell'esercizio: <span className="font-semibold text-amber-100">«Addizione tra frazioni»</span> (oppure «Sottrazione tra frazioni»).</p>
+          <p className="font-bold text-amber-200">2.</p>
+          <p>
+            Scrivi le due frazioni <span className="italic">una accanto all'altra</span> con il segno{" "}
+            <span className="font-mono font-bold text-amber-100">{op}</span> in mezzo, lasciando spazio sotto per i calcoli:
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="flex items-center gap-4 text-base font-mono bg-amber-500/10 px-4 py-2 rounded-lg">
+              <FractionDisplay numerator={num1} denominator={den1} size="md" />
+              <span className="text-lg font-bold">{op}</span>
+              <FractionDisplay numerator={num2} denominator={den2} size="md" />
+            </div>
+          </div>
+          <p className="font-bold text-amber-200">3.</p>
+          <p>
+            Sotto le frazioni, <span className="italic">scomponi i denominatori in fattori primi</span>:
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}<br />
+            {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}
+          </p>
+          <p className="font-bold text-amber-200">4.</p>
+          <p>
+            Calcola il <span className="font-bold text-amber-100">m.c.m.</span>: prendi <span className="italic">tutti</span> i fattori, ciascuno con l'esponente <span className="italic">più alto</span>.
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
+          </p>
+          <p className="font-bold text-amber-200">5.</p>
+          <p>
+            Traccia una <span className="italic">linea di frazione lunga</span> e scrivi il m.c.m. come denominatore comune.
+            Sopra la linea, scrivi l'espressione con le parentesi vuote:
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="font-mono text-xs text-center bg-amber-500/10 px-4 py-2 rounded-lg">
+              ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
+              <span className="border-t border-amber-500/50 block mt-1 pt-1">{computed.mcmCorretto}</span>
+            </div>
+          </div>
+        </NotebookGuide>
+
         <div className="space-y-1.5 text-sm">
           <p className="font-semibold">1.1 Scomposizione in fattori primi:</p>
           <p className="font-mono text-xs opacity-80">{formatFattori(nd1, computed.fattori1)}</p>
@@ -596,6 +695,38 @@ function AddSubExercise({
         <p className="text-sm font-bold text-foreground">2. Divisione del denominatore col m.c.m. e moltiplicazione col numeratore</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Calcolare</p>
 
+        {/* Notebook Guide: Step 2 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Divisione e moltiplicazione">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>
+            Per la <span className="font-bold text-amber-100">prima frazione</span>: dividi il m.c.m. per il denominatore e moltiplica per il numeratore.
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-amber-100">{computed.val1Corretto}</span>
+          </p>
+          <p className="font-bold text-amber-200">2.</p>
+          <p>
+            Per la <span className="font-bold text-amber-100">seconda frazione</span>: stesso procedimento.
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-amber-100">{computed.val2Corretto}</span>
+          </p>
+          <p className="font-bold text-amber-200">3.</p>
+          <p>
+            Riscrivi la frazione con denominatore comune sostituendo i risultati al numeratore:
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="font-mono text-sm text-center bg-amber-500/10 px-4 py-2 rounded-lg">
+              <span className="font-bold">{computed.val1Corretto}</span> {op} (<span className="font-bold">{computed.val2Corretto}</span>)<br />
+              <span className="border-t border-amber-500/50 block mt-1 pt-1">{computed.mcmCorretto}</span>
+            </div>
+          </div>
+          <p className="font-bold text-amber-200">4.</p>
+          <p>
+            <span className="italic">Attenzione:</span> se l'operazione è una <span className="font-bold">sottrazione</span>, ricorda che il meno davanti a una parentesi cambia il segno di ciò che sta dentro! Esempio: −(+5) = −5, −(−3) = +3.
+          </p>
+        </NotebookGuide>
+
         <div className="space-y-3">
           <p className="text-sm">
             ({mcmDisplay} : {nd1}) · ({effNum1}) = <span className="font-bold">Risultato 1</span>
@@ -625,6 +756,58 @@ function AddSubExercise({
       <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
         <p className="text-sm font-bold text-foreground">3. Somma algebrica finale</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+
+        {/* Notebook Guide: Step 3 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Somma algebrica e risultato">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>
+            Esegui l'operazione al <span className="font-bold text-amber-100">numeratore</span>:
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleCorretto}
+          </p>
+          <p className="font-bold text-amber-200">2.</p>
+          <p>
+            Scrivi il <span className="font-bold text-amber-100">risultato come frazione</span> (se il numeratore e il denominatore hanno un divisore comune, semplifica):
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="font-mono text-sm text-center bg-amber-500/10 px-4 py-2 rounded-lg">
+              <span className="font-bold">{computed.numFinaleCorretto}</span><br />
+              <span className="border-t border-amber-500/50 block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+            </div>
+          </div>
+          {computed.denFinaleCorretto !== computed.mcmCorretto && (
+            <p className="text-xs text-amber-300/80 italic">
+              Nota: la frazione è stata semplificata dividendo numeratore e denominatore per{" "}
+              {computed.mcmCorretto / computed.denFinaleCorretto}.
+            </p>
+          )}
+          <p className="font-bold text-amber-200">3.</p>
+          <p>
+            Se il numeratore è <span className="italic">più grande</span> del denominatore, puoi anche scrivere il <span className="font-bold text-amber-100">numero misto</span>:
+          </p>
+          {(() => {
+            const absNum = Math.abs(computed.numFinaleCorretto);
+            if (absNum > computed.denFinaleCorretto) {
+              const intero = Math.floor(absNum / computed.denFinaleCorretto);
+              const resto = absNum % computed.denFinaleCorretto;
+              return (
+                <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+                  {computed.numFinaleCorretto}/{computed.denFinaleCorretto} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
+                </p>
+              );
+            }
+            return (
+              <p className="text-xs text-amber-300/70 italic">
+                Il numeratore è minore del denominatore, quindi la frazione è già nella forma più semplice (frazione propria).
+              </p>
+            );
+          })()}
+          <p className="font-bold text-amber-200">4.</p>
+          <p>
+            <span className="font-bold text-amber-100">Cerchia</span> il risultato finale con un rettangolo o un ovale per evidenziarlo.
+          </p>
+        </NotebookGuide>
 
         <div className="flex justify-center">
           <FractionDisplay
@@ -740,6 +923,53 @@ function MulDivExercise({
       <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
         <p className="text-sm font-bold text-foreground">1. Moltiplicazione e inversione</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+
+        {/* Notebook Guide: Step 1 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: Impostazione dell'operazione">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>Scrivi il titolo: <span className="font-semibold text-amber-100">«{op === "*" ? "Moltiplicazione" : "Divisione"} tra frazioni»</span>.</p>
+          {op === "/" && (
+            <>
+              <p className="font-bold text-amber-200">2.</p>
+              <p>
+                <span className="font-bold text-amber-100">REGOLA FONDAMENTALE:</span> per dividere due frazioni,{" "}
+                <span className="italic">inverti la seconda frazione</span> (scambiando numeratore e denominatore) e{" "}
+                <span className="italic">trasforma la divisione in moltiplicazione</span>.
+              </p>
+              <div className="flex justify-center my-2">
+                <div className="flex items-center gap-3 text-sm font-mono bg-amber-500/10 px-4 py-2 rounded-lg">
+                  <FractionDisplay numerator={num1} denominator={nd1} size="sm" />
+                  <span className="text-lg">÷</span>
+                  <FractionDisplay numerator={num2} denominator={nd2} size="sm" />
+                  <span className="text-lg">→</span>
+                  <FractionDisplay numerator={num1} denominator={nd1} size="sm" />
+                  <span className="text-lg">×</span>
+                  <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="sm" />
+                </div>
+              </div>
+              <p className="text-xs text-amber-300/80 italic">
+                Attenzione: se la seconda frazione ha il segno meno, questo rimane attaccato al numeratore dopo l'inversione.
+              </p>
+            </>
+          )}
+          {op === "*" && (
+            <>
+              <p className="font-bold text-amber-200">2.</p>
+              <p>Scrivi le due frazioni una accanto all'altra con il segno <span className="font-mono font-bold text-amber-100">×</span> tra di esse.</p>
+            </>
+          )}
+          <p className="font-bold text-amber-200">{op === "/" ? "3" : "3"}.</p>
+          <p>
+            Sul quaderno, disponi le frazioni in orizzontale:
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="flex items-center gap-3 text-sm bg-amber-500/10 px-4 py-2 rounded-lg">
+              <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" size="sm" />
+              <span className="text-lg font-bold">×</span>
+              <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400" denClass="text-blue-400" size="sm" />
+            </div>
+          </div>
+        </NotebookGuide>
         <div className="flex justify-center items-center gap-3 text-lg">
           <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" />
           <span className="text-xl font-bold text-foreground">×</span>
@@ -753,6 +983,63 @@ function MulDivExercise({
       <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
         <p className="text-sm font-bold text-foreground">2. Semplificazione tra frazioni</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+
+        {/* Notebook Guide: Step 2 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Semplificazione incrociata">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>
+            Nella moltiplicazione tra frazioni, puoi <span className="font-bold text-amber-100">semplificare in croce</span>:{" "}
+            dividere un numeratore e un denominatore di frazioni <span className="italic">diverse</span> per lo stesso numero.
+          </p>
+          <p className="font-bold text-amber-200">2.</p>
+          <p>
+            <span className="font-bold text-amber-100">Primo incrocio:</span> cerca un divisore comune tra il{" "}
+            <span className="text-orange-400 font-bold">numeratore 1 ({num1})</span> e il{" "}
+            <span className="text-blue-400 font-bold">denominatore 2 ({computed.actualDen2})</span>
+            {computed.divCom1 ? (
+              <>. Il divisore comune è <span className="font-bold text-amber-100">{computed.divCom1}</span>.</>
+            ) : (
+              <>. Non c'è nessun divisore comune, quindi <span className="italic">riscrivi gli stessi numeri</span>.</>
+            )}
+          </p>
+          {computed.divCom1 && (
+            <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+              {num1} : {computed.divCom1} = {Math.abs(num1) / computed.divCom1 * (num1 < 0 ? -1 : 1)}{" "}
+              &nbsp;&nbsp;{computed.actualDen2} : {computed.divCom1} = {Math.abs(computed.actualDen2) / computed.divCom1}
+            </p>
+          )}
+          <p className="font-bold text-amber-200">3.</p>
+          <p>
+            <span className="font-bold text-amber-100">Secondo incrocio:</span> cerca un divisore comune tra il{" "}
+            <span className="text-sky-400 font-bold">denominatore 1 ({nd1})</span> e il{" "}
+            <span className="text-red-400 font-bold">numeratore 2 ({computed.actualNum2})</span>
+            {computed.divCom2 ? (
+              <>. Il divisore comune è <span className="font-bold text-amber-100">{computed.divCom2}</span>.</>
+            ) : (
+              <>. Non c'è nessun divisore comune, quindi <span className="italic">riscrivi gli stessi numeri</span>.</>
+            )}
+          </p>
+          {computed.divCom2 && (
+            <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+              {nd1} : {computed.divCom2} = {Math.abs(nd1) / computed.divCom2}{" "}
+              &nbsp;&nbsp;{computed.actualNum2} : {computed.divCom2} = {Math.abs(computed.actualNum2) / computed.divCom2 * (computed.actualNum2 < 0 ? -1 : 1)}
+            </p>
+          )}
+          <p className="font-bold text-amber-200">4.</p>
+          <p>
+            <span className="italic">Sul quaderno</span>, barra i numeri originali e scrivi quelli semplificati a fianco:
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="font-mono text-xs text-center bg-amber-500/10 px-4 py-2 rounded-lg leading-relaxed">
+              <span className="line-through decoration-red-500/50">{num1}</span>→{num1Semplificato !== null ? num1Semplificato : "?"}{" "}
+              &nbsp; &nbsp;
+              <span className="line-through decoration-red-500/50">{computed.actualDen2}</span>→{den2Semplificato !== null ? den2Semplificato : "?"}<br />
+              <span className="line-through decoration-red-500/50">{nd1}</span>→{den1Semplificato !== null ? den1Semplificato : "?"}{" "}
+              &nbsp; &nbsp;
+              <span className="line-through decoration-red-500/50">{computed.actualNum2}</span>→{num2Semplificato !== null ? num2Semplificato : "?"}
+            </div>
+          </div>
+        </NotebookGuide>
 
         <div className="space-y-4">
           <div>
@@ -810,6 +1097,64 @@ function MulDivExercise({
       <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
         <p className="text-sm font-bold text-foreground">3. Moltiplicazione finale</p>
         <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+
+        {/* Notebook Guide: Step 3 */}
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Moltiplicazione e risultato">
+          <p className="font-bold text-amber-200">1.</p>
+          <p>
+            <span className="font-bold text-amber-100">Moltiplica i numeratori</span> tra loro:
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            (numeratore semplificato 1) × (numeratore semplificato 2) ={" "}
+            {num1Semplificato !== null && num2Semplificato !== null
+              ? <span className="font-bold text-amber-100">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
+              : <span className="italic">... × ... = ?</span>
+            }
+          </p>
+          <p className="font-bold text-amber-200">2.</p>
+          <p>
+            <span className="font-bold text-amber-100">Moltiplica i denominatori</span> tra loro:
+          </p>
+          <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
+            (denominatore semplificato 1) × (denominatore semplificato 2) ={" "}
+            {den1Semplificato !== null && den2Semplificato !== null
+              ? <span className="font-bold text-amber-100">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
+              : <span className="italic">... × ... = ?</span>
+            }
+          </p>
+          <p className="font-bold text-amber-200">3.</p>
+          <p>
+            Scrivi il <span className="font-bold text-amber-100">risultato come frazione</span> (semplifica se possibile):
+          </p>
+          <div className="flex justify-center my-2">
+            <div className="font-mono text-sm text-center bg-amber-500/10 px-4 py-2 rounded-lg">
+              <span className="font-bold">{computed.numFinaleCorretto}</span><br />
+              <span className="border-t border-amber-500/50 block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+            </div>
+          </div>
+          {(() => {
+            const rawNum = num1 * computed.actualNum2;
+            const rawDen = nd1 * computed.actualDen2;
+            const gcdVal = gcd(rawNum, rawDen);
+            if (gcdVal > 1) {
+              return (
+                <p className="text-xs text-amber-300/80 italic">
+                  Nota: la frazione è stata semplificata. Prodotto iniziale: {rawNum}/{rawDen}{" "}
+                  → diviso per {gcdVal} → {computed.numFinaleCorretto}/{computed.denFinaleCorretto}.
+                </p>
+              );
+            }
+            return (
+              <p className="text-xs text-amber-300/70 italic">
+                La frazione è già ridotta ai minimi termini.
+              </p>
+            );
+          })()}
+          <p className="font-bold text-amber-200">4.</p>
+          <p>
+            <span className="font-bold text-amber-100">Cerchia</span> il risultato finale. Se il numeratore è maggiore del denominatore, puoi anche scrivere il numero misto.
+          </p>
+        </NotebookGuide>
 
         <div className="space-y-4">
           <div>
