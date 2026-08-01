@@ -867,11 +867,17 @@ function AddSubExercise({
            <span className="font-bold text-foreground">B.</span></p>
           <div className="flex justify-center my-2">
             <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
-              <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-              <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+              {computed.denFinaleCorretto === 1 ? (
+                <span className="font-bold">{computed.numFinaleCorretto}</span>
+              ) : (
+                <>
+                  <span className="font-bold">{computed.numFinaleCorretto}</span><br />
+                  <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+                </>
+              )}
             </div>
           </div>
-          {computed.denFinaleCorretto !== computed.mcmCorretto && (
+          {computed.denFinaleCorretto !== computed.mcmCorretto && computed.denFinaleCorretto !== 1 && (
             <p className="text-xs text-muted-foreground">
               Nota: la frazione è stata semplificata dividendo numeratore e denominatore per{" "}
               {computed.mcmCorretto / computed.denFinaleCorretto}.
@@ -887,7 +893,7 @@ function AddSubExercise({
               const resto = absNum % computed.denFinaleCorretto;
               return (
                 <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
-                  {computed.numFinaleCorretto}/{computed.denFinaleCorretto} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
+                  {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
                 </p>
               );
             }
@@ -1036,13 +1042,13 @@ function MulDivExercise({
 
       {/* Step 2: Cross simplification */}
       <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
-        <p className="text-base font-bold text-primary">2. Semplificazione tra frazioni</p>
+        <p className="text-base font-bold text-amber-900">2. SEMPLIFICAZIONE tra frazioni</p>
 
         {/* Notebook Guide: Step 2 */}
         <div className="space-y-4">
           <div>
             <p className="text-xs mb-2">
-              Semplificazione 1: divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span>
+              <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 1:</span> divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span>
               {" "}{computed.divCom1
                 ? <>per <span className="font-bold">{computed.divCom1}</span></>
                 : <>. Ma non c'è nessun divisore in comune tra {num1} e {computed.actualDen2}. Riscrivo gli stessi numeri</>
@@ -1082,7 +1088,7 @@ function MulDivExercise({
 
           <div>
             <p className="text-xs mb-2">
-              Semplificazione 2: divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span>
+              <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 2:</span> divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span>
               {" "}{computed.divCom2
                 ? <>per <span className="font-bold">{computed.divCom2}</span></>
                 : <>. Ma non c'è nessun divisore in comune tra {nd1} e {computed.actualNum2}. Riscrivo gli stessi numeri</>
@@ -1322,8 +1328,14 @@ function MulDivExercise({
            <span className="font-bold text-foreground">C.</span></p>
           <div className="flex justify-center my-2">
             <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
-              <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-              <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+              {computed.denFinaleCorretto === 1 ? (
+                <span className="font-bold">{computed.numFinaleCorretto}</span>
+              ) : (
+                <>
+                  <span className="font-bold">{computed.numFinaleCorretto}</span><br />
+                  <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+                </>
+              )}
             </div>
           </div>
           {(() => {
@@ -1334,7 +1346,7 @@ function MulDivExercise({
               return (
                 <p className="text-xs text-muted-foreground">
                   Nota: la frazione è stata semplificata. Prodotto iniziale: {rawNum}/{rawDen}{" "}
-                  → diviso per {gcdVal} → {computed.numFinaleCorretto}/{computed.denFinaleCorretto}.
+                  → diviso per {gcdVal} → {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}.
                 </p>
               );
             }

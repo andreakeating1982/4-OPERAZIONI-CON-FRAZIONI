@@ -23,6 +23,14 @@ export function FractionDisplay({
   className,
   size = "md",
 }: FractionDisplayProps) {
+  // Se il denominatore è 1, mostra solo il numeratore (numero intero)
+  if (denominator === 1 || denominator === "1") {
+    return (
+      <span className={cn("inline-flex items-center align-middle mx-1", sizeMap[size], className)}>
+        <span className={cn("block text-center px-1", numClass)}>{numerator}</span>
+      </span>
+    );
+  }
   return (
     <span className={cn("inline-flex flex-col items-center align-middle mx-1", sizeMap[size], className)}>
       <span className={cn("block text-center px-1", numClass)}>{numerator}</span>

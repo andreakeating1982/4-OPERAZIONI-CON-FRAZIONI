@@ -40,7 +40,7 @@ export function NumberInputCanvas({
   const handleManualRecognize = useCallback(async () => {
     if (strokes.length === 0 || !isModelReady) return;
     setIsRecognizing(true);
-    const result = await recognize(strokes, "expression");
+    const result = await recognize(strokes, "auto");
     if (result) {
       // 1. Rimuovi spazi bianchi (causa principale del bug multi-cifra)
       let numStr = result.latex.replace(/\s+/g, "");
