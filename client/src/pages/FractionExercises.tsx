@@ -536,38 +536,43 @@ export default function FractionExercises() {
 function NotebookGuide({
   title,
   defaultOpen = false,
+  forceOpen = false,
+  visible = true,
   children,
 }: {
   title: string;
   defaultOpen?: boolean;
+  forceOpen?: boolean;
+  visible?: boolean;
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
+  if (!visible) return null;
+
+  const open = forceOpen || isOpen;
+
   return (
-    <div className="rounded-xl border-2 border-amber-500/30 bg-amber-500/5 overflow-hidden">
+    <div className="rounded-xl border border-primary/25 bg-primary/5 overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 hover:bg-amber-500/10 transition-colors text-left"
+        className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-primary/10 transition-colors"
       >
-        <div className="flex items-center gap-2.5">
-          <span className="text-amber-400 text-base">📓</span>
-          <span className="text-sm font-bold text-amber-300">{title}</span>
-        </div>
+        <span className="text-sm font-bold text-primary">{title}</span>
         <span className={cn(
-          "text-amber-400 text-sm transition-transform duration-300",
-          isOpen && "rotate-180",
-        )}>{isOpen ? "▲" : "▼"}</span>
+          "text-primary/60 text-xs transition-transform duration-300",
+          open && "rotate-180",
+        )}>{open ? "▲" : "▼"}</span>
       </button>
-      {isOpen && (
+      {open && (
         <div className="px-4 pb-4 pt-1">
-          <div className="rounded-lg bg-amber-500/5 border border-amber-500/15 p-3.5 space-y-2.5 text-sm leading-relaxed text-amber-100/90">
+          <div className="rounded-lg bg-card border border-border p-3.5 space-y-2 text-sm leading-relaxed text-foreground">
             {/* Notebook lines */}
             <div
               className="relative"
               style={{
                 backgroundImage:
-                  "repeating-linear-gradient(transparent, transparent 1.55rem, rgba(251,191,36,0.08) 1.55rem, rgba(251,191,36,0.08) 1.6rem)",
+                  "repeating-linear-gradient(transparent, transparent 1.55rem, rgba(139,92,62,0.06) 1.55rem, rgba(139,92,62,0.06) 1.6rem)",
               }}
             >
               {children}
@@ -601,6 +606,10 @@ function AddSubExercise({
   risultatoFinaleUtente, setRisultatoFinaleUtente,
   feedbackFinale, verificaFinale, onNew,
 }: AddSubExerciseProps) {
+  const [showStep3Guide, setShowStep3Guide] = useState(false);
+  const [finalNumUtente, setFinalNumUtente] = useState<number | null>(null);
+  const [finalDenUtente, setFinalDenUtente] = useState<number | null>(null);
+  
   const mcmDisplay = mcmUtente ?? "MCM";
   const r1Display = risultato1Utente !== null ? risultato1Utente : "...";
   const r2Display = risultato2Utente !== null ? risultato2Utente : "...";
@@ -608,13 +617,20 @@ function AddSubExercise({
   const nd2 = Math.abs(den2);
   const effNum1 = num1 * (den1 < 0 ? -1 : 1);
   const effNum2 = num2 * (den2 < 0 ? -1 : 1);
+  
+  const handleFinalVerify = () => {
+    if (finalNumUtente !== null && finalDenUtente !== null) {
+      const resultStr = finalDenUtente === 1 ? String(finalNumUtente) : `${finalNumUtente}/${finalDenUtente}`;
+      verificaFinale(resultStr);
+      setShowStep3Guide(true);
+    }
+  };
 
   return (
     <div className="space-y-5">
       {/* Step 1: MCM */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">1. Calcolo del m.c.m. tra i denominatori</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">1. Calcolo del m.c.m. tra i denominatori</p>
 
         {/* Notebook Guide: Step 1 */}
         <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: m.c.m.">
@@ -637,8 +653,8 @@ function AddSubExercise({
             Sotto le frazioni, <span className="italic">scomponi i denominatori in fattori primi</span>:
           </p>
           <p className="font-mono text-xs pl-2 border-l-2 border-amber-500/30 ml-2">
-            {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}<br />
-            {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}
+            Denominatore della <b>prima</b> frazione: {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}<br />
+            Denominatore della <b>seconda</b> frazione: {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${String.fromCharCode(0x2074 + e - 4 > 0 ? 0x00B2 + e - 2 : 0)}`).join(" · ")}
           </p>
           <p className="font-bold text-amber-200">4.</p>
           <p>
@@ -661,9 +677,9 @@ function AddSubExercise({
         </NotebookGuide>
 
         <div className="space-y-1.5 text-sm">
-          <p className="font-semibold">1.1 Scomposizione in fattori primi:</p>
-          <p className="font-mono text-xs opacity-80">{formatFattori(nd1, computed.fattori1)}</p>
-          <p className="font-mono text-xs opacity-80">{formatFattori(nd2, computed.fattori2)}</p>
+          <p className="font-semibold">1.1 Scomposizione in fattori primi dei denominatori:</p>
+          <p className="font-mono text-xs opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
+          <p className="font-mono text-xs opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
           <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
           <p className="font-mono text-xs opacity-80">
             Il m.c.m. tra {nd1} e {nd2} è uguale a {computed.mcmFormula}, cioè...
@@ -688,9 +704,8 @@ function AddSubExercise({
       </div>
 
       {/* Step 2: Division and multiplication */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">2. Divisione del denominatore col m.c.m. e moltiplicazione col numeratore</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Calcolare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">2. Divisione del denominatore col m.c.m. e moltiplicazione col numeratore</p>
 
         {/* Notebook Guide: Step 2 */}
         <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Divisione e moltiplicazione">
@@ -750,12 +765,11 @@ function AddSubExercise({
       </div>
 
       {/* Step 3: Final sum */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">3. Somma algebrica finale</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">3. Somma algebrica finale</p>
 
         {/* Notebook Guide: Step 3 */}
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Somma algebrica e risultato">
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Somma algebrica e risultato" forceOpen={showStep3Guide}>
           <p className="font-bold text-amber-200">1.</p>
           <p>
             Esegui l'operazione al <span className="font-bold text-amber-100">numeratore</span>:
@@ -814,37 +828,57 @@ function AddSubExercise({
           />
         </div>
 
-        {/* Final result input: text input since it can be a fraction */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wide text-foreground">
-            Inserisci il tuo risultato finale
-          </label>
-          <input
-            type="text"
-            value={risultatoFinaleUtente}
-            onChange={(e) => setRisultatoFinaleUtente(e.target.value)}
-            placeholder="Es. 2/3 o 5"
-            className="w-full px-4 py-2.5 rounded-lg bg-card border border-border text-foreground text-center text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
+        {/* Final result handwriting input */}
+        <div className="space-y-3 pt-2">
+          <p className="text-sm font-semibold text-foreground">
+            Scrivi il risultato finale:
+          </p>
+          <div className="rounded-xl border border-border bg-card/60 p-3 space-y-1">
+            <NumberInputCanvas
+              value={finalNumUtente}
+              onChange={setFinalNumUtente}
+              label="NUMERATORE"
+              colorClass="text-primary"
+              allowNegative
+            />
+            {/* Linea di frazione */}
+            <div className="flex items-center justify-center">
+              <div className="w-[100px] h-[2.5px] bg-foreground/80" />
+            </div>
+            <NumberInputCanvas
+              value={finalDenUtente}
+              onChange={setFinalDenUtente}
+              label="DENOMINATORE"
+              colorClass="text-primary"
+            />
+          </div>
+          {/* Preview */}
+          {finalNumUtente !== null && finalDenUtente !== null && (
+            <div className="flex justify-center">
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold font-serif">{finalNumUtente}</span>
+                <div className="w-12 h-[2px] bg-foreground/60 my-0.5" />
+                <span className="text-lg font-bold font-serif">{finalDenUtente}</span>
+              </div>
+            </div>
+          )}
           <button
-            onClick={() => verificaFinale(risultatoFinaleUtente)}
-            className="w-full py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold transition-all duration-200"
+            onClick={handleFinalVerify}
+            disabled={finalNumUtente === null || finalDenUtente === null}
+            className="max-w-xs mx-auto w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed text-primary-foreground text-sm font-bold tracking-widest transition-all duration-200 shadow-sm"
           >
-            Verifica il risultato
+            VERIFICA RISULTATO
           </button>
         </div>
 
         {feedbackFinale && (
           <div className={cn(
-            "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
+            "p-3 rounded-lg text-sm font-semibold text-center",
             feedbackFinale.corretto
-              ? "bg-[#2ecc71]/10 text-[#2ecc71] border border-[#2ecc71]/30"
-              : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+              ? "bg-success/10 text-success border border-success/30"
+              : "bg-destructive/10 text-destructive border border-destructive/20",
           )}>
-            {feedbackFinale.corretto
-              ? <span className="text-[#2ecc71] text-base font-bold flex-shrink-0">✓</span>
-              : <span className="text-red-500 text-base font-bold flex-shrink-0">✗</span>
-            }
+            <span>{feedbackFinale.corretto ? "CORRETTO! " : "SBAGLIATO. "}</span>
             <span>{feedbackFinale.testo}</span>
           </div>
         )}
@@ -853,10 +887,9 @@ function AddSubExercise({
       {/* New exercise */}
       <button
         onClick={onNew}
-        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-semibold transition-all duration-200"
+        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold tracking-widest transition-all duration-200"
       >
-        <span className="text-base font-bold">→</span>
-        <span>Nuovo esercizio</span>
+        NUOVO ESERCIZIO
       </button>
     </div>
   );
@@ -888,6 +921,9 @@ function MulDivExercise({
   denominatoreFinaleUtente, setDenominatoreFinaleUtente,
   risultatoFinaleUtente, feedbackFinale, verificaFinale, onNew,
 }: MulDivExerciseProps) {
+  const [showStep3Guide, setShowStep3Guide] = useState(false);
+  const [finalNumUtente, setFinalNumUtente] = useState<number | null>(null);
+  const [finalDenUtente, setFinalDenUtente] = useState<number | null>(null);
   const nd1 = Math.abs(den1);
   const nd2 = Math.abs(den2);
 
@@ -917,9 +953,8 @@ function MulDivExercise({
   return (
     <div className="space-y-5">
       {/* Step 1: Initial multiplication */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">1. Moltiplicazione e inversione</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">1. Moltiplicazione e inversione</p>
 
         {/* Notebook Guide: Step 1 */}
         <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: Impostazione dell'operazione">
@@ -977,9 +1012,8 @@ function MulDivExercise({
       </div>
 
       {/* Step 2: Cross simplification */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">2. Semplificazione tra frazioni</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">2. Semplificazione tra frazioni</p>
 
         {/* Notebook Guide: Step 2 */}
         <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Semplificazione incrociata">
@@ -1091,12 +1125,11 @@ function MulDivExercise({
       </div>
 
       {/* Step 3: Final multiplication */}
-      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
-        <p className="text-sm font-bold text-foreground">3. Moltiplicazione finale</p>
-        <p className="text-xs text-muted-foreground uppercase font-semibold">Copiare</p>
+      <div className="p-4 rounded-xl bg-card/40 border border-border space-y-4 leading-relaxed">
+        <p className="text-base font-bold text-primary">3. Moltiplicazione finale</p>
 
         {/* Notebook Guide: Step 3 */}
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Moltiplicazione e risultato">
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Moltiplicazione e risultato" forceOpen={showStep3Guide}>
           <p className="font-bold text-amber-200">1.</p>
           <p>
             <span className="font-bold text-amber-100">Moltiplica i numeratori</span> tra loro:
@@ -1194,37 +1227,79 @@ function MulDivExercise({
           </div>
         )}
 
-        {/* Final verification */}
-        <div className="space-y-1.5 mt-4">
-          <label className="text-xs font-semibold uppercase tracking-wide text-foreground">
-            Trascrivi qui la frazione che è apparsa sopra
-          </label>
-          <input
-            type="text"
-            value={risultatoFinaleUtente}
-            onChange={(e) => setRisultatoFinaleUtente(e.target.value)}
-            placeholder="Es. 2/3 o 0.66"
-            className="w-full px-4 py-2.5 rounded-lg bg-card border border-border text-foreground text-center text-sm placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50"
-          />
+        {/* Final verification with handwriting */}
+        <div className="space-y-3 pt-2">
+          <p className="text-sm font-semibold text-foreground">
+            Scrivi il risultato finale:
+          </p>
+          <div className="rounded-xl border border-border bg-card/60 p-3 space-y-1">
+            <NumberInputCanvas
+              value={finalNumUtente}
+              onChange={(v) => {
+                setFinalNumUtente(v);
+                if (v !== null && finalDenUtente !== null) {
+                  const resultStr = finalDenUtente === 1 ? String(v) : `${v}/${finalDenUtente}`;
+                  verificaFinale(resultStr);
+                  setShowStep3Guide(true);
+                } else if (v !== null && numeratoreFinaleUtente !== null && denominatoreFinaleUtente !== null) {
+                  // Use the step 2 values for auto-verification
+                }
+              }}
+              label="NUMERATORE"
+              colorClass="text-primary"
+              allowNegative
+            />
+            {/* Linea di frazione */}
+            <div className="flex items-center justify-center">
+              <div className="w-[100px] h-[2.5px] bg-foreground/80" />
+            </div>
+            <NumberInputCanvas
+              value={finalDenUtente}
+              onChange={(v) => {
+                setFinalDenUtente(v);
+                if (v !== null && finalNumUtente !== null) {
+                  const resultStr = v === 1 ? String(finalNumUtente) : `${finalNumUtente}/${v}`;
+                  verificaFinale(resultStr);
+                  setShowStep3Guide(true);
+                }
+              }}
+              label="DENOMINATORE"
+              colorClass="text-primary"
+            />
+          </div>
+          {/* Preview */}
+          {finalNumUtente !== null && finalDenUtente !== null && (
+            <div className="flex justify-center">
+              <div className="flex flex-col items-center">
+                <span className="text-lg font-bold font-serif">{finalNumUtente}</span>
+                <div className="w-12 h-[2px] bg-foreground/60 my-0.5" />
+                <span className="text-lg font-bold font-serif">{finalDenUtente}</span>
+              </div>
+            </div>
+          )}
           <button
-            onClick={() => verificaFinale(risultatoFinaleUtente)}
-            className="w-full py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold transition-all duration-200"
+            onClick={() => {
+              if (finalNumUtente !== null && finalDenUtente !== null) {
+                const resultStr = finalDenUtente === 1 ? String(finalNumUtente) : `${finalNumUtente}/${finalDenUtente}`;
+                verificaFinale(resultStr);
+                setShowStep3Guide(true);
+              }
+            }}
+            disabled={finalNumUtente === null || finalDenUtente === null}
+            className="max-w-xs mx-auto w-full py-2.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed text-primary-foreground text-sm font-bold tracking-widest transition-all duration-200 shadow-sm"
           >
-            Verifica il risultato
+            VERIFICA RISULTATO
           </button>
         </div>
 
         {feedbackFinale && (
           <div className={cn(
-            "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
+            "p-3 rounded-lg text-sm font-semibold text-center",
             feedbackFinale.corretto
-              ? "bg-[#2ecc71]/10 text-[#2ecc71] border border-[#2ecc71]/30"
-              : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+              ? "bg-success/10 text-success border border-success/30"
+              : "bg-destructive/10 text-destructive border border-destructive/20",
           )}>
-            {feedbackFinale.corretto
-              ? <span className="text-[#2ecc71] text-base font-bold flex-shrink-0">✓</span>
-              : <span className="text-red-500 text-base font-bold flex-shrink-0">✗</span>
-            }
+            <span>{feedbackFinale.corretto ? "CORRETTO! " : "SBAGLIATO. "}</span>
             <span>{feedbackFinale.testo}</span>
           </div>
         )}
@@ -1233,10 +1308,9 @@ function MulDivExercise({
       {/* New exercise */}
       <button
         onClick={onNew}
-        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-semibold transition-all duration-200"
+        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold tracking-widest transition-all duration-200"
       >
-        <span className="text-base font-bold">→</span>
-        <span>Nuovo esercizio</span>
+        NUOVO ESERCIZIO
       </button>
     </div>
   );
