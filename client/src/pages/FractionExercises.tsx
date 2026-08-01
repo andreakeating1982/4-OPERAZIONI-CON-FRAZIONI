@@ -75,6 +75,9 @@ function trovaDivisoriComuni(a: number, b: number): number | null {
 type OperationMode ="addsub"|"muldiv";
 
 export default function FractionExercises() {
+ // ─── PDF generation ────────────────────────────────────────────────
+ const [generatingPdf, setGeneratingPdf] = useState(false);
+
  // ─── Mode ──────────────────────────────────────────────────────────
  const [mode, setMode] = useState<OperationMode>("addsub");
  const [addSubOp, setAddSubOp] = useState<"+"|"-">("+");
@@ -243,6 +246,76 @@ export default function FractionExercises() {
   setSubmitted(false);
   resetExercise();
  };
+
+ // ─── PDF download ─────────────────────────────────────────────────
+ const handleScaricaPdf = useCallback(() => {
+  setGeneratingPdf(true);
+  setTimeout(() => {
+   const notebookContents = document.querySelectorAll('.notebook-content');
+   if (notebookContents.length === 0) { setGeneratingPdf(false); return; }
+
+   let sectionsHtml = '';
+   notebookContents.forEach((el, i) => {
+    const section = el.closest('.rounded-xl');
+    const titleEl = section?.querySelector('.text-base.font-bold.text-primary');
+    const title = titleEl?.textContent || 'RICOPIA SUL QUADERNO';
+    sectionsHtml += `
+<div class="pdf-section" style="margin-bottom:30px;page-break-inside:avoid;">
+<div class="pdf-title" style="font-size:16px;font-weight:bold;color:#92400e;border-bottom:2px solid #d97706;padding-bottom:6px;margin-bottom:12px;">${i + 1}. ${title}</div>
+<div class="pdf-body" style="font-size:15px;line-height:1.9;">${el.innerHTML}</div>
+</div>`;
+   });
+
+   const printHtml = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Quaderno — Operazioni con le frazioni</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;color:#1a1a1a;padding:30px;max-width:800px;margin:0 auto}
+h1{font-size:22px;text-align:center;margin-bottom:28px;color:#451a03}
+.text-primary,.text-primary *{color:#92400e!important;font-weight:bold!important}
+.text-orange-400,.text-orange-400 *{color:#ea580c!important}
+.text-blue-400,.text-blue-400 *{color:#2563eb!important}
+.text-sky-400,.text-sky-400 *{color:#0284c7!important}
+.text-red-400,.text-red-400 *{color:#dc2626!important}
+.text-success{color:#16a34a!important}
+.text-destructive,.text-destructive *{color:#dc2626!important}
+.font-bold{font-weight:bold!important}
+.font-mono{font-family:'Courier New',monospace!important}
+.font-serif{font-family:Georgia,serif!important}
+.bg-muted{background:#f1f5f9!important;padding:8px 14px!important;border-radius:8px!important;display:inline-block!important}
+.rounded-lg{border-radius:8px!important}
+.flex{display:flex!important}
+.items-center{align-items:center!important}
+.justify-center{justify-content:center!important}
+.gap-2{gap:8px!important}.gap-3{gap:12px!important}
+.border-t{border-top:1px solid #000!important}
+.border-black{border-color:#000!important}
+.text-center{text-align:center!important}
+.block{display:block!important}
+.inline-block{display:inline-block!important}
+.mt-1{margin-top:4px!important}.mt-2{margin-top:8px!important}
+.pt-1{padding-top:4px!important}
+.px-4{padding-left:16px!important;padding-right:16px!important}
+.py-2{padding-top:8px!important;padding-bottom:8px!important}
+.my-2{margin-top:8px!important;margin-bottom:8px!important}
+.space-y-2>*+*{margin-top:8px!important}
+.leading-loose{line-height:1.9!important}
+.opacity-80{opacity:.8!important}
+.px-3\\\\.5{padding-left:14px!important;padding-right:14px!important}
+@media print{body{padding:10px}@page{margin:1.5cm}}
+</style></head>
+<body>
+<h1>📓 Quaderno — Operazioni con le frazioni</h1>
+${sectionsHtml}
+<script>window.onload=function(){window.print()}</script>
+</body></html>`;
+
+   const w = window.open('', '_blank');
+   if (w) { w.document.write(printHtml); w.document.close(); }
+   setGeneratingPdf(false);
+  }, 300);
+ }, []);
 
  // ─── Add/Sub verification ─────────────────────────────────────────
  const verificaAddSub = (valore: string) => {
@@ -522,6 +595,7 @@ export default function FractionExercises() {
         feedbackFinale={feedbackFinale}
         verificaFinale={verificaAddSub}
         onNew={handleNewExercise}
+        generatingPdf={generatingPdf}
        />
       )}
 
@@ -550,8 +624,21 @@ export default function FractionExercises() {
         feedbackFinale={feedbackFinale}
         verificaFinale={verificaMulDiv}
         onNew={handleNewExercise}
+        generatingPdf={generatingPdf}
        />
       )}
+     </div>
+    )}
+
+    {/* SCARICA PDF button */}
+    {phase === "exercise" && (
+     <div className="flex justify-center pt-4 pb-2">
+      <button
+       onClick={handleScaricaPdf}
+       className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 font-bold text-base tracking-widest transition-all shadow-sm"
+      >
+       📄 SCARICA PDF
+      </button>
      </div>
     )}
    </main>
@@ -624,6 +711,7 @@ interface AddSubExerciseProps {
  feedbackFinale: { testo: string; corretto: boolean } | null;
  verificaFinale: (v: string) => void;
  onNew: () => void;
+ generatingPdf: boolean;
 }
 
 function AddSubExercise({
@@ -632,7 +720,7 @@ function AddSubExercise({
  risultato1Utente, setRisultato1Utente,
  risultato2Utente, setRisultato2Utente,
  risultatoFinaleUtente, setRisultatoFinaleUtente,
- feedbackFinale, verificaFinale, onNew,
+ feedbackFinale, verificaFinale, onNew, generatingPdf,
 }: AddSubExerciseProps) {
  const [showStep3Guide, setShowStep3Guide] = useState(false);
  const [finalNumUtente, setFinalNumUtente] = useState<number | null>(null);
@@ -701,7 +789,7 @@ function AddSubExercise({
       size="sm"
      />
     </div>
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto} forceOpen={generatingPdf}>
      <div className="flex justify-center my-2">
       <div className="flex items-center gap-3 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
        <FractionDisplay numerator={num1} denominator={den1} size="xs"/>
@@ -775,7 +863,7 @@ function AddSubExercise({
       </p>
      )}
     </div>
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto} forceOpen={generatingPdf}>
      <p className="font-mono text-base">
       ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
      </p>
@@ -872,7 +960,7 @@ function AddSubExercise({
       <span>{feedbackFinale.testo}</span>
      </div>
     )}
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true || generatingPdf}>
      <p className="font-mono text-base">
       {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleRaw}
      </p>
@@ -922,6 +1010,7 @@ interface MulDivExerciseProps {
  risultatoFinaleUtente: string; feedbackFinale: { testo: string; corretto: boolean } | null;
  verificaFinale: (v: string) => void;
  onNew: () => void;
+ generatingPdf: boolean;
 }
 
 function MulDivExercise({
@@ -932,7 +1021,7 @@ function MulDivExercise({
  num2Semplificato, setNum2Semplificato,
  numeratoreFinaleUtente, setNumeratoreFinaleUtente,
  denominatoreFinaleUtente, setDenominatoreFinaleUtente,
- risultatoFinaleUtente, feedbackFinale, verificaFinale, onNew,
+ risultatoFinaleUtente, feedbackFinale, verificaFinale, onNew, generatingPdf,
 }: MulDivExerciseProps) {
  const [showStep3Guide, setShowStep3Guide] = useState(false);
  const [finalNumUtente, setFinalNumUtente] = useState<number | null>(null);
@@ -983,7 +1072,7 @@ function MulDivExercise({
      <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400"denClass="text-blue-400"/>
      {wrapParens && <span className="text-xl text-foreground">)</span>}
     </div>
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct} forceOpen={generatingPdf}>
      {op ==="/"&& (
       <div className="flex justify-center my-2">
        <div className="flex items-center gap-2 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
@@ -1103,7 +1192,7 @@ function MulDivExercise({
       </div>
      </div>
     </div>
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct} forceOpen={generatingPdf}>
      {(!computed.divCom1 && !computed.divCom2) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
@@ -1263,7 +1352,7 @@ function MulDivExercise({
       <span>{feedbackFinale.testo}</span>
      </div>
     )}
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true || generatingPdf}>
      <p className="font-mono text-base">
       {num1Semplificato !== null && num2Semplificato !== null
        ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
