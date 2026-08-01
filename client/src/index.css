@@ -162,7 +162,6 @@
 
   body {
     @apply bg-background text-foreground;
-    line-height: 2;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }

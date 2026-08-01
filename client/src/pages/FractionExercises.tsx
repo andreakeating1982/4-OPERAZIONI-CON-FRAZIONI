@@ -331,8 +331,14 @@ export default function FractionExercises() {
  const allFilled = num1 !== null && num2 !== null;
 
  return (
-  <div className="min-h-screen bg-background flex flex-col">
-   <main className="flex-1 max-w-2xl mx-auto w-full p-3 sm:p-4 pt-4">
+  <div className="min-h-screen bg-background paper-grain flex flex-col">
+   {/* Header */}
+   <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
+    <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground text-center">
+     OPERAZIONI CON LE FRAZIONI
+    </h1>
+   </header>
+   <main className="flex-1 max-w-2xl mx-auto w-full px-3 sm:px-4 pb-16">
     {/* Mode selector */}
     <div className="flex gap-1 p-1 bg-card/60 backdrop-blur-sm rounded-xl border border-border mb-4">
      <button
@@ -667,7 +673,7 @@ function AddSubExercise({
       </p>
      ) : (
       <p className="font-mono text-xs opacity-80">
-       Il m.c.m. tra {nd1} e {nd2} è {computed.mcmFormula} = {computed.mcmCorretto}
+       Il m.c.m. tra {nd1} e {nd2} è {computed.mcmFormula}, cioè...
       </p>
      )}
     </div>
