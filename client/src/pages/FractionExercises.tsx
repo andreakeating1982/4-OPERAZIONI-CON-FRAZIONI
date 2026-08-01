@@ -663,7 +663,7 @@ function AddSubExercise({
      <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
      {nd1 === nd2 ? (
       <p className="font-mono text-xs opacity-80">
-       Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè {nd1}
+       Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè...
       </p>
      ) : (
       <p className="font-mono text-xs opacity-80">
@@ -1272,19 +1272,19 @@ function MulDivExercise({
      </p>
      <div className="flex justify-center my-2">
       <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
-       {computed.denFinaleRaw === 1 ? (
-        <span className="font-bold">{computed.numFinaleRaw}</span>
+       {((den1Semplificato ?? 1) * (den2Semplificato ?? 1)) === 1 ? (
+        <span className="font-bold">{(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}</span>
        ) : (
         <>
-         <span className="font-bold">{computed.numFinaleRaw}</span><br />
-         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleRaw}</span>
+         <span className="font-bold">{(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}</span><br />
+         <span className="border-t border-black block mt-1 pt-1">{(den1Semplificato ?? 1) * (den2Semplificato ?? 1)}</span>
         </>
        )}
       </div>
      </div>
-     {(computed.numFinaleRaw !== computed.numFinaleCorretto || computed.denFinaleRaw !== computed.denFinaleCorretto) && (
+     {((num1Semplificato ?? 1) * (num2Semplificato ?? 1) !== computed.numFinaleCorretto || (den1Semplificato ?? 1) * (den2Semplificato ?? 1) !== computed.denFinaleCorretto) && (
       <p className="font-mono text-sm text-center">
-       {computed.numFinaleRaw}/{computed.denFinaleRaw} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
+       {(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}/{(den1Semplificato ?? 1) * (den2Semplificato ?? 1)} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
       </p>
      )}
     </NotebookGuide>
