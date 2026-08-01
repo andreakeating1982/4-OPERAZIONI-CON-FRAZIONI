@@ -216,7 +216,7 @@ export function MathDrawCanvas({
     if (tool === "write") {
       setCurrentStroke({
         points: [coords],
-        lineWidth: 3,
+        lineWidth: 4,
       });
       setIsDrawing(true);
     } else if (tool === "erase") {
@@ -339,6 +339,7 @@ export function MathDrawCanvas({
         onMouseMove={handlePointerMove}
         onMouseUp={handlePointerUp}
         onMouseLeave={handlePointerLeave}
+        onContextMenu={(e) => e.preventDefault()}
         onTouchStart={handlePointerDown}
         onTouchMove={handlePointerMove}
         onTouchEnd={handlePointerUp}

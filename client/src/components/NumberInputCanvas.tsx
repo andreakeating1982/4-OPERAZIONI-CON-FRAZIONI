@@ -102,12 +102,12 @@ export function NumberInputCanvas({
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {/* Quadratino del canvas */}
-      <div className="flex-shrink-0 w-[100px] h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="flex-shrink-0 w-[130px] sm:w-[150px] h-[95px] sm:h-[110px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <MathDrawCanvas
           strokes={strokes}
           onStrokesChange={handleStrokesChange}
           tool="write"
-          height={85}
+          
           className="border-0 rounded-none shadow-none ring-0"
           disabled={isLoading || isRecognizing}
           hideWatermark
