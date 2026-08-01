@@ -126,7 +126,7 @@ export default function FractionExercises() {
 
     const mcmFormulaParts: string[] = [];
     for (const [f, e] of Object.entries(mcmFattori)) {
-      mcmFormulaParts.push(e === 1 ? f : `${f}${"^".repeat(0)}${e}`);
+      mcmFormulaParts.push(e === 1 ? f : `${f}${toSuperscript(e)}`);
     }
 
     const effNum1 = num1 * (den1 < 0 ? -1 : 1);
@@ -676,7 +676,7 @@ function AddSubExercise({
             size="sm"
           />
         </div>
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: m.c.m." visible={mcmUtente !== null}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: m.c.m." visible={mcmUtente === computed.mcmCorretto}>
           <p className="font-bold text-foreground">1.</p>
           <p>Scrivi il titolo dell'esercizio: <span className="font-semibold text-primary">«Addizione tra frazioni»</span> (oppure «Sottrazione tra frazioni»).</p>
           <p className="font-bold text-foreground">2.</p>
@@ -765,7 +765,7 @@ function AddSubExercise({
             </p>
           )}
         </div>
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Divisione e moltiplicazione" visible={risultato1Utente !== null || risultato2Utente !== null}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Divisione e moltiplicazione" visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto}>
           <p className="font-bold text-foreground">1.</p>
           <p>
             Per la <span className="font-bold text-primary">prima frazione</span>: dividi il m.c.m. per il denominatore e moltiplica per il numeratore.
@@ -861,11 +861,10 @@ function AddSubExercise({
               ? "bg-success/10 text-success border border-success/30"
               : "bg-destructive/10 text-destructive border border-destructive/20",
           )}>
-            <span>{feedbackFinale.corretto ? "CORRETTO! " : "RISULTATO SBAGLIATO. CALCOLA DI NUOVO. "}</span>
             <span>{feedbackFinale.testo}</span>
           </div>
         )}
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Somma algebrica e risultato" visible={showStep3Guide} forceOpen={showStep3Guide}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Somma algebrica e risultato" visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
           <p className="font-bold text-foreground">1.</p>
           <p>
             Esegui l'operazione al <span className="font-bold text-primary">numeratore</span>:
@@ -971,6 +970,12 @@ function MulDivExercise({
   const displayDen2 = computed.displayDen2;
   const wrapParens = num2 < 0 && op === "/";
 
+  // Valori corretti per visibilità NotebookGuide (solo quando l'utente inserisce il risultato esatto)
+  const num1Correct = computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1;
+  const den2Correct = computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2;
+  const den1Correct = computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1;
+  const num2Correct = computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
+
   const numU = numeratoreFinaleUtente;
   const denU = denominatoreFinaleUtente;
 
@@ -998,7 +1003,7 @@ function MulDivExercise({
           <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400" denClass="text-blue-400" />
           {wrapParens && <span className="text-xl text-foreground">)</span>}
         </div>
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: Impostazione dell'operazione" visible={num1Semplificato !== null || den2Semplificato !== null}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 1: Impostazione dell'operazione" visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct}>
           <p className="font-bold text-foreground">1.</p>
           <p>Scrivi il titolo: <span className="font-semibold text-primary">«{op === "*" ? "Moltiplicazione" : "Divisione"} tra frazioni»</span>.</p>
           {op === "/" && (
@@ -1133,7 +1138,7 @@ function MulDivExercise({
             </div>
           </div>
         </div>
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Semplificazione incrociata" visible={den1Semplificato !== null || num2Semplificato !== null}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 2: Semplificazione incrociata" visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
           <p className="font-bold text-foreground">1.</p>
           <p>
             Nella moltiplicazione tra frazioni, puoi <span className="font-bold text-primary">semplificare in croce</span>:{" "}
@@ -1309,11 +1314,10 @@ function MulDivExercise({
               ? "bg-success/10 text-success border border-success/30"
               : "bg-destructive/10 text-destructive border border-destructive/20",
           )}>
-            <span>{feedbackFinale.corretto ? "CORRETTO! " : "RISULTATO SBAGLIATO. CALCOLA DI NUOVO. "}</span>
             <span>{feedbackFinale.testo}</span>
           </div>
         )}
-        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Moltiplicazione e risultato" visible={showStep3Guide} forceOpen={showStep3Guide}>
+        <NotebookGuide title="Cosa scrivere sul quaderno — Passo 3: Moltiplicazione e risultato" visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
           <p className="font-bold text-foreground">1.</p>
           <p>
             <span className="font-bold text-primary">Moltiplica i numeratori</span> tra loro:
