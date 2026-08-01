@@ -77,63 +77,63 @@ export function NumberInputCanvas({
   const hasContent = strokes.length > 0;
 
   return (
-    <div className={cn("flex flex-col items-center gap-2", className)}>
-      {/* Label sempre in maiuscolo (ereditato dal CSS globale) */}
-      <span className={cn(
-        "text-xs font-bold tracking-widest",
-        colorClass,
-      )}>
-        {label}
-      </span>
+    <div className={cn("flex items-center gap-3", className)}>
+      {/* Quadratino del canvas */}
+      <div className="flex-shrink-0 w-[100px] h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+        <MathDrawCanvas
+          strokes={strokes}
+          onStrokesChange={handleStrokesChange}
+          tool="write"
+          height={85}
+          className="border-0 rounded-none shadow-none ring-0"
+          disabled={isLoading || isRecognizing}
+          hideWatermark
+        />
+      </div>
 
-      {/* Canvas quadratino + pulsante Riconosci affiancati */}
-      <div className="flex items-center gap-3">
-        {/* Quadratino del canvas */}
-        <div className="w-[100px] h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-          <MathDrawCanvas
-            strokes={strokes}
-            onStrokesChange={handleStrokesChange}
-            tool="write"
-            height={85}
-            className="border-0 rounded-none shadow-none ring-0"
-            disabled={isLoading || isRecognizing}
-            hideWatermark
-          />
-        </div>
+      {/* Colonna destra: label + Riconosci + valore */}
+      <div className="flex flex-col items-center gap-1.5 flex-1">
+        {/* Label sopra il pulsante */}
+        <span className={cn(
+          "text-xs font-bold tracking-widest",
+          colorClass,
+        )}>
+          {label}
+        </span>
 
         {/* Pulsante Riconosci */}
         <button
           onClick={handleManualRecognize}
           disabled={!hasContent || !isModelReady || isRecognizing}
-          className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm"
+          className="h-9 px-5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm w-full"
         >
           {isRecognizing ? "..." : "RICONOSCI"}
         </button>
-      </div>
 
-      {/* Pulsante Cancella (solo se c'è contenuto) e valore riconosciuto */}
-      <div className="flex items-center gap-2">
-        {displayValue && (
-          <span className="inline-block px-3 py-0.5 rounded-lg bg-secondary text-sm font-serif font-bold">
-            {displayValue}
+        {/* Valore riconosciuto + cancella */}
+        <div className="flex items-center gap-2">
+          {displayValue && (
+            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-secondary text-sm font-serif font-bold">
+              {displayValue}
+            </span>
+          )}
+          {hasContent && (
+            <button
+              onClick={handleClear}
+              className="text-[10px] text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
+            >
+              CANCELLA
+            </button>
+          )}
+        </div>
+
+        {/* Caricamento AI */}
+        {isLoading && (
+          <span className="text-[10px] text-muted-foreground">
+            CARICAMENTO...
           </span>
         )}
-        {hasContent && (
-          <button
-            onClick={handleClear}
-            className="text-xs text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
-          >
-            CANCELLA
-          </button>
-        )}
       </div>
-
-      {/* Caricamento modello AI */}
-      {isLoading && (
-        <span className="text-[10px] text-muted-foreground">
-          CARICAMENTO AI IN CORSO...
-        </span>
-      )}
     </div>
   );
 }

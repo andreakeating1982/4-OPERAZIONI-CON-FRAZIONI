@@ -393,9 +393,9 @@ export default function FractionExercises() {
                   label="NUMERATORE"
                   allowNegative
                 />
-                {/* Linea di frazione */}
-                <div className="flex items-center px-4">
-                  <div className="w-full h-[2px] bg-foreground/80" />
+                {/* Linea di frazione (corta) */}
+                <div className="flex items-center justify-center py-1">
+                  <div className="w-2/5 h-[2px] bg-foreground/70" />
                 </div>
                 <NumberInputCanvas
                   value={den1}
@@ -403,6 +403,13 @@ export default function FractionExercises() {
                   label="DENOMINATORE"
                 />
               </div>
+            </div>
+
+            {/* Segno dell'operazione tra le due frazioni */}
+            <div className="flex items-center justify-center py-1">
+              <span className="text-2xl font-bold text-primary">
+                {mode === "addsub" ? (addSubOp === "+" ? "+" : "\u2212") : (mulDivOp === "*" ? "\u00d7" : "\u00f7")}
+              </span>
             </div>
 
             {/* Seconda frazione */}
@@ -419,9 +426,9 @@ export default function FractionExercises() {
                   label="NUMERATORE"
                   allowNegative
                 />
-                {/* Linea di frazione */}
-                <div className="flex items-center px-4">
-                  <div className="w-full h-[2px] bg-foreground/80" />
+                {/* Linea di frazione (corta) */}
+                <div className="flex items-center justify-center py-1">
+                  <div className="w-2/5 h-[2px] bg-foreground/70" />
                 </div>
                 <NumberInputCanvas
                   value={den2}
