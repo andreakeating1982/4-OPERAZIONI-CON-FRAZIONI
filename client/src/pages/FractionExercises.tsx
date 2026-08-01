@@ -841,7 +841,7 @@ function AddSubExercise({
           <div className={cn(
             "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
             feedbackFinale.corretto
-              ? "bg-green-500/10 text-green-400 border border-green-500/20"
+              ? "bg-green-100 text-green-700 border border-green-300"
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto
@@ -1221,7 +1221,7 @@ function MulDivExercise({
           <div className={cn(
             "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
             feedbackFinale.corretto
-              ? "bg-green-500/10 text-green-400 border border-green-500/20"
+              ? "bg-green-100 text-green-700 border border-green-300"
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto

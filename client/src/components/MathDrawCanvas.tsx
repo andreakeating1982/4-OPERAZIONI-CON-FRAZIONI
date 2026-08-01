@@ -79,7 +79,7 @@ export function MathDrawCanvas({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw grid
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+    ctx.strokeStyle = "rgba(139, 94, 60, 0.08)";
     ctx.lineWidth = 0.5;
     const gridSize = 20;
     for (let x = gridSize; x < canvas.width; x += gridSize) {
@@ -149,7 +149,7 @@ export function MathDrawCanvas({
     if (stroke.points.length === 0) return;
 
     ctx.beginPath();
-    ctx.strokeStyle = "#e2e8f0";
+    ctx.strokeStyle = "#3d2e1c";
     ctx.lineWidth = stroke.lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -157,7 +157,7 @@ export function MathDrawCanvas({
     if (stroke.points.length === 1) {
       const p = stroke.points[0];
       ctx.arc(p.x, p.y, stroke.lineWidth / 2, 0, Math.PI * 2);
-      ctx.fillStyle = "#e2e8f0";
+      ctx.fillStyle = "#3d2e1c";
       ctx.fill();
     } else {
       // Use quadratic Bézier curves for smooth lines
@@ -304,7 +304,7 @@ export function MathDrawCanvas({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full overflow-hidden rounded-xl border-2 border-border bg-[#0c1520] shadow-inner shadow-black/30 ring-1 ring-white/[0.03] group ${className}`}
+      className={`relative w-full overflow-hidden rounded-xl border-2 border-border bg-card shadow-inner shadow-black/[0.04] ring-1 ring-black/[0.04] group ${className}`}
       style={{ minHeight: height || 200 }}
     >
       {/* Empty state watermark */}

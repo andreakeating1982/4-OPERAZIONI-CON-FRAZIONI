@@ -23,7 +23,7 @@ export default function Home() {
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activeTool, setActiveTool] = useState<ToolType>("write");
   const [recognizedLatex, setRecognizedLatex] = useState<string | null>(null);
-  const [realtimeMode, setRealtimeMode] = useState(true);
+  const [realtimeMode, setRealtimeMode] = useState(false);
   const [recognitionMode, setRecognitionMode] = useState<RecognitionMode>("auto");
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [stats, setStats] = useState<{
@@ -240,7 +240,7 @@ export default function Home() {
               </div>
             )}
             {isModelReady && !isLoading && (
-              <div className="flex items-center gap-1.5 text-green-400">
+              <div className="flex items-center gap-1.5 text-green-600">
                 <Zap className="w-3 h-3" />
                 <span>Modello AI pronto</span>
               </div>
@@ -273,7 +273,7 @@ export default function Home() {
             Basato su CoMER (ECCV 2022) — Riconoscimento 100% nel browser
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70"></span>
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500/70"></span>
             Nessun dato inviato a server esterni
           </span>
         </div>

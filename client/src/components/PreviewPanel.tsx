@@ -68,14 +68,14 @@ export function PreviewPanel({
     temp.style.left = "-9999px";
     temp.style.top = "-9999px";
     temp.style.padding = "20px";
-    temp.style.backgroundColor = "#1a2332";
+    temp.style.backgroundColor = "#ffffff";
     temp.style.borderRadius = "8px";
     document.body.appendChild(temp);
 
     try {
       // Use html-to-image or canvas approach
       const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(temp, { backgroundColor: "#1a2332" });
+      const dataUrl = await toPng(temp, { backgroundColor: "#ffffff" });
 
       // Trigger download
       const link = document.createElement("a");
@@ -90,10 +90,10 @@ export function PreviewPanel({
       canvas.width = temp.offsetWidth * 2;
       canvas.height = temp.offsetHeight * 2;
       ctx.scale(2, 2);
-      ctx.fillStyle = "#1a2332";
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       // Simple text rendering fallback
-      ctx.fillStyle = "#e2e8f0";
+      ctx.fillStyle = "#3d2e1c";
       ctx.font = "24px 'Fira Code'";
       ctx.fillText(latex || "", 20, 50);
       const link = document.createElement("a");
@@ -183,8 +183,8 @@ export function PreviewPanel({
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-green-400" />
-                  <span className="text-green-400">Copiato!</span>
+                  <Check className="w-4 h-4 text-green-600" />
+                  <span className="text-green-600">Copiato!</span>
                 </>
               ) : (
                 <>
