@@ -4,8 +4,8 @@
   "description": "Scrivi formule matematiche a mano libera e convertile in LaTeX con AI",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f1729",
-  "theme_color": "#0f1729",
+  "background_color": "#ffffff",
+  "theme_color": "#8B5E3C",
   "icons": [
     {
       "src": "/icon-192.png",
