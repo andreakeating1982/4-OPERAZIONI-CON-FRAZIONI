@@ -694,7 +694,7 @@ function AddSubExercise({
      </div>
      {nd1 === nd2 ? (
      <p className="font-mono text-base">
-      Il m.c.m. tra {nd1} e {nd2} è uguale al numero stesso, cioè {nd1}
+      Il m.c.m tra {nd1} e {nd2} corrisponde al numero stesso, cioè {nd1}
      </p>
      ) : (
      <>
