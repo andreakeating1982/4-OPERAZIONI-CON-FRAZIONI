@@ -118,6 +118,7 @@ export function NumberInputCanvas({
           height={90}
           className="rounded-lg border-dashed"
           disabled={isLoading}
+          hideWatermark
         />
 
         {/* Overlay: recognized number or loading */}

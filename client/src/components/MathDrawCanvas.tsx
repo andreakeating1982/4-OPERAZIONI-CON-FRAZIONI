@@ -18,6 +18,7 @@ interface MathDrawCanvasProps {
   height?: number;
   className?: string;
   disabled?: boolean;
+  hideWatermark?: boolean;
 }
 
 const ERASER_RADIUS = 20;
@@ -30,6 +31,7 @@ export function MathDrawCanvas({
   height,
   className = "",
   disabled = false,
+  hideWatermark = false,
 }: MathDrawCanvasProps) {
   const isEmpty = strokes.length === 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -305,8 +307,8 @@ export function MathDrawCanvas({
       className={`relative w-full overflow-hidden rounded-xl border-2 border-border bg-[#0c1520] shadow-inner shadow-black/30 ring-1 ring-white/[0.03] group ${className}`}
       style={{ minHeight: height || 200 }}
     >
-      {/* Empty state watermark — like Windows "Scrivere qui le espressioni matematiche" */}
-      {isEmpty && tool === "write" && (
+      {/* Empty state watermark */}
+      {!hideWatermark && isEmpty && tool === "write" && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
           <div className="text-center opacity-25 transition-opacity duration-300 group-hover:opacity-30">
             <p className="text-base sm:text-lg font-light text-foreground/40 tracking-wide">
