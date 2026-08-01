@@ -10,6 +10,7 @@ interface FractionDisplayProps {
 }
 
 const sizeMap = {
+  xs: "text-xs min-w-[28px]",
   sm: "text-base min-w-[40px]",
   md: "text-xl min-w-[56px]",
   lg: "text-2xl min-w-[72px]",
