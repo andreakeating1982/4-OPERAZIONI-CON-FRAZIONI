@@ -684,6 +684,12 @@ function AddSubExercise({
       size="sm"
      />
     </div>
+    {/* Equal denominators message — outside dropdown, always visible when correct */}
+    {nd1 === nd2 && mcmUtente === computed.mcmCorretto && (
+     <p className="font-mono text-base text-center mt-2">
+      Il m.c.m tra {nd1} e {nd2} corrisponde al numero stesso, cioè {nd1}
+     </p>
+    )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto}>
      <div className="flex justify-center my-2">
       <div className="flex items-center gap-4 text-base font-mono bg-muted px-4 py-2 rounded-lg">
@@ -692,11 +698,7 @@ function AddSubExercise({
        <FractionDisplay numerator={num2} denominator={den2} size="md"/>
       </div>
      </div>
-     {nd1 === nd2 ? (
-     <p className="font-mono text-base">
-      Il m.c.m tra {nd1} e {nd2} corrisponde al numero stesso, cioè {nd1}
-     </p>
-     ) : (
+     {nd1 !== nd2 && (
      <>
      <p className="font-mono text-base">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
@@ -1098,28 +1100,48 @@ function MulDivExercise({
      </div>
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
-     {computed.divCom1 && (
-      <p className="font-mono text-base">
-       {num1} : {computed.divCom1} = {Math.abs(num1) / computed.divCom1 * (num1 < 0 ? -1 : 1)}{""}
-       &nbsp;&nbsp;{computed.actualDen2} : {computed.divCom1} = {Math.abs(computed.actualDen2) / computed.divCom1}
-      </p>
-     )}
-     {computed.divCom2 && (
-      <p className="font-mono text-base">
-       {nd1} : {computed.divCom2} = {Math.abs(nd1) / computed.divCom2}{""}
-       &nbsp;&nbsp;{computed.actualNum2} : {computed.divCom2} = {Math.abs(computed.actualNum2) / computed.divCom2 * (computed.actualNum2 < 0 ? -1 : 1)}
-      </p>
-     )}
-     <div className="flex justify-center my-2">
-      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg leading-relaxed">
-       <span className="line-through decoration-red-500/50">{num1}</span>→{num1Semplificato !== null ? num1Semplificato :"?"}{""}
-       &nbsp; &nbsp;
-       <span className="line-through decoration-red-500/50">{computed.actualDen2}</span>→{den2Semplificato !== null ? den2Semplificato :"?"}<br />
-       <span className="line-through decoration-red-500/50">{nd1}</span>→{den1Semplificato !== null ? den1Semplificato :"?"}{""}
-       &nbsp; &nbsp;
-       <span className="line-through decoration-red-500/50">{computed.actualNum2}</span>→{num2Semplificato !== null ? num2Semplificato :"?"}
+     {(!computed.divCom1 && !computed.divCom2) ? (
+      <p className="text-base text-center font-bold py-2">NESSUNA SEMPLIFICAZIONE DA FARE</p>
+     ) : (
+      <>
+      {op === "/"&& (
+       <div className="flex justify-center my-2">
+        <div className="flex items-center gap-3 text-base bg-muted px-4 py-2 rounded-lg">
+         <FractionDisplay numerator={num1} denominator={nd1} size="sm"/>
+         <span className="text-base">÷</span>
+         <FractionDisplay numerator={num2} denominator={nd2} size="sm"/>
+         <span className="text-base">→</span>
+         <FractionDisplay numerator={num1} denominator={nd1} size="sm"/>
+         <span className="text-base">×</span>
+         <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="sm"/>
+        </div>
+       </div>
+      )}
+      <div className="flex justify-center my-2">
+       <div className="flex items-center gap-3 text-base bg-muted px-4 py-2 rounded-lg">
+        <div className="flex flex-col items-center">
+         <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
+         {(dDen1S !== 1 && dDen1S !=="1") && (
+         <>
+          <div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>
+          <span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span>
+         </>
+         )}
+        </div>
+        <span className="text-base font-bold">×</span>
+        <div className="flex flex-col items-center">
+         <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
+         {(dDen2S !== 1 && dDen2S !=="1") && (
+         <>
+          <div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>
+          <span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span>
+         </>
+         )}
+        </div>
+       </div>
       </div>
-     </div>
+      </>
+     )}
     </NotebookGuide>
 
    </div>
