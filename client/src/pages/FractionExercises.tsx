@@ -657,7 +657,7 @@ function AddSubExercise({
      <p className="font-mono text-xs opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
      <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
      <p className="font-mono text-xs opacity-80">
-      Il m.c.m. tra {nd1} e {nd2} è uguale a {computed.mcmFormula}, cioè...
+      Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè...
      </p>
     </div>
 
@@ -698,7 +698,6 @@ function AddSubExercise({
        <FractionDisplay numerator={num2} denominator={den2} size="xs"/>
       </div>
      </div>
-     <p className="font-mono text-sm text-center text-primary mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
      {nd1 !== nd2 && (
      <>
      <p className="font-mono text-sm">
@@ -713,7 +712,7 @@ function AddSubExercise({
      <div className="flex justify-center my-2">
       <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
        ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
-       <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
+       <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
      </div>
     </NotebookGuide>
@@ -774,7 +773,7 @@ function AddSubExercise({
      <div className="flex justify-center my-2">
       <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
        <span className="font-bold">{computed.val1Corretto}</span> {op} (<span className="font-bold">{computed.val2Corretto}</span>)<br />
-       <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
+       <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
      </div>
     </NotebookGuide>
@@ -872,7 +871,7 @@ function AddSubExercise({
        ) : (
         <>
          <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-         <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleCorretto}</span>
         </>
        )}
       </div>
@@ -1111,7 +1110,7 @@ function MulDivExercise({
          <span className="text-orange-400 font-bold font-serif text-sm">{dNum1S}</span>
          {(dDen1S !== 1 && dDen1S !=="1") && (
          <>
-          <div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>
+          <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-sky-400 font-bold font-serif text-sm">{dDen1S}</span>
          </>
          )}
@@ -1121,7 +1120,7 @@ function MulDivExercise({
          <span className="text-red-400 font-bold font-serif text-sm">{dNum2S}</span>
          {(dDen2S !== 1 && dDen2S !=="1") && (
          <>
-          <div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>
+          <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-blue-400 font-bold font-serif text-sm">{dDen2S}</span>
          </>
          )}
@@ -1267,7 +1266,7 @@ function MulDivExercise({
        ) : (
         <>
          <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-         <span className="border-t border-border block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleCorretto}</span>
         </>
        )}
       </div>

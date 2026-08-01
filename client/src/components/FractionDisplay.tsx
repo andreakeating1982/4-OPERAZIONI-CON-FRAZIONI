@@ -36,7 +36,7 @@ export function FractionDisplay({
   return (
     <span className={cn("inline-flex flex-col items-center align-middle mx-1", sizeMap[size], className)}>
       <span className={cn("block text-center px-1", numClass)}>{numerator}</span>
-      <span className="block w-full border-t border-foreground/60 my-0.5" />
+      <span className="block w-full border-t border-black my-0.5" />
       <span className={cn("block text-center px-1", denClass)}>{denominator}</span>
     </span>
   );
