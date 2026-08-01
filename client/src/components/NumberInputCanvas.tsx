@@ -118,7 +118,7 @@ export function NumberInputCanvas({
       <div className="flex flex-col items-center gap-1.5 flex-1">
         {/* Label sopra il pulsante */}
         <span className={cn(
-          "text-xs font-bold tracking-widest",
+          "text-sm font-bold tracking-widest",
           colorClass,
         )}>
           {label}
@@ -128,7 +128,7 @@ export function NumberInputCanvas({
         <button
           onClick={handleManualRecognize}
           disabled={!hasContent || !isModelReady || isRecognizing}
-          className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm"
+          className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-sm font-bold tracking-widest transition-all shadow-sm"
         >
           {isRecognizing ? "..." : "RICONOSCI"}
         </button>
@@ -136,14 +136,14 @@ export function NumberInputCanvas({
         {/* Valore riconosciuto + cancella */}
         <div className="flex items-center gap-2">
           {displayValue && (
-            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-secondary text-sm font-serif font-bold">
+            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-secondary text-base font-serif font-bold">
               {displayValue}
             </span>
           )}
           {hasContent && (
             <button
               onClick={handleClear}
-              className="text-[10px] text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
+              className="text-sm text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
             >
               CANCELLA
             </button>
@@ -152,7 +152,7 @@ export function NumberInputCanvas({
 
         {/* Caricamento AI */}
         {isLoading && (
-          <span className="text-[10px] text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             CARICAMENTO...
           </span>
         )}

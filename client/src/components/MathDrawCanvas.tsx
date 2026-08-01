@@ -314,7 +314,7 @@ export function MathDrawCanvas({
             <p className="text-base sm:text-lg font-light text-foreground/40 tracking-wide">
               Scrivi qui le espressioni matematiche
             </p>
-            <p className="text-xs text-muted-foreground/40 mt-1">
+            <p className="text-sm text-muted-foreground/40 mt-1">
               Usa il mouse, touch o pennino
             </p>
           </div>

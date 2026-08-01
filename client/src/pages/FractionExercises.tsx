@@ -334,7 +334,7 @@ export default function FractionExercises() {
           <button
             onClick={() => { setMode("addsub"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-base font-bold transition-all duration-200",
               mode === "addsub"
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "text-muted-foreground hover:text-foreground hover:bg-secondary",
@@ -345,7 +345,7 @@ export default function FractionExercises() {
           <button
             onClick={() => { setMode("muldiv"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-base font-bold transition-all duration-200",
               mode === "muldiv"
                 ? "bg-primary text-primary-foreground shadow-md"
                 : "text-muted-foreground hover:text-foreground hover:bg-secondary",
@@ -360,19 +360,19 @@ export default function FractionExercises() {
           <div className="space-y-6">
             {/* Suggerimento */}
             <div className="text-center">
-              <span className="text-xs text-muted-foreground tracking-widest font-semibold">
+              <span className="text-base text-muted-foreground tracking-widest font-semibold">
                 SCRIVI IL NUMERO NEL RIQUADRO
               </span>
             </div>
 
             {/* Operation selector */}
             <div className="flex items-center justify-center gap-3">
-              <label className="text-sm font-bold tracking-wider">OPERAZIONE:</label>
+              <label className="text-base font-bold tracking-wider">OPERAZIONE:</label>
               {mode === "addsub" ? (
                 <select
                   value={addSubOp}
                   onChange={(e) => setAddSubOp(e.target.value as "+" | "-")}
-                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-base font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="+">ADDIZIONE (+)</option>
                   <option value="-">SOTTRAZIONE (&minus;)</option>
@@ -381,7 +381,7 @@ export default function FractionExercises() {
                 <select
                   value={mulDivOp}
                   onChange={(e) => setMulDivOp(e.target.value as "*" | "/")}
-                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-base font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option value="*">MOLTIPLICAZIONE (&times;)</option>
                   <option value="/">DIVISIONE (&divide;)</option>
@@ -392,7 +392,7 @@ export default function FractionExercises() {
             {/* Prima frazione */}
             <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in max-w-xs mx-auto w-full">
               <div className="py-2.5 border-b border-border bg-secondary/50">
-                <span className="text-sm font-bold tracking-widest">
+                <span className="text-base font-bold tracking-widest">
                   PRIMA FRAZIONE
                 </span>
               </div>
@@ -425,7 +425,7 @@ export default function FractionExercises() {
             {/* Seconda frazione */}
             <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in max-w-xs mx-auto w-full">
               <div className="py-2.5 border-b border-border bg-secondary/50">
-                <span className="text-sm font-bold tracking-widest">
+                <span className="text-base font-bold tracking-widest">
                   SECONDA FRAZIONE
                 </span>
               </div>
@@ -568,15 +568,15 @@ function NotebookGuide({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-center px-4 py-2.5 hover:bg-primary/10 transition-colors relative"
       >
-        <span className="text-sm font-bold text-primary text-center">{title}</span>
+        <span className="text-base font-bold text-primary text-center">{title}</span>
         <span className={cn(
-          "text-primary/60 text-xs transition-transform duration-300 absolute right-4",
+          "text-primary/60 text-base transition-transform duration-300 absolute right-4",
           open && "rotate-180",
         )}>{open ? "▲" : "▼"}</span>
       </button>
       {open && (
         <div className="px-4 pb-4 pt-1">
-          <div className="notebook-content rounded-lg bg-card border border-border p-3.5 space-y-2 text-sm leading-loose text-foreground text-justify">
+          <div className="notebook-content rounded-lg bg-card border border-border p-3.5 space-y-2 text-base leading-loose text-foreground text-justify">
             {/* Notebook lines */}
             <div
               className="relative"
@@ -643,12 +643,12 @@ function AddSubExercise({
         <p className="text-base font-bold text-primary">1. Calcolo del m.c.m. tra i denominatori</p>
 
         {/* Notebook Guide: Step 1 */}
-        <div className="space-y-1.5 text-sm">
+        <div className="space-y-1.5 text-base">
           <p className="font-semibold">1.1 Scomposizione in fattori primi dei denominatori:</p>
-          <p className="font-mono text-xs opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
-          <p className="font-mono text-xs opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
+          <p className="font-mono text-base opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
+          <p className="font-mono text-base opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
           <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
-          <p className="font-mono text-xs opacity-80">
+          <p className="font-mono text-base opacity-80">
             Il m.c.m. tra {nd1} e {nd2} è uguale a {computed.mcmFormula}, cioè...
           </p>
         </div>
@@ -661,7 +661,7 @@ function AddSubExercise({
         />
         {mcmUtente !== null && (
           <p className={cn(
-            "text-xs font-bold text-center mt-1",
+            "text-base font-bold text-center mt-1",
             mcmUtente === computed.mcmCorretto ? "text-success" : "text-destructive",
           )}>
             {mcmUtente === computed.mcmCorretto ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -684,15 +684,15 @@ function AddSubExercise({
               <FractionDisplay numerator={num2} denominator={den2} size="md" />
             </div>
           </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}<br />
             {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-xs text-center bg-muted px-4 py-2 rounded-lg">
+            <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
               ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
               <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
             </div>
@@ -707,7 +707,7 @@ function AddSubExercise({
 
         {/* Notebook Guide: Step 2 */}
         <div className="space-y-3">
-          <p className="text-sm">
+          <p className="text-base">
             ({mcmDisplay} : {nd1}) · ({effNum1}) = <span className="font-bold">Risultato 1</span>
           </p>
           <NumberInputCanvas
@@ -719,14 +719,14 @@ function AddSubExercise({
           />
           {risultato1Utente !== null && (
             <p className={cn(
-              "text-xs font-bold text-center",
+              "text-base font-bold text-center",
               risultato1Utente === computed.val1Corretto ? "text-success" : "text-destructive",
             )}>
               {risultato1Utente === computed.val1Corretto ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
             </p>
           )}
 
-          <p className="text-sm">
+          <p className="text-base">
             ({mcmDisplay} : {nd2}) · ({effNum2}) = <span className="font-bold">Risultato 2</span>
           </p>
           <NumberInputCanvas
@@ -738,7 +738,7 @@ function AddSubExercise({
           />
           {risultato2Utente !== null && (
             <p className={cn(
-              "text-xs font-bold text-center",
+              "text-base font-bold text-center",
               risultato2Utente === computed.val2Corretto ? "text-success" : "text-destructive",
             )}>
               {risultato2Utente === computed.val2Corretto ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -746,14 +746,14 @@ function AddSubExercise({
           )}
         </div>
         <NotebookGuide title="RICOPIA SUL QUADERNO:" visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto}>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+            <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
               <span className="font-bold">{computed.val1Corretto}</span> {op} (<span className="font-bold">{computed.val2Corretto}</span>)<br />
               <span className="border-t border-border block mt-1 pt-1">{computed.mcmCorretto}</span>
             </div>
@@ -777,7 +777,7 @@ function AddSubExercise({
 
         {/* Final result handwriting input */}
         <div className="space-y-3 pt-2">
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-base font-semibold text-foreground">
             Scrivi il risultato finale:
           </p>
           <div className="rounded-xl border border-border bg-card/60 p-3 space-y-1">
@@ -827,7 +827,7 @@ function AddSubExercise({
 
         {feedbackFinale && (
           <div className={cn(
-            "p-3 rounded-lg text-sm font-semibold text-center",
+            "p-3 rounded-lg text-base font-semibold text-center",
             feedbackFinale.corretto
               ? "bg-success/10 text-success border border-success/30"
               : "bg-destructive/10 text-destructive border border-destructive/20",
@@ -836,11 +836,11 @@ function AddSubExercise({
           </div>
         )}
         <NotebookGuide title="RICOPIA SUL QUADERNO:" visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleCorretto}
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+            <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
               {computed.denFinaleCorretto === 1 ? (
                 <span className="font-bold">{computed.numFinaleCorretto}</span>
               ) : (
@@ -857,7 +857,7 @@ function AddSubExercise({
               const intero = Math.floor(absNum / computed.denFinaleCorretto);
               const resto = absNum % computed.denFinaleCorretto;
               return (
-                <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+                <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
                   {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
                 </p>
               );
@@ -871,7 +871,7 @@ function AddSubExercise({
       {/* New exercise */}
       <button
         onClick={onNew}
-        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold tracking-widest transition-all duration-200"
+        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-base font-bold tracking-widest transition-all duration-200"
       >
         NUOVO ESERCIZIO
       </button>
@@ -957,7 +957,7 @@ function MulDivExercise({
         <NotebookGuide title="RICOPIA SUL QUADERNO:" visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct}>
           {op === "/" && (
             <div className="flex justify-center my-2">
-              <div className="flex items-center gap-3 text-sm font-mono bg-muted px-4 py-2 rounded-lg">
+              <div className="flex items-center gap-3 text-base font-mono bg-muted px-4 py-2 rounded-lg">
                 <FractionDisplay numerator={num1} denominator={nd1} size="sm" />
                 <span className="text-lg">÷</span>
                 <FractionDisplay numerator={num2} denominator={nd2} size="sm" />
@@ -969,7 +969,7 @@ function MulDivExercise({
             </div>
           )}
           <div className="flex justify-center my-2">
-            <div className="flex items-center gap-3 text-sm bg-muted px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-3 text-base bg-muted px-4 py-2 rounded-lg">
               <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" size="sm" />
               <span className="text-lg font-bold">×</span>
               <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400" denClass="text-blue-400" size="sm" />
@@ -986,7 +986,7 @@ function MulDivExercise({
         {/* Notebook Guide: Step 2 */}
         <div className="space-y-4">
           <div>
-            <p className="text-xs mb-2">
+            <p className="text-base mb-2">
               <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 1:</span> divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span>
               {" "}{computed.divCom1
                 ? <>per <span className="font-bold">{computed.divCom1}</span></>
@@ -1002,7 +1002,7 @@ function MulDivExercise({
               />
               {num1Semplificato !== null && (
                 <p className={cn(
-                  "text-xs font-bold text-center",
+                  "text-base font-bold text-center",
                   num1Semplificato === (computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ? "text-success" : "text-destructive",
                 )}>
                   {num1Semplificato === (computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -1016,7 +1016,7 @@ function MulDivExercise({
               />
               {den2Semplificato !== null && (
                 <p className={cn(
-                  "text-xs font-bold text-center",
+                  "text-base font-bold text-center",
                   den2Semplificato === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ? "text-success" : "text-destructive",
                 )}>
                   {den2Semplificato === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -1026,7 +1026,7 @@ function MulDivExercise({
           </div>
 
           <div>
-            <p className="text-xs mb-2">
+            <p className="text-base mb-2">
               <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 2:</span> divido sia il <span className="text-sky-400 font-bold">denominatore {nd1}</span> che il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span>
               {" "}{computed.divCom2
                 ? <>per <span className="font-bold">{computed.divCom2}</span></>
@@ -1042,7 +1042,7 @@ function MulDivExercise({
               />
               {den1Semplificato !== null && (
                 <p className={cn(
-                  "text-xs font-bold text-center",
+                  "text-base font-bold text-center",
                   den1Semplificato === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ? "text-success" : "text-destructive",
                 )}>
                   {den1Semplificato === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -1057,7 +1057,7 @@ function MulDivExercise({
               />
               {num2Semplificato !== null && (
                 <p className={cn(
-                  "text-xs font-bold text-center",
+                  "text-base font-bold text-center",
                   num2Semplificato === (computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ? "text-success" : "text-destructive",
                 )}>
                   {num2Semplificato === (computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ? "CORRETTO" : `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
@@ -1068,19 +1068,19 @@ function MulDivExercise({
         </div>
         <NotebookGuide title="RICOPIA SUL QUADERNO:" visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
           {computed.divCom1 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+            <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
               {num1} : {computed.divCom1} = {Math.abs(num1) / computed.divCom1 * (num1 < 0 ? -1 : 1)}{" "}
               &nbsp;&nbsp;{computed.actualDen2} : {computed.divCom1} = {Math.abs(computed.actualDen2) / computed.divCom1}
             </p>
           )}
           {computed.divCom2 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+            <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
               {nd1} : {computed.divCom2} = {Math.abs(nd1) / computed.divCom2}{" "}
               &nbsp;&nbsp;{computed.actualNum2} : {computed.divCom2} = {Math.abs(computed.actualNum2) / computed.divCom2 * (computed.actualNum2 < 0 ? -1 : 1)}
             </p>
           )}
           <div className="flex justify-center my-2">
-            <div className="font-mono text-xs text-center bg-muted px-4 py-2 rounded-lg leading-relaxed">
+            <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg leading-relaxed">
               <span className="line-through decoration-red-500/50">{num1}</span>→{num1Semplificato !== null ? num1Semplificato : "?"}{" "}
               &nbsp; &nbsp;
               <span className="line-through decoration-red-500/50">{computed.actualDen2}</span>→{den2Semplificato !== null ? den2Semplificato : "?"}<br />
@@ -1100,7 +1100,7 @@ function MulDivExercise({
         {/* Notebook Guide: Step 3 */}
         <div className="space-y-4">
           <div>
-            <p className="text-sm mb-2">
+            <p className="text-base mb-2">
               Moltiplicazione numeratori:{" "}
               <span className="text-orange-400 font-bold">{dNum1S}</span> · (<span className="text-red-400 font-bold">{dNum2S}</span>) = <span className="font-bold">Risultato numeratore finale</span>
             </p>
@@ -1113,7 +1113,7 @@ function MulDivExercise({
             />
           </div>
           <div>
-            <p className="text-sm mb-2">
+            <p className="text-base mb-2">
               Moltiplicazione denominatori:{" "}
               <span className="text-sky-400 font-bold">{dDen1S}</span> · (<span className="text-blue-400 font-bold">{dDen2S}</span>) = <span className="font-bold">Risultato denominatore finale</span>
             </p>
@@ -1141,7 +1141,7 @@ function MulDivExercise({
 
         {/* Final verification with handwriting */}
         <div className="space-y-3 pt-2">
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-base font-semibold text-foreground">
             Scrivi il risultato finale:
           </p>
           <div className="rounded-xl border border-border bg-card/60 p-3 space-y-1">
@@ -1193,7 +1193,7 @@ function MulDivExercise({
 
         {feedbackFinale && (
           <div className={cn(
-            "p-3 rounded-lg text-sm font-semibold text-center",
+            "p-3 rounded-lg text-base font-semibold text-center",
             feedbackFinale.corretto
               ? "bg-success/10 text-success border border-success/30"
               : "bg-destructive/10 text-destructive border border-destructive/20",
@@ -1202,20 +1202,20 @@ function MulDivExercise({
           </div>
         )}
         <NotebookGuide title="RICOPIA SUL QUADERNO:" visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             {num1Semplificato !== null && num2Semplificato !== null
               ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
               : <span className="italic">... × ... = ?</span>
             }
           </p>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
+          <p className="font-mono text-base pl-2 border-l-2 border-border ml-2 text-left">
             {den1Semplificato !== null && den2Semplificato !== null
               ? <span className="font-bold text-primary">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
               : <span className="italic">... × ... = ?</span>
             }
           </p>
           <div className="flex justify-center my-2">
-            <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
+            <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
               {computed.denFinaleCorretto === 1 ? (
                 <span className="font-bold">{computed.numFinaleCorretto}</span>
               ) : (
@@ -1233,7 +1233,7 @@ function MulDivExercise({
       {/* New exercise */}
       <button
         onClick={onNew}
-        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold tracking-widest transition-all duration-200"
+        className="max-w-xs mx-auto w-full py-3 rounded-xl bg-secondary hover:bg-secondary/80 text-foreground text-base font-bold tracking-widest transition-all duration-200"
       >
         NUOVO ESERCIZIO
       </button>

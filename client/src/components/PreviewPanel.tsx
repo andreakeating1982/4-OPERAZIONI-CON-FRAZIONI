@@ -122,7 +122,7 @@ export function PreviewPanel({
       {/* Preview label */}
       <div className="flex items-center gap-2">
         <Eye className="w-4 h-4 text-muted-foreground" />
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
           Anteprima
         </span>
         {isRecognizing && (
@@ -143,16 +143,16 @@ export function PreviewPanel({
         {isRecognizing && !latex && (
           <div className="flex items-center gap-3 text-muted-foreground">
             <Sparkles className="w-5 h-5 text-primary animate-pulse" />
-            <span className="text-sm">Riconoscimento in corso...</span>
+            <span className="text-base">Riconoscimento in corso...</span>
           </div>
         )}
 
         {!isRecognizing && !latex && (
           <div className="text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Scrivi un'espressione matematica nell'area di scrittura
             </p>
-            <p className="text-xs text-muted-foreground/60 mt-1">
+            <p className="text-sm text-muted-foreground/60 mt-1">
               Il riconoscimento partirà automaticamente
             </p>
           </div>
@@ -179,7 +179,7 @@ export function PreviewPanel({
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-secondary hover:bg-secondary/80 text-sm font-medium transition-all duration-200"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-secondary hover:bg-secondary/80 text-base font-medium transition-all duration-200"
             >
               {copied ? (
                 <>
@@ -195,7 +195,7 @@ export function PreviewPanel({
             </button>
             <button
               onClick={handleInsert}
-              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-semibold transition-all duration-200 shadow-md shadow-primary/20"
+              className="flex items-center gap-2 px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-base font-semibold transition-all duration-200 shadow-md shadow-primary/20"
             >
               <span>Inserisci</span>
             </button>

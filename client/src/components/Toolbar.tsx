@@ -37,7 +37,7 @@ export function Toolbar({
             onClick={() => onToolChange(tool.id)}
             disabled={isRecognizing}
             className={cn(
-              "relative flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200",
+              "relative flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-200",
               "disabled:opacity-40 disabled:cursor-not-allowed",
               isActive
                 ? "bg-[#b05f3c] text-white shadow-md"
@@ -56,7 +56,7 @@ export function Toolbar({
         onClick={onUndo}
         disabled={!canUndo || isRecognizing}
         className={cn(
-          "flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200",
+          "flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-200",
           "disabled:opacity-40 disabled:cursor-not-allowed",
           canUndo && !isRecognizing
             ? "text-[#55483d] hover:text-[#221b16] hover:bg-[#f3eee4] active:scale-95"
@@ -71,7 +71,7 @@ export function Toolbar({
         onClick={onClear}
         disabled={!canClear || isRecognizing}
         className={cn(
-          "flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-200",
+          "flex items-center justify-center px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-200",
           "disabled:opacity-40 disabled:cursor-not-allowed",
           canClear && !isRecognizing
             ? "text-[#55483d] hover:text-red-600 hover:bg-red-50 active:scale-95"

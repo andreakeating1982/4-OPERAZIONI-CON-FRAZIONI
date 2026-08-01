@@ -140,19 +140,10 @@
     font-family: Cambria, Georgia, "Times New Roman", serif !important;
   }
 
-  /* NotebookGuide: testo normale, giustificato (non maiuscolo) */
+  /* NotebookGuide: testo normale, tutto centrato (non maiuscolo) */
   body .notebook-content,
   body .notebook-content * {
     text-transform: none !important;
-  }
-  body .notebook-content {
-    text-align: justify !important;
-  }
-  body .notebook-content .text-left,
-  body .notebook-content .font-mono {
-    text-align: left !important;
-  }
-  body .notebook-content .text-center {
     text-align: center !important;
   }
 

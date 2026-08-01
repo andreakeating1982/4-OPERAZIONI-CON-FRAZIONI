@@ -130,13 +130,13 @@ export default function Home() {
               <h1 className="text-base font-semibold text-foreground leading-tight">
                 Math Input Panel
               </h1>
-              <p className="text-xs text-muted-foreground leading-tight">
+              <p className="text-sm text-muted-foreground leading-tight">
                 Riconoscimento scrittura matematica
               </p>
             </div>
             <a
               href="/"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-xs font-medium text-muted-foreground hover:text-foreground transition-all duration-200 border border-border ml-3"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-sm font-medium text-muted-foreground hover:text-foreground transition-all duration-200 border border-border ml-3"
               title="Esercizi con le frazioni"
             >
               <GraduationCap className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export default function Home() {
             {/* Real-time toggle */}
             <button
               onClick={() => setRealtimeMode(!realtimeMode)}
-              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               title={
                 realtimeMode
                   ? "Riconoscimento in tempo reale"
@@ -171,7 +171,7 @@ export default function Home() {
               onChange={(e) =>
                 setRecognitionMode(e.target.value as RecognitionMode)
               }
-              className="text-xs bg-secondary border border-border rounded-lg px-2.5 py-1.5 text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
+              className="text-sm bg-secondary border border-border rounded-lg px-2.5 py-1.5 text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option value="auto">Auto</option>
               <option value="number">Numeri</option>
@@ -226,7 +226,7 @@ export default function Home() {
           )}
 
           {/* Status info */}
-          <div className="flex items-center gap-2 sm:gap-4 text-xs text-muted-foreground flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-4 text-sm text-muted-foreground flex-wrap">
             {isLoading && (
               <div className="flex items-center gap-1.5">
                 <Loader2 className="w-3 h-3 animate-spin" />
@@ -268,7 +268,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border py-3 mt-auto">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-1 text-xs text-muted-foreground text-center sm:text-left">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-1 text-sm text-muted-foreground text-center sm:text-left">
           <span>
             Basato su CoMER (ECCV 2022) — Riconoscimento 100% nel browser
           </span>
