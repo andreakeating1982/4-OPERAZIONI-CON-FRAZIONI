@@ -264,7 +264,7 @@ export default function FractionExercises() {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Georgia,serif;color:#1a1a1a;padding:36px 24px;max-width:800px;margin:0 auto;text-align:center;line-height:2.3}
+body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;max-width:800px;margin:0 auto;text-align:center;line-height:2.3}
 .text-primary,.text-primary *{color:#92400e!important;font-weight:bold!important}
 .text-orange-400,.text-orange-400 *{color:#ea580c!important}
 .text-blue-400,.text-blue-400 *{color:#2563eb!important}
@@ -274,8 +274,8 @@ body{font-family:Georgia,serif;color:#1a1a1a;padding:36px 24px;max-width:800px;m
 .text-destructive,.text-destructive *{color:#dc2626!important}
 .text-amber-900,.text-amber-900 *{color:#78350f!important}
 .font-bold{font-weight:bold!important}
-.font-mono{font-family:'Courier New',monospace!important}
-.font-serif{font-family:Georgia,serif!important}
+.font-mono{font-family:'Cambria Math',Cambria,serif!important}
+.font-serif{font-family:'Cambria Math',Cambria,serif!important}
 .font-semibold{font-weight:600!important}
 .bg-muted{background:#f1f5f9!important;padding:8px 14px!important;border-radius:8px!important;display:inline-block!important}
 .rounded-lg{border-radius:8px!important}
@@ -306,8 +306,20 @@ body{font-family:Georgia,serif;color:#1a1a1a;padding:36px 24px;max-width:800px;m
 .leading-loose{line-height:2.5!important}
 .leading-relaxed{line-height:2.2!important}
 .opacity-80{opacity:.8!important}
+.text-sm{font-size:14px!important}
+.text-base{font-size:16px!important}
+.text-xl{font-size:20px!important}
+.text-2xl{font-size:24px!important}
+.mx-1{margin-left:4px!important;margin-right:4px!important}
+.px-1{padding-left:4px!important;padding-right:4px!important}
+.align-middle{vertical-align:middle!important}
+.w-full{width:100%!important}
 .w-10{width:40px!important}.w-12{width:48px!important}
 .h-\[2px\]{height:2px!important}
+.min-w-\[32px\]{min-width:32px!important}
+.min-w-\[40px\]{min-width:40px!important}
+.min-w-\[56px\]{min-width:56px!important}
+.min-w-\[72px\]{min-width:72px!important}
 .bg-black{background:#000!important}
 .bg-foreground\/70{background:rgba(0,0,0,.7)!important}
 .px-3\\\\.5{padding-left:14px!important;padding-right:14px!important}
