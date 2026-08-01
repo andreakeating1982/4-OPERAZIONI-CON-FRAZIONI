@@ -661,9 +661,15 @@ function AddSubExercise({
      <p className="font-mono text-xs opacity-80">Denominatore 1ª fraz. ({nd1}): {formatFattori(nd1, computed.fattori1)}</p>
      <p className="font-mono text-xs opacity-80">Denominatore 2ª fraz. ({nd2}): {formatFattori(nd2, computed.fattori2)}</p>
      <p className="font-semibold mt-2">1.2 Calcolo del minimo comune multiplo:</p>
-     <p className="font-mono text-xs opacity-80">
-      Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè...
-     </p>
+     {nd1 === nd2 ? (
+      <p className="font-mono text-xs opacity-80">
+       Il m.c.m. tra {nd1} e {nd2} è il numero stesso, cioè {nd1}
+      </p>
+     ) : (
+      <p className="font-mono text-xs opacity-80">
+       Il m.c.m. tra {nd1} e {nd2} è {computed.mcmFormula} = {computed.mcmCorretto}
+      </p>
+     )}
     </div>
 
     <NumberInputCanvas
@@ -699,6 +705,7 @@ function AddSubExercise({
      </div>
      {nd1 !== nd2 && (
      <>
+     <p className="font-mono text-sm text-center text-primary mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
      <p className="font-mono text-sm">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
       {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}
@@ -1092,7 +1099,7 @@ function MulDivExercise({
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct}>
      {(!computed.divCom1 && !computed.divCom2) ? (
-      <p className="text-sm text-center font-bold py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
+      <p className="text-sm text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
       {op === "/"&& (
