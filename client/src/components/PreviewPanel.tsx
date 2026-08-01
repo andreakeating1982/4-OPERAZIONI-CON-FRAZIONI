@@ -183,8 +183,8 @@ export function PreviewPanel({
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span className="text-green-600">Copiato!</span>
+                  <Check className="w-4 h-4 text-[#2ecc71]" />
+                  <span className="text-[#2ecc71]">Copiato!</span>
                 </>
               ) : (
                 <>

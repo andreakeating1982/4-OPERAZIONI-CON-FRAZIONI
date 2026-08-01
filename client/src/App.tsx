@@ -11,8 +11,8 @@ import FractionExercises from "./pages/FractionExercises";
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/frazioni"} component={FractionExercises} />
+      <Route path={"/"} component={FractionExercises} />
+      <Route path={"/pannello"} component={Home} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

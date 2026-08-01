@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { MathDrawCanvas, type Stroke } from "@/components/MathDrawCanvas";
 import { useMathRecognition } from "@/hooks/useMathRecognition";
 import { cn } from "@/lib/utils";
-import { Eraser, Check, Loader2, Pencil } from "lucide-react";
+import { Eraser, Check, Loader2, Pencil, Search } from "lucide-react";
 
 interface NumberInputCanvasProps {
   value: number | null;
@@ -27,7 +27,6 @@ export function NumberInputCanvas({
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [justRecognized, setJustRecognized] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { recognize, isModelReady, isLoading } = useMathRecognition();
 
   const handleStrokesChange = useCallback(
@@ -37,46 +36,40 @@ export function NumberInputCanvas({
 
       if (newStrokes.length === 0) {
         setRecognizedText("");
-        return;
+      }
+    },
+    [],
+  );
+
+  // Manual recognition
+  const handleManualRecognize = useCallback(async () => {
+    if (strokes.length === 0 || !isModelReady) return;
+    setIsRecognizing(true);
+    const result = await recognize(strokes, "number");
+    if (result) {
+      let numStr = result.latex
+        .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+        .replace(/[{}]/g, "")
+        .trim();
+
+      if (!allowNegative) {
+        numStr = numStr.replace(/^-/, "");
       }
 
-      // Debounced recognition for numbers (600ms)
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(async () => {
-        if (!isModelReady) return;
-        setIsRecognizing(true);
-        const result = await recognize(newStrokes, "number");
-        if (result) {
-          // Extract just the number from the LaTeX (e.g., "12" or "-5")
-          let numStr = result.latex
-            .replace(/\\mathrm\{([^}]*)\}/g, "$1")
-            .replace(/[{}]/g, "")
-            .trim();
-
-          // Handle negative numbers
-          if (!allowNegative) {
-            numStr = numStr.replace(/^-/, "");
-          }
-
-          // Try to parse as number
-          const parsed = parseFloat(numStr);
-          if (!isNaN(parsed)) {
-            setRecognizedText(numStr);
-            onChange(parsed);
-            setJustRecognized(true);
-            // Auto-clear strokes after 1.5s
-            setTimeout(() => {
-              setStrokes([]);
-            }, 1500);
-          } else {
-            setRecognizedText(numStr || "?");
-          }
-        }
-        setIsRecognizing(false);
-      }, 600);
-    },
-    [recognize, isModelReady, onChange, allowNegative],
-  );
+      const parsed = parseFloat(numStr);
+      if (!isNaN(parsed)) {
+        setRecognizedText(numStr);
+        onChange(parsed);
+        setJustRecognized(true);
+        setTimeout(() => {
+          setStrokes([]);
+        }, 1500);
+      } else {
+        setRecognizedText(numStr || "?");
+      }
+    }
+    setIsRecognizing(false);
+  }, [strokes, recognize, isModelReady, onChange, allowNegative]);
 
   const handleClear = () => {
     setStrokes([]);
@@ -84,13 +77,6 @@ export function NumberInputCanvas({
     onChange(null);
     setJustRecognized(false);
   };
-
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   const displayValue =
     value !== null && !isNaN(value)
@@ -100,12 +86,12 @@ export function NumberInputCanvas({
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       {/* Label */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-center">
         <span className={cn("text-xs font-semibold uppercase tracking-wide", colorClass)}>
           {label}
         </span>
         {hint && (
-          <span className="text-[10px] text-muted-foreground">{hint}</span>
+          <span className="text-[10px] text-muted-foreground ml-2">{hint}</span>
         )}
       </div>
 
@@ -116,12 +102,12 @@ export function NumberInputCanvas({
           onStrokesChange={handleStrokesChange}
           tool="write"
           height={90}
-          className="rounded-lg border-dashed"
+          className="rounded-lg border-2 border-border"
           disabled={isLoading}
           hideWatermark
         />
 
-        {/* Overlay: recognized number or loading */}
+        {/* Overlay: recognized number */}
         <div className="absolute top-0 right-0 flex items-center gap-1.5 p-2 z-10">
           {isRecognizing && (
             <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
@@ -144,7 +130,7 @@ export function NumberInputCanvas({
         {/* Empty state watermark */}
         {strokes.length === 0 && !value && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-            <div className="text-center opacity-20">
+            <div className="text-center opacity-25">
               <Pencil className="w-4 h-4 mx-auto mb-1 text-muted-foreground" />
               <span className="text-xs text-muted-foreground">Scrivi il numero</span>
             </div>
@@ -152,20 +138,37 @@ export function NumberInputCanvas({
         )}
       </div>
 
-      {/* Clear button */}
-      {strokes.length > 0 && (
+      {/* Action buttons */}
+      <div className="flex items-center justify-center gap-2">
+        {/* Manual recognize button */}
         <button
-          onClick={handleClear}
-          className="flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-200"
+          onClick={handleManualRecognize}
+          disabled={strokes.length === 0 || !isModelReady || isRecognizing}
+          className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-sm font-semibold transition-all duration-200 shadow-md shadow-primary/20"
         >
-          <Eraser className="w-3 h-3" />
-          <span>Cancella</span>
+          {isRecognizing ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Search className="w-3.5 h-3.5" />
+          )}
+          <span>Riconosci</span>
         </button>
-      )}
+
+        {/* Clear button */}
+        {strokes.length > 0 && (
+          <button
+            onClick={handleClear}
+            className="flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-200 border border-border"
+          >
+            <Eraser className="w-3 h-3" />
+            <span>Cancella</span>
+          </button>
+        )}
+      </div>
 
       {/* Model loading indicator */}
       {isLoading && (
-        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+        <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
           <Loader2 className="w-2.5 h-2.5 animate-spin" />
           <span>Caricamento AI...</span>
         </div>

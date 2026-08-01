@@ -41,67 +41,67 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Fira Code", ui-monospace, monospace;
+  --font-sans: "Cambria Math", Cambria, Georgia, "Times New Roman", serif;
+  --font-mono: "Cambria Math", Cambria, Georgia, "Times New Roman", serif;
 }
 
 :root {
   --radius: 0.75rem;
 
-  /* ── Tema chiaro ispirato alla foto ────────────────────────── */
-  /* White background */
-  --background: #ffffff;
-  --foreground: #3d2e1c;
+  /* ── Tema chiaro: palette esatta dalla foto ───────────────── */
+  /* Sfondo crema caldo */
+  --background: #f9f6f0;
+  --foreground: #221b16;
 
-  /* Cards - white with subtle border */
+  /* Cards - bianco */
   --card: #ffffff;
-  --card-foreground: #3d2e1c;
+  --card-foreground: #221b16;
 
   /* Popover */
   --popover: #ffffff;
-  --popover-foreground: #3d2e1c;
+  --popover-foreground: #221b16;
 
-  /* Primary - warm brown (matching photo buttons) */
-  --primary: #8B5E3C;
+  /* Primary - terracotta/marrone ruggine */
+  --primary: #b05f3c;
   --primary-foreground: #ffffff;
 
-  /* Secondary - warm light beige */
-  --secondary: #f5f0e8;
-  --secondary-foreground: #5c4a2e;
+  /* Secondary - beige chiaro */
+  --secondary: #f3eee4;
+  --secondary-foreground: #55483d;
 
   /* Muted */
-  --muted: #faf8f5;
-  --muted-foreground: #8c7a6a;
+  --muted: #f9f6f0;
+  --muted-foreground: #55483d;
 
   /* Accent */
-  --accent: #f0ebe0;
-  --accent-foreground: #3d2e1c;
+  --accent: #f3eee4;
+  --accent-foreground: #221b16;
 
   /* Destructive */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  /* Borders & Inputs - warm gray */
-  --border: #e5e0d5;
-  --input: #f5f0e8;
-  --ring: #8B5E3C;
+  /* Borders - beige caldo */
+  --border: #e2dac9;
+  --input: #ffffff;
+  --ring: #b05f3c;
 
   /* Charts */
-  --chart-1: #8B5E3C;
-  --chart-2: #22c55e;
+  --chart-1: #b05f3c;
+  --chart-2: #2ecc71;
   --chart-3: #f59e0b;
   --chart-4: #3b82f6;
   --chart-5: #ec4899;
 
   /* Sidebar */
-  --sidebar: #faf8f5;
-  --sidebar-foreground: #3d2e1c;
-  --sidebar-primary: #8B5E3C;
+  --sidebar: #f9f6f0;
+  --sidebar-foreground: #221b16;
+  --sidebar-primary: #b05f3c;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f0ebe0;
-  --sidebar-accent-foreground: #3d2e1c;
-  --sidebar-border: #e5e0d5;
-  --sidebar-ring: #8B5E3C;
+  --sidebar-accent: #f3eee4;
+  --sidebar-accent-foreground: #221b16;
+  --sidebar-border: #e2dac9;
+  --sidebar-ring: #b05f3c;
 }
 
 .dark {
@@ -145,9 +145,37 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased text-center;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Centrare tutti i pulsanti */
+  button,
+  [role="button"],
+  a[href] {
+    @apply justify-center;
+  }
+
+  /* Centrare i titoli e testi */
+  h1, h2, h3, h4, h5, h6, p, span, label, div {
+    text-align: center;
+  }
+
+  /* Forzare centratura flex container */
+  .flex:not([class*="justify-"]) {
+    justify-content: center;
+  }
+
+  /* Reset per elementi che non devono essere centrati */
+  input, textarea, select {
+    text-align: left;
+  }
+
+  /* Header - mantenere spazio tra elementi */
+  header .flex,
+  nav .flex {
+    justify-content: space-between;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -167,7 +195,7 @@
   }
   .katex .mathnormal,
   .katex .mathrm {
-    color: #3d2e1c !important;
+    color: #221b16 !important;
   }
 }
 
@@ -204,8 +232,8 @@
 /* Math grid pattern — graph paper on light background */
 .math-grid-pattern {
   background-image:
-    linear-gradient(rgba(139, 94, 60, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139, 94, 60, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(176, 95, 60, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(176, 95, 60, 0.07) 1px, transparent 1px);
   background-size: 20px 20px;
   background-position: center center;
 }
@@ -219,9 +247,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 94, 60, 0.2);
+  background: rgba(176, 95, 60, 0.25);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 94, 60, 0.35);
+  background: rgba(176, 95, 60, 0.4);
 }

@@ -135,7 +135,7 @@ export default function Home() {
               </p>
             </div>
             <a
-              href="/frazioni"
+              href="/"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-xs font-medium text-muted-foreground hover:text-foreground transition-all duration-200 border border-border ml-3"
               title="Esercizi con le frazioni"
             >
@@ -240,7 +240,7 @@ export default function Home() {
               </div>
             )}
             {isModelReady && !isLoading && (
-              <div className="flex items-center gap-1.5 text-green-600">
+              <div className="flex items-center gap-1.5 text-[#2ecc71]">
                 <Zap className="w-3 h-3" />
                 <span>Modello AI pronto</span>
               </div>
@@ -273,7 +273,7 @@ export default function Home() {
             Basato su CoMER (ECCV 2022) — Riconoscimento 100% nel browser
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500/70"></span>
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#2ecc71]/70"></span>
             Nessun dato inviato a server esterni
           </span>
         </div>

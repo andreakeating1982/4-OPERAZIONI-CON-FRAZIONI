@@ -79,7 +79,7 @@ export function MathDrawCanvas({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw grid
-    ctx.strokeStyle = "rgba(139, 94, 60, 0.08)";
+    ctx.strokeStyle = "rgba(176, 95, 60, 0.08)";
     ctx.lineWidth = 0.5;
     const gridSize = 20;
     for (let x = gridSize; x < canvas.width; x += gridSize) {

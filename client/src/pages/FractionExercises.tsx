@@ -326,7 +326,7 @@ export default function FractionExercises() {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <a href="/" className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center hover:bg-primary/25 transition-colors" title="Math Input Panel">
+            <a href="/pannello" className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center hover:bg-primary/25 transition-colors" title="Math Input Panel">
               <span className="text-primary text-sm font-bold">√</span>
             </a>
             <div>
@@ -841,7 +841,7 @@ function AddSubExercise({
           <div className={cn(
             "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
             feedbackFinale.corretto
-              ? "bg-green-100 text-green-700 border border-green-300"
+              ? "bg-[#2ecc71]/10 text-[#2ecc71] border border-[#2ecc71]/30"
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto
@@ -1221,7 +1221,7 @@ function MulDivExercise({
           <div className={cn(
             "flex items-center gap-2 p-3 rounded-lg text-sm font-medium",
             feedbackFinale.corretto
-              ? "bg-green-100 text-green-700 border border-green-300"
+              ? "bg-[#2ecc71]/10 text-[#2ecc71] border border-[#2ecc71]/30"
               : "bg-amber-500/10 text-amber-400 border border-amber-500/20",
           )}>
             {feedbackFinale.corretto
