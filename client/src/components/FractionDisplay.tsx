@@ -6,11 +6,11 @@ interface FractionDisplayProps {
   numClass?: string;
   denClass?: string;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
 }
 
 const sizeMap = {
-  xs: "text-xs min-w-[28px]",
+  xs: "text-sm min-w-[32px]",
   sm: "text-base min-w-[40px]",
   md: "text-xl min-w-[56px]",
   lg: "text-2xl min-w-[72px]",
