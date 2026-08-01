@@ -576,7 +576,7 @@ function NotebookGuide({
       </button>
       {open && (
         <div className="px-4 pb-4 pt-1">
-          <div className="rounded-lg bg-card border border-border p-3.5 space-y-2 text-sm leading-loose text-foreground">
+          <div className="rounded-lg bg-card border border-border p-3.5 space-y-2 text-sm leading-loose text-foreground text-justify">
             {/* Notebook lines */}
             <div
               className="relative"
@@ -697,7 +697,7 @@ function AddSubExercise({
           <span className="font-bold text-foreground shrink-0">C.</span>
           <p className="flex-1">Sotto le frazioni, <span className="italic">scomponi i denominatori in fattori primi</span>:</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             Denominatore della <b>prima</b> frazione: {nd1} = {computed.fattori1[1] === 1 ? "1" : Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}<br />
             Denominatore della <b>seconda</b> frazione: {nd2} = {computed.fattori2[1] === 1 ? "1" : Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join(" · ")}
           </p>
@@ -705,7 +705,7 @@ function AddSubExercise({
           <span className="font-bold text-foreground shrink-0">D.</span>
           <p className="flex-1">Calcola il <span className="font-bold text-primary">m.c.m.</span>: prendi <span className="italic">tutti</span> i fattori, ciascuno con l'esponente <span className="italic">più alto</span>.</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
           </p>
           <div className="flex items-start gap-2">
@@ -772,14 +772,14 @@ function AddSubExercise({
           <span className="font-bold text-foreground shrink-0">A.</span>
           <p className="flex-1">Per la <span className="font-bold text-primary">prima frazione</span>: dividi il m.c.m. per il denominatore e moltiplica per il numeratore.</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
           </p>
           <div className="flex items-start gap-2">
           <span className="font-bold text-foreground shrink-0">B.</span>
           <p className="flex-1">Per la <span className="font-bold text-primary">seconda frazione</span>: stesso procedimento.</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
           </p>
           <div className="flex items-start gap-2">
@@ -878,7 +878,7 @@ function AddSubExercise({
           <span className="font-bold text-foreground shrink-0">A.</span>
           <p className="flex-1">Esegui l'operazione al <span className="font-bold text-primary">numeratore</span>:</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleCorretto}
           </p>
           <div className="flex items-start gap-2">
@@ -913,7 +913,7 @@ function AddSubExercise({
               const intero = Math.floor(absNum / computed.denFinaleCorretto);
               const resto = absNum % computed.denFinaleCorretto;
               return (
-                <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+                <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
                   {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`} = {computed.numFinaleCorretto < 0 ? "−" : ""}{intero} + {resto}/{computed.denFinaleCorretto}
                 </p>
               );
@@ -1175,7 +1175,7 @@ function MulDivExercise({
             )}</p>
         </div>
           {computed.divCom1 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
               {num1} : {computed.divCom1} = {Math.abs(num1) / computed.divCom1 * (num1 < 0 ? -1 : 1)}{" "}
               &nbsp;&nbsp;{computed.actualDen2} : {computed.divCom1} = {Math.abs(computed.actualDen2) / computed.divCom1}
             </p>
@@ -1192,7 +1192,7 @@ function MulDivExercise({
             )}</p>
         </div>
           {computed.divCom2 && (
-            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+            <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
               {nd1} : {computed.divCom2} = {Math.abs(nd1) / computed.divCom2}{" "}
               &nbsp;&nbsp;{computed.actualNum2} : {computed.divCom2} = {Math.abs(computed.actualNum2) / computed.divCom2 * (computed.actualNum2 < 0 ? -1 : 1)}
             </p>
@@ -1328,7 +1328,7 @@ function MulDivExercise({
           <span className="font-bold text-foreground shrink-0">A.</span>
           <p className="flex-1"><span className="font-bold text-primary">Moltiplica i numeratori</span> tra loro:</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             (numeratore semplificato 1) × (numeratore semplificato 2) ={" "}
             {num1Semplificato !== null && num2Semplificato !== null
               ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
@@ -1339,7 +1339,7 @@ function MulDivExercise({
           <span className="font-bold text-foreground shrink-0">B.</span>
           <p className="flex-1"><span className="font-bold text-primary">Moltiplica i denominatori</span> tra loro:</p>
         </div>
-          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2">
+          <p className="font-mono text-xs pl-2 border-l-2 border-border ml-2 text-left">
             (denominatore semplificato 1) × (denominatore semplificato 2) ={" "}
             {den1Semplificato !== null && den2Semplificato !== null
               ? <span className="font-bold text-primary">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
