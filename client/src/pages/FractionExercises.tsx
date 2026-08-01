@@ -380,7 +380,7 @@ export default function FractionExercises() {
             </div>
 
             {/* Prima frazione */}
-            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in">
+            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in max-w-xs mx-auto w-full">
               <div className="py-2.5 border-b border-border bg-secondary/50">
                 <span className="text-sm font-bold tracking-widest">
                   PRIMA FRAZIONE
@@ -394,7 +394,7 @@ export default function FractionExercises() {
                   allowNegative
                 />
                 {/* Linea di frazione — larga 100px, allineata sotto il quadratino */}
-                <div className="flex justify-start pl-4 py-1">
+                <div className="flex justify-start py-1">
                   <div className="w-[100px] h-[2.5px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
@@ -413,7 +413,7 @@ export default function FractionExercises() {
             </div>
 
             {/* Seconda frazione */}
-            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in">
+            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in max-w-xs mx-auto w-full">
               <div className="py-2.5 border-b border-border bg-secondary/50">
                 <span className="text-sm font-bold tracking-widest">
                   SECONDA FRAZIONE
@@ -427,7 +427,7 @@ export default function FractionExercises() {
                   allowNegative
                 />
                 {/* Linea di frazione — larga 100px, allineata sotto il quadratino */}
-                <div className="flex justify-start pl-4 py-1">
+                <div className="flex justify-start py-1">
                   <div className="w-[100px] h-[2.5px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
