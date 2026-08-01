@@ -101,11 +101,11 @@ export function NumberInputCanvas({
           {label}
         </span>
 
-        {/* Pulsante Riconosci */}
+        {/* Pulsante Riconosci — compatto */}
         <button
           onClick={handleManualRecognize}
           disabled={!hasContent || !isModelReady || isRecognizing}
-          className="h-9 px-5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm w-full"
+          className="h-9 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm"
         >
           {isRecognizing ? "..." : "RICONOSCI"}
         </button>

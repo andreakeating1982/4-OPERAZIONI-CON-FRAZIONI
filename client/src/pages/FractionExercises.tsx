@@ -393,9 +393,9 @@ export default function FractionExercises() {
                   label="NUMERATORE"
                   allowNegative
                 />
-                {/* Linea di frazione (corta) */}
-                <div className="flex items-center justify-center py-1">
-                  <div className="w-2/5 h-[2px] bg-foreground/70" />
+                {/* Linea di frazione — larga 100px come il quadratino */}
+                <div className="flex items-center justify-center">
+                  <div className="w-[100px] h-[2.5px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
                   value={den1}
@@ -426,9 +426,9 @@ export default function FractionExercises() {
                   label="NUMERATORE"
                   allowNegative
                 />
-                {/* Linea di frazione (corta) */}
-                <div className="flex items-center justify-center py-1">
-                  <div className="w-2/5 h-[2px] bg-foreground/70" />
+                {/* Linea di frazione — larga 100px come il quadratino */}
+                <div className="flex items-center justify-center">
+                  <div className="w-[100px] h-[2.5px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
                   value={den2}
