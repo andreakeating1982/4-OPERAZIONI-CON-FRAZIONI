@@ -10,17 +10,20 @@ function gcd(a: number, b: number): number {
  return gcd(b, a % b);
 }
 
+function round2(n: number): number { return Math.round(n * 100) / 100; }
+
 function lcm(a: number, b: number): number {
  if (a === 0 || b === 0) return 0;
- return Math.abs(a * b) / gcd(Math.abs(a), Math.abs(b));
+ const result = Math.abs(a * b) / gcd(Math.abs(a), Math.abs(b));
+ return round2(result);
 }
 
 function semplificaFrazione(num: number, den: number): { num: number; den: number } {
  if (den === 0) return { num, den: 0 };
  if (num === 0) return { num: 0, den: 1 };
  const c = gcd(Math.abs(num), Math.abs(den));
- let sn = num / c;
- let sd = den / c;
+ let sn = round2(num / c);
+ let sd = round2(den / c);
  if (sd < 0) { sn = -sn; sd = -sd; }
  return { num: sn, den: sd };
 }
@@ -136,10 +139,10 @@ export default function FractionExercises() {
 
   const effNum1 = num1 * (dn1 < 0 ? -1 : 1);
   const effNum2 = num2 * (dn2 < 0 ? -1 : 1);
-  const val1Corretto = (mcmCorretto / nd1) * effNum1;
-  const val2Corretto = (mcmCorretto / nd2) * effNum2;
+  const val1Corretto = round2((mcmCorretto / nd1) * effNum1);
+  const val2Corretto = round2((mcmCorretto / nd2) * effNum2);
 
-  const numFinaleRaw = addSubOp ==="+"? val1Corretto + val2Corretto : val1Corretto - val2Corretto;
+  const numFinaleRaw = round2(addSubOp ==="+"? val1Corretto + val2Corretto : val1Corretto - val2Corretto);
   const denFinaleRaw = mcmCorretto;
   const sempl = semplificaFrazione(numFinaleRaw, mcmCorretto);
 
@@ -193,8 +196,8 @@ export default function FractionExercises() {
   const divCom1 = trovaDivisoriComuni(num1, actualDen2);
   const divCom2 = trovaDivisoriComuni(nd1, actualNum2);
 
-  const numFinaleRaw = num1 * actualNum2;
-  const denFinaleRaw = nd1 * actualDen2;
+  const numFinaleRaw = round2(num1 * actualNum2);
+  const denFinaleRaw = round2(nd1 * actualDen2);
   const sempl = semplificaFrazione(numFinaleRaw, denFinaleRaw);
 
   return {
@@ -881,10 +884,10 @@ function AddSubExercise({
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto} forceOpen={generatingPdf}>
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {computed.mcmCorretto / nd1} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
+      ({computed.mcmCorretto} : {nd1}) · ({effNum1}) = {round2(computed.mcmCorretto / nd1)} · ({effNum1}) = <span className="font-bold text-primary">{computed.val1Corretto}</span>
      </p>
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {computed.mcmCorretto / nd2} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
+      ({computed.mcmCorretto} : {nd2}) · ({effNum2}) = {round2(computed.mcmCorretto / nd2)} · ({effNum2}) = <span className="font-bold text-primary">{computed.val2Corretto}</span>
      </p>
      <div className="flex justify-center my-2">
       <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
