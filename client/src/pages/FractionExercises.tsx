@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from"react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from"react";
 import { NumberInputCanvas } from"@/components/NumberInputCanvas";
 import { FractionDisplay } from"@/components/FractionDisplay";
 import { cn } from"@/lib/utils";
@@ -78,6 +78,27 @@ function trovaDivisoriComuni(a: number, b: number): number | null {
 type OperationMode ="addsub"|"muldiv";
 
 export default function FractionExercises() {
+ // ─── Auto-resize postMessage for embed ─────────────────────────────
+ const containerRef = useRef<HTMLDivElement>(null);
+ useEffect(() => {
+  const sendHeight = () => {
+   const height = document.body.scrollHeight;
+   if (window.parent && window.parent !== window) {
+    window.parent.postMessage({ type: 'labvisivo:height', height }, '*');
+   }
+  };
+  sendHeight();
+  const observer = new ResizeObserver(() => sendHeight());
+  observer.observe(document.body);
+  // Also observe mutations for dynamic content changes
+  const mutationObserver = new MutationObserver(() => sendHeight());
+  mutationObserver.observe(document.body, { childList: true, subtree: true, attributes: true });
+  return () => {
+   observer.disconnect();
+   mutationObserver.disconnect();
+  };
+ }, []);
+
  // ─── PDF generation ────────────────────────────────────────────────
  const [generatingPdf, setGeneratingPdf] = useState(false);
 
@@ -423,7 +444,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
  const allFilled = num1 !== null && num2 !== null;
 
  return (
-  <div className="min-h-screen bg-background paper-grain flex flex-col">
+  <div ref={containerRef} className="min-h-screen bg-background paper-grain flex flex-col">
    {/* Header */}
    <header className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-9">
     <h1 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground text-center">
