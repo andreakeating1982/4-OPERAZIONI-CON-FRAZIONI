@@ -40,7 +40,7 @@ export function NumberInputCanvas({
   const handleManualRecognize = useCallback(async () => {
     if (strokes.length === 0 || !isModelReady) return;
     setIsRecognizing(true);
-    const result = await recognize(strokes, "number");
+    const result = await recognize(strokes, "expression");
     if (result) {
       let numStr = result.latex
         .replace(/\\mathrm\{([^}]*)\}/g, "$1")
