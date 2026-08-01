@@ -16,6 +16,7 @@ import {
   Loader2,
   AlertCircle,
   SquareFunction,
+  GraduationCap,
 } from "lucide-react";
 
 export default function Home() {
@@ -122,9 +123,9 @@ export default function Home() {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center">
+            <a href="/" className="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center hover:bg-primary/25 transition-colors">
               <SquareFunction className="w-5 h-5 text-primary" />
-            </div>
+            </a>
             <div>
               <h1 className="text-base font-semibold text-foreground leading-tight">
                 Math Input Panel
@@ -133,6 +134,14 @@ export default function Home() {
                 Riconoscimento scrittura matematica
               </p>
             </div>
+            <a
+              href="/frazioni"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary hover:bg-secondary/80 text-xs font-medium text-muted-foreground hover:text-foreground transition-all duration-200 border border-border ml-3"
+              title="Esercizi con le frazioni"
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Esercizi Frazioni</span>
+            </a>
           </div>
 
           <div className="flex items-center gap-3">
