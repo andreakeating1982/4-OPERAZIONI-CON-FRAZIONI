@@ -413,9 +413,9 @@ export default function FractionExercises() {
          label="NUMERATORE"
          allowNegative
         />
-        {/* Linea di frazione — larga 100px, allineata sotto il quadratino */}
-        <div className="flex justify-start py-1">
-         <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+        {/* Linea di frazione */}
+        <div className="flex justify-center py-1">
+         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
          value={den1}
@@ -446,9 +446,9 @@ export default function FractionExercises() {
          label="NUMERATORE"
          allowNegative
         />
-        {/* Linea di frazione — larga 100px, allineata sotto il quadratino */}
-        <div className="flex justify-start py-1">
-         <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+        {/* Linea di frazione */}
+        <div className="flex justify-center py-1">
+         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
          value={den2}
@@ -827,7 +827,7 @@ function AddSubExercise({
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
-       <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
       </div>
       )}
       {computed.denFinaleRaw !== 1 && (
@@ -1038,8 +1038,8 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-start py-1">
-        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       <div className="flex justify-center py-1">
+        <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
         value={den2Semplificato}
@@ -1082,8 +1082,8 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-start py-1">
-        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       <div className="flex justify-center py-1">
+        <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
         value={num2Semplificato}
@@ -1218,7 +1218,7 @@ function MulDivExercise({
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
-       <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
+       <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
       </div>
       )}
       {computed.denFinaleRaw !== 1 && (
