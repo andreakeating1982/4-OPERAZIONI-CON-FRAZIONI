@@ -42,18 +42,36 @@ export function NumberInputCanvas({
     setIsRecognizing(true);
     const result = await recognize(strokes, "expression");
     if (result) {
-      let numStr = result.latex
+      // 1. Rimuovi spazi bianchi (causa principale del bug multi-cifra)
+      let numStr = result.latex.replace(/\s+/g, "");
+      // 2. Sostituisci virgole decimali con punti
+      numStr = numStr.replace(/,/g, ".");
+      // 3. Rimuovi comandi LaTeX e parentesi
+      numStr = numStr
         .replace(/\\mathrm\{([^}]*)\}/g, "$1")
-        .replace(/[{}]/g, "")
-        .trim();
-
-      if (!allowNegative) {
-        numStr = numStr.replace(/^-/, "");
+        .replace(/\\[a-zA-Z]+(\{[^}]*\})?/g, "")
+        .replace(/[{}]/g, "");
+      // 4. Tieni solo cifre, punto decimale e segno meno (se consentito)
+      if (allowNegative) {
+        numStr = numStr.replace(/[^0-9.\-]/g, "");
+        // Gestisci eventuali meno multipli: tieni solo il primo
+        const minusCount = (numStr.match(/-/g) || []).length;
+        if (minusCount > 1) {
+          numStr = "-" + numStr.replace(/-/g, "");
+        }
+      } else {
+        numStr = numStr.replace(/[^0-9.]/g, "");
+      }
+      // 5. Gestisci edge case: stringa vuota o solo un meno
+      if (!numStr || numStr === "-" || numStr === ".") {
+        setRecognizedText("?");
+        setIsRecognizing(false);
+        return;
       }
 
       const parsed = parseFloat(numStr);
       if (!isNaN(parsed)) {
-        setRecognizedText(numStr);
+        setRecognizedText(parsed.toString());
         onChange(parsed);
         setTimeout(() => setStrokes([]), 1200);
       } else {
