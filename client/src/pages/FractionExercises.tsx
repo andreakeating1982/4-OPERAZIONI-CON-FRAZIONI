@@ -110,11 +110,13 @@ export default function FractionExercises() {
 
  // Add/Sub computed values
  const addSubComputed = useMemo(() => {
-  if (num1 === null || den1 === null || num2 === null || den2 === null) return null;
-  if (den1 < 1 || den2 < 1) return null;
+  if (num1 === null || num2 === null) return null;
 
-  const nd1 = Math.abs(den1);
-  const nd2 = Math.abs(den2);
+  const dn1 = den1 ?? 1;
+  const dn2 = den2 ?? 1;
+  if (dn1 < 1 || dn2 < 1) return null;
+  const nd1 = Math.abs(dn1);
+  const nd2 = Math.abs(dn2);
   const mcmCorretto = lcm(nd1, nd2);
 
   const fattori1 = fattorizzazionePrimi(nd1);
@@ -129,8 +131,8 @@ export default function FractionExercises() {
    mcmFormulaParts.push(e === 1 ? f : `${f}${toSuperscript(e)}`);
   }
 
-  const effNum1 = num1 * (den1 < 0 ? -1 : 1);
-  const effNum2 = num2 * (den2 < 0 ? -1 : 1);
+  const effNum1 = num1 * (dn1 < 0 ? -1 : 1);
+  const effNum2 = num2 * (dn2 < 0 ? -1 : 1);
   const val1Corretto = (mcmCorretto / nd1) * effNum1;
   const val2Corretto = (mcmCorretto / nd2) * effNum2;
 
@@ -156,11 +158,13 @@ export default function FractionExercises() {
 
  // Mul/Div computed values
  const mulDivComputed = useMemo(() => {
-  if (num1 === null || den1 === null || num2 === null || den2 === null) return null;
-  if (den1 < 1 || den2 < 1) return null;
+  if (num1 === null || num2 === null) return null;
 
-  const nd1 = Math.abs(den1);
-  const nd2 = Math.abs(den2);
+  const dn1 = den1 ?? 1;
+  const dn2 = den2 ?? 1;
+  if (dn1 < 1 || dn2 < 1) return null;
+  const nd1 = Math.abs(dn1);
+  const nd2 = Math.abs(dn2);
 
   let actualNum2: number;
   let actualDen2: number;
@@ -216,8 +220,10 @@ export default function FractionExercises() {
  }, []);
 
  const handleCalculate = () => {
-  if (num1 === null || den1 === null || num2 === null || den2 === null) return;
-  if (den1 < 1 || den2 < 1) return;
+  if (num1 === null || num2 === null) return;
+  const d1 = den1 ?? 1;
+  const d2 = den2 ?? 1;
+  if (d1 < 1 || d2 < 1) return;
   setSubmitted(true);
   setPhase("exercise");
   resetExercise();
@@ -317,7 +323,7 @@ export default function FractionExercises() {
 
  // ─── Render ────────────────────────────────────────────────────────
 
- const allFilled = num1 !== null && den1 !== null && num2 !== null && den2 !== null;
+ const allFilled = num1 !== null && num2 !== null;
 
  return (
   <div className="min-h-screen bg-background flex flex-col">
@@ -629,8 +635,9 @@ function AddSubExercise({
  const effNum2 = num2 * (den2 < 0 ? -1 : 1);
  
  const handleFinalVerify = () => {
-  if (finalNumUtente !== null && finalDenUtente !== null) {
-   const resultStr = finalDenUtente === 1 ? String(finalNumUtente) : `${finalNumUtente}/${finalDenUtente}`;
+  if (finalNumUtente !== null) {
+   const denVal = finalDenUtente ?? 1;
+   const resultStr = denVal === 1 ? String(finalNumUtente) : `${finalNumUtente}/${denVal}`;
    verificaFinale(resultStr);
    setShowStep3Guide(true);
   }
@@ -684,6 +691,12 @@ function AddSubExercise({
        <FractionDisplay numerator={num2} denominator={den2} size="md"/>
       </div>
      </div>
+     {nd1 === nd2 ? (
+     <p className="font-mono text-base">
+      Il m.c.m. tra {nd1} e {nd2} è uguale al numero stesso, cioè {nd1}
+     </p>
+     ) : (
+     <>
      <p className="font-mono text-base">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
       {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}
@@ -691,6 +704,8 @@ function AddSubExercise({
      <p className="font-mono text-base">
       m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
      </p>
+     </>
+     )}
      <div className="flex justify-center my-2">
       <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
        ({computed.mcmCorretto} : {nd1}) · ({effNum1}) {op} ({computed.mcmCorretto} : {nd2}) · ({effNum2})<br />
@@ -785,26 +800,28 @@ function AddSubExercise({
        value={finalNumUtente}
        onChange={(v) => {
         setFinalNumUtente(v);
-        if (v !== null && finalDenUtente !== null) {
-         const resultStr = finalDenUtente === 1 ? String(v) : `${v}/${finalDenUtente}`;
-         verificaFinale(resultStr);
-         setShowStep3Guide(true);
-        }
+        const denVal = finalDenUtente ?? 1;
+        const resultStr = denVal === 1 ? String(v ?? "?") : `${v ?? "?"}/${denVal}`;
+        verificaFinale(resultStr);
+        setShowStep3Guide(true);
        }}
        label="NUMERATORE"
        colorClass="text-primary"
        allowNegative
       />
-      {/* Linea di frazione — allineata sotto i quadratini input */}
+      {/* Linea di frazione — nascosta se denominatore è 1 */}
+      {computed.denFinaleCorretto !== 1 && (
       <div className="flex items-center">
        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
       </div>
+      )}
+      {computed.denFinaleCorretto !== 1 && (
       <NumberInputCanvas
        value={finalDenUtente}
        onChange={(v) => {
         setFinalDenUtente(v);
-        if (v !== null && finalNumUtente !== null) {
-         const resultStr = v === 1 ? String(finalNumUtente) : `${finalNumUtente}/${v}`;
+        if (finalNumUtente !== null) {
+         const resultStr = (v ?? 1) === 1 ? String(finalNumUtente) : `${finalNumUtente}/${v}`;
          verificaFinale(resultStr);
          setShowStep3Guide(true);
         }
@@ -812,14 +829,19 @@ function AddSubExercise({
        label="DENOMINATORE"
        colorClass="text-primary"
       />
+      )}
      </div>
      {/* Preview */}
-     {finalNumUtente !== null && finalDenUtente !== null && (
+     {finalNumUtente !== null && (
       <div className="flex justify-center">
        <div className="flex flex-col items-center">
         <span className="text-lg font-bold font-serif">{finalNumUtente}</span>
+        {(finalDenUtente ?? 1) !== 1 && (
         <div className="w-12 h-[2px] bg-foreground/60 my-0.5"/>
+        )}
+        {(finalDenUtente ?? 1) !== 1 && (
         <span className="text-lg font-bold font-serif">{finalDenUtente}</span>
+        )}
        </div>
       </div>
      )}
@@ -1017,9 +1039,9 @@ function MulDivExercise({
        {den2Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         den2Semplificato === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"text-success":"text-destructive",
+         (den2Semplificato ?? 1) === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"text-success":"text-destructive",
         )}>
-         {den2Semplificato === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {(den2Semplificato ?? 1) === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
       </div>
@@ -1043,9 +1065,9 @@ function MulDivExercise({
        {den1Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         den1Semplificato === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"text-success":"text-destructive",
+         (den1Semplificato ?? 1) === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"text-success":"text-destructive",
         )}>
-         {den1Semplificato === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {(den1Semplificato ?? 1) === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
        <NumberInputCanvas
@@ -1149,28 +1171,28 @@ function MulDivExercise({
        value={finalNumUtente}
        onChange={(v) => {
         setFinalNumUtente(v);
-        if (v !== null && finalDenUtente !== null) {
-         const resultStr = finalDenUtente === 1 ? String(v) : `${v}/${finalDenUtente}`;
-         verificaFinale(resultStr);
-         setShowStep3Guide(true);
-        } else if (v !== null && numeratoreFinaleUtente !== null && denominatoreFinaleUtente !== null) {
-         // Use the step 2 values for auto-verification
-        }
+        const denVal = finalDenUtente ?? 1;
+        const resultStr = denVal === 1 ? String(v ?? "?") : `${v ?? "?"}/${denVal}`;
+        verificaFinale(resultStr);
+        setShowStep3Guide(true);
        }}
        label="NUMERATORE"
        colorClass="text-primary"
        allowNegative
       />
-      {/* Linea di frazione — allineata sotto i quadratini input */}
+      {/* Linea di frazione — nascosta se denominatore è 1 */}
+      {computed.denFinaleCorretto !== 1 && (
       <div className="flex items-center">
        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
       </div>
+      )}
+      {computed.denFinaleCorretto !== 1 && (
       <NumberInputCanvas
        value={finalDenUtente}
        onChange={(v) => {
         setFinalDenUtente(v);
-        if (v !== null && finalNumUtente !== null) {
-         const resultStr = v === 1 ? String(finalNumUtente) : `${finalNumUtente}/${v}`;
+        if (finalNumUtente !== null) {
+         const resultStr = (v ?? 1) === 1 ? String(finalNumUtente) : `${finalNumUtente}/${v}`;
          verificaFinale(resultStr);
          setShowStep3Guide(true);
         }
@@ -1178,14 +1200,19 @@ function MulDivExercise({
        label="DENOMINATORE"
        colorClass="text-primary"
       />
+      )}
      </div>
      {/* Preview */}
-     {finalNumUtente !== null && finalDenUtente !== null && (
+     {finalNumUtente !== null && (
       <div className="flex justify-center">
        <div className="flex flex-col items-center">
         <span className="text-lg font-bold font-serif">{finalNumUtente}</span>
+        {(finalDenUtente ?? 1) !== 1 && (
         <div className="w-12 h-[2px] bg-foreground/60 my-0.5"/>
+        )}
+        {(finalDenUtente ?? 1) !== 1 && (
         <span className="text-lg font-bold font-serif">{finalDenUtente}</span>
+        )}
        </div>
       </div>
      )}
