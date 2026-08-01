@@ -324,24 +324,24 @@ export default function FractionExercises() {
           <button
             onClick={() => { setMode("addsub"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold transition-all duration-200",
               mode === "addsub"
-                ? "bg-[#b05f3c] text-white shadow-md"
-                : "text-[#55483d] hover:text-[#221b16] hover:bg-[#f3eee4]",
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary",
             )}
           >
-            + / − &nbsp;Addizione / Sottrazione
+            + / &minus; ADDIZIONE / SOTTRAZIONE
           </button>
           <button
             onClick={() => { setMode("muldiv"); handleNewExercise(); }}
             className={cn(
-              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold uppercase tracking-wider transition-all duration-200",
+              "flex-1 flex items-center justify-center py-2.5 px-4 rounded-lg text-sm font-bold transition-all duration-200",
               mode === "muldiv"
-                ? "bg-[#b05f3c] text-white shadow-md"
-                : "text-[#55483d] hover:text-[#221b16] hover:bg-[#f3eee4]",
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary",
             )}
           >
-            × / ÷ &nbsp;Moltiplicazione / Divisione
+            &times; / &divide; MOLTIPLICAZIONE / DIVISIONE
           </button>
         </div>
 
@@ -350,79 +350,83 @@ export default function FractionExercises() {
           <div className="space-y-6">
             {/* Suggerimento */}
             <div className="text-center">
-              <span className="text-xs text-[#55483d] uppercase tracking-widest font-semibold">
-                Scrivi il segno della frazione al numeratore
+              <span className="text-xs text-muted-foreground tracking-widest font-semibold">
+                SCRIVI IL NUMERO NEL RIQUADRO
               </span>
             </div>
 
             {/* Operation selector */}
             <div className="flex items-center justify-center gap-3">
-              <label className="text-sm font-semibold text-[#221b16] uppercase tracking-wider">Operazione:</label>
+              <label className="text-sm font-bold tracking-wider">OPERAZIONE:</label>
               {mode === "addsub" ? (
                 <select
                   value={addSubOp}
                   onChange={(e) => setAddSubOp(e.target.value as "+" | "-")}
-                  className="px-4 py-2 rounded-lg bg-white border-2 border-[#e2dac9] text-[#221b16] text-sm font-bold cursor-pointer focus:outline-none focus:border-[#b05f3c]"
+                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
                 >
-                  <option value="+">Addizione (+)</option>
-                  <option value="-">Sottrazione (−)</option>
+                  <option value="+">ADDIZIONE (+)</option>
+                  <option value="-">SOTTRAZIONE (&minus;)</option>
                 </select>
               ) : (
                 <select
                   value={mulDivOp}
                   onChange={(e) => setMulDivOp(e.target.value as "*" | "/")}
-                  className="px-4 py-2 rounded-lg bg-white border-2 border-[#e2dac9] text-[#221b16] text-sm font-bold cursor-pointer focus:outline-none focus:border-[#b05f3c]"
+                  className="px-4 py-2 rounded-lg bg-card border border-border text-foreground text-sm font-bold cursor-pointer focus:outline-none focus:ring-2 focus:ring-ring"
                 >
-                  <option value="*">Moltiplicazione (×)</option>
-                  <option value="/">Divisione (÷)</option>
+                  <option value="*">MOLTIPLICAZIONE (&times;)</option>
+                  <option value="/">DIVISIONE (&divide;)</option>
                 </select>
               )}
             </div>
 
             {/* Prima frazione */}
-            <div className="rounded-2xl border-2 border-[#e2dac9] bg-white overflow-hidden">
-              <p className="text-center text-sm font-bold text-[#221b16] uppercase tracking-widest py-3 border-b border-[#e2dac9]">
-                Prima frazione
-              </p>
-              <div className="p-4 space-y-0">
+            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in">
+              <div className="py-2.5 border-b border-border bg-secondary/50">
+                <span className="text-sm font-bold tracking-widest">
+                  PRIMA FRAZIONE
+                </span>
+              </div>
+              <div className="p-4 space-y-1">
                 <NumberInputCanvas
                   value={num1}
                   onChange={setNum1}
-                  label="Numeratore"
+                  label="NUMERATORE"
                   allowNegative
                 />
                 {/* Linea di frazione */}
-                <div className="flex items-center justify-center py-1">
-                  <div className="w-full h-[2px] bg-[#221b16]" />
+                <div className="flex items-center px-4">
+                  <div className="w-full h-[2px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
                   value={den1}
                   onChange={setDen1}
-                  label="Denominatore"
+                  label="DENOMINATORE"
                 />
               </div>
             </div>
 
             {/* Seconda frazione */}
-            <div className="rounded-2xl border-2 border-[#e2dac9] bg-white overflow-hidden">
-              <p className="text-center text-sm font-bold text-[#221b16] uppercase tracking-widest py-3 border-b border-[#e2dac9]">
-                Seconda frazione
-              </p>
-              <div className="p-4 space-y-0">
+            <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in">
+              <div className="py-2.5 border-b border-border bg-secondary/50">
+                <span className="text-sm font-bold tracking-widest">
+                  SECONDA FRAZIONE
+                </span>
+              </div>
+              <div className="p-4 space-y-1">
                 <NumberInputCanvas
                   value={num2}
                   onChange={setNum2}
-                  label="Numeratore"
+                  label="NUMERATORE"
                   allowNegative
                 />
                 {/* Linea di frazione */}
-                <div className="flex items-center justify-center py-1">
-                  <div className="w-full h-[2px] bg-[#221b16]" />
+                <div className="flex items-center px-4">
+                  <div className="w-full h-[2px] bg-foreground/80" />
                 </div>
                 <NumberInputCanvas
                   value={den2}
                   onChange={setDen2}
-                  label="Denominatore"
+                  label="DENOMINATORE"
                 />
               </div>
             </div>
@@ -431,7 +435,7 @@ export default function FractionExercises() {
             <button
               onClick={handleCalculate}
               disabled={!allFilled}
-              className="w-full py-3.5 rounded-xl bg-[#b05f3c] hover:bg-[#964f32] disabled:opacity-30 disabled:cursor-not-allowed text-white font-bold text-base uppercase tracking-widest transition-all duration-200 shadow-md"
+              className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed text-primary-foreground font-bold text-base tracking-widest transition-all duration-200 shadow-md"
             >
               CALCOLA
             </button>

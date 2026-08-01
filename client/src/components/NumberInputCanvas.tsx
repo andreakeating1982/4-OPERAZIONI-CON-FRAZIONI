@@ -17,7 +17,7 @@ export function NumberInputCanvas({
   value,
   onChange,
   label,
-  hint,
+  hint: _hint,
   colorClass = "text-foreground",
   className,
   allowNegative = true,
@@ -77,67 +77,62 @@ export function NumberInputCanvas({
   const hasContent = strokes.length > 0;
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
-      {/* Etichetta */}
+    <div className={cn("flex flex-col items-center gap-2", className)}>
+      {/* Label sempre in maiuscolo (ereditato dal CSS globale) */}
       <span className={cn(
-        "text-xs font-semibold uppercase tracking-wider text-center",
+        "text-xs font-bold tracking-widest",
         colorClass,
       )}>
         {label}
       </span>
 
-      {/* Card con canvas e pulsanti affiancati */}
-      <div className="flex gap-3 items-stretch">
-        {/* Canvas quadrato */}
-        <div className="flex-shrink-0 w-[140px] h-[110px] rounded-lg border-2 border-[#e2dac9] bg-white shadow-sm overflow-hidden">
+      {/* Canvas quadratino + pulsante Riconosci affiancati */}
+      <div className="flex items-center gap-3">
+        {/* Quadratino del canvas */}
+        <div className="w-[100px] h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
           <MathDrawCanvas
             strokes={strokes}
             onStrokesChange={handleStrokesChange}
             tool="write"
-            height={110}
+            height={85}
             className="border-0 rounded-none shadow-none ring-0"
             disabled={isLoading || isRecognizing}
             hideWatermark
           />
         </div>
 
-        {/* Pulsanti a destra */}
-        <div className="flex flex-col justify-center gap-2">
-          <button
-            onClick={handleManualRecognize}
-            disabled={!hasContent || !isModelReady || isRecognizing}
-            className="px-3 py-1.5 rounded-md bg-[#b05f3c] hover:bg-[#964f32] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold uppercase tracking-wider transition-colors min-w-[90px]"
-          >
-            {isRecognizing ? "..." : "RICONOSCI"}
-          </button>
-          {hasContent && (
-            <button
-              onClick={handleClear}
-              className="px-3 py-1 rounded-md text-xs text-[#55483d] hover:text-red-600 hover:bg-red-50 transition-colors uppercase tracking-wider"
-            >
-              Cancella
-            </button>
-          )}
-        </div>
+        {/* Pulsante Riconosci */}
+        <button
+          onClick={handleManualRecognize}
+          disabled={!hasContent || !isModelReady || isRecognizing}
+          className="h-10 px-5 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold tracking-widest transition-all shadow-sm"
+        >
+          {isRecognizing ? "..." : "RICONOSCI"}
+        </button>
       </div>
 
-      {/* Valore riconosciuto */}
-      {displayValue && (
-        <div className="text-center">
-          <span className={cn(
-            "inline-block px-2.5 py-0.5 rounded-md bg-[#f3eee4] text-sm font-bold font-mono",
-            colorClass,
-          )}>
+      {/* Pulsante Cancella (solo se c'è contenuto) e valore riconosciuto */}
+      <div className="flex items-center gap-2">
+        {displayValue && (
+          <span className="inline-block px-3 py-0.5 rounded-lg bg-secondary text-sm font-serif font-bold">
             {displayValue}
           </span>
-        </div>
-      )}
+        )}
+        {hasContent && (
+          <button
+            onClick={handleClear}
+            className="text-xs text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
+          >
+            CANCELLA
+          </button>
+        )}
+      </div>
 
       {/* Caricamento modello AI */}
       {isLoading && (
-        <div className="text-center text-[10px] text-[#55483d]">
-          Caricamento AI in corso...
-        </div>
+        <span className="text-[10px] text-muted-foreground">
+          CARICAMENTO AI IN CORSO...
+        </span>
       )}
     </div>
   );
