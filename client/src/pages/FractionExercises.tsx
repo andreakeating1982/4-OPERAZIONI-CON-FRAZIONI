@@ -630,10 +630,10 @@ function AddSubExercise({
  const mcmDisplay = mcmUtente ??"MCM";
  const r1Display = risultato1Utente !== null ? risultato1Utente :"...";
  const r2Display = risultato2Utente !== null ? risultato2Utente :"...";
- const nd1 = Math.abs(den1);
- const nd2 = Math.abs(den2);
- const effNum1 = num1 * (den1 < 0 ? -1 : 1);
- const effNum2 = num2 * (den2 < 0 ? -1 : 1);
+ const nd1 = Math.abs(den1 ?? 1);
+ const nd2 = Math.abs(den2 ?? 1);
+ const effNum1 = num1 * ((den1 ?? 1) < 0 ? -1 : 1);
+ const effNum2 = num2 * ((den2 ?? 1) < 0 ? -1 : 1);
  
  const handleFinalVerify = () => {
   if (finalNumUtente !== null) {
@@ -933,8 +933,8 @@ function MulDivExercise({
  const [showStep3Guide, setShowStep3Guide] = useState(false);
  const [finalNumUtente, setFinalNumUtente] = useState<number | null>(null);
  const [finalDenUtente, setFinalDenUtente] = useState<number | null>(null);
- const nd1 = Math.abs(den1);
- const nd2 = Math.abs(den2);
+ const nd1 = Math.abs(den1 ?? 1);
+ const nd2 = Math.abs(den2 ?? 1);
 
  const dNum1S = num1Semplificato !== null ? num1Semplificato :"...";
  const dDen2S = den2Semplificato !== null ? den2Semplificato :"...";
