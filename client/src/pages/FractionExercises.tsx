@@ -327,14 +327,7 @@ export default function FractionExercises() {
 
  return (
   <div className="min-h-screen bg-background flex flex-col">
-   {/* Header */}
-   <header className="fixed top-0 left-0 right-0 z-50 bg-background">
-    <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-center">
-     <h1 className="text-lg font-bold text-foreground tracking-widest uppercase">OPERAZIONI CON LE FRAZIONI</h1>
-    </div>
-   </header>
-
-   <main className="flex-1 max-w-2xl mx-auto w-full p-3 sm:p-4 pt-16">
+   <main className="flex-1 max-w-2xl mx-auto w-full p-3 sm:p-4 pt-4">
     {/* Mode selector */}
     <div className="flex gap-1 p-1 bg-card/60 backdrop-blur-sm rounded-xl border border-border mb-4">
      <button
@@ -460,8 +453,12 @@ export default function FractionExercises() {
         {/* Prima frazione */}
         <div className="flex flex-col items-center">
          <span className="text-lg font-bold font-serif">{num1}</span>
+         {(den1 !== null && den1 !== 1) && (
          <div className="w-12 h-[2px] bg-foreground/70 my-0.5"/>
+         )}
+         {(den1 !== null && den1 !== 1) && (
          <span className="text-lg font-bold font-serif">{den1}</span>
+         )}
         </div>
         {/* Segno operazione */}
         <span className="text-xl font-bold text-primary">
@@ -470,8 +467,12 @@ export default function FractionExercises() {
         {/* Seconda frazione */}
         <div className="flex flex-col items-center">
          <span className="text-lg font-bold font-serif">{num2}</span>
+         {(den2 !== null && den2 !== 1) && (
          <div className="w-12 h-[2px] bg-foreground/70 my-0.5"/>
+         )}
+         {(den2 !== null && den2 !== 1) && (
          <span className="text-lg font-bold font-serif">{den2}</span>
+         )}
         </div>
        </div>
       )}
