@@ -34,6 +34,7 @@ function semplificaFrazione(num: number, den: number): { num: number; den: numbe
 }
 
 function fattorizzazionePrimi(n: number): Record<number, number> {
+  if (n === 1) return { 1: 1 };
   const fattori: Record<number, number> = {};
   let d = 2;
   let temp = n;
@@ -49,6 +50,9 @@ function fattorizzazionePrimi(n: number): Record<number, number> {
 }
 
 function formatFattori(num: number, fattori: Record<number, number>): string {
+  if (num === 1 && fattori[1] === 1) {
+    return "Scomposizione in fattori primi di 1 = 1";
+  }
   const parts: string[] = [];
   for (const [f, exp] of Object.entries(fattori)) {
     parts.push(exp === 1 ? f : `${f}${"^".repeat(0)}${exp}`);
@@ -398,7 +402,7 @@ export default function FractionExercises() {
             {/* First fraction */}
             <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
               <p className="text-sm font-semibold text-foreground">Prima frazione:</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-3">
                 <NumberInputCanvas
                   value={num1}
                   onChange={setNum1}
@@ -406,6 +410,9 @@ export default function FractionExercises() {
                   colorClass="text-orange-400"
                   allowNegative
                 />
+                <div className="flex justify-center">
+                  <div className="w-3/4 border-t border-border/60" />
+                </div>
                 <NumberInputCanvas
                   value={den1}
                   onChange={setDen1}
@@ -414,7 +421,7 @@ export default function FractionExercises() {
                 />
               </div>
               {num1 !== null && den1 !== null && den1 > 0 && (
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-2">
                   <FractionDisplay numerator={num1} denominator={den1} numClass="text-orange-400" denClass="text-sky-400" size="lg" />
                 </div>
               )}
@@ -423,7 +430,7 @@ export default function FractionExercises() {
             {/* Second fraction */}
             <div className="p-4 rounded-xl bg-card/40 border border-border space-y-3">
               <p className="text-sm font-semibold text-foreground">Seconda frazione:</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-3">
                 <NumberInputCanvas
                   value={num2}
                   onChange={setNum2}
@@ -431,6 +438,9 @@ export default function FractionExercises() {
                   colorClass="text-red-400"
                   allowNegative
                 />
+                <div className="flex justify-center">
+                  <div className="w-3/4 border-t border-border/60" />
+                </div>
                 <NumberInputCanvas
                   value={den2}
                   onChange={setDen2}
@@ -439,7 +449,7 @@ export default function FractionExercises() {
                 />
               </div>
               {num2 !== null && den2 !== null && den2 > 0 && (
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-2">
                   <FractionDisplay numerator={num2} denominator={den2} numClass="text-red-400" denClass="text-blue-400" size="lg" />
                 </div>
               )}
