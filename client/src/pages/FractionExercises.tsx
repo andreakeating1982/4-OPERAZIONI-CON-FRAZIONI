@@ -256,7 +256,7 @@ export default function FractionExercises() {
 
    let bodyHtml = '';
    notebookContents.forEach((el) => {
-    bodyHtml += `<div style="margin-bottom:26px;text-align:center">${el.innerHTML}</div>`;
+    bodyHtml += `<div style="margin-bottom:48px;text-align:center">${el.innerHTML}</div>`;
    });
 
    const printHtml = `<!DOCTYPE html>
@@ -264,7 +264,7 @@ export default function FractionExercises() {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Georgia,serif;color:#1a1a1a;padding:24px;max-width:800px;margin:0 auto;text-align:center}
+body{font-family:Georgia,serif;color:#1a1a1a;padding:36px 24px;max-width:800px;margin:0 auto;text-align:center;line-height:2.3}
 .text-primary,.text-primary *{color:#92400e!important;font-weight:bold!important}
 .text-orange-400,.text-orange-400 *{color:#ea580c!important}
 .text-blue-400,.text-blue-400 *{color:#2563eb!important}
@@ -290,21 +290,21 @@ body{font-family:Georgia,serif;color:#1a1a1a;padding:24px;max-width:800px;margin
 .text-center{text-align:center!important}
 .block{display:block!important}
 .inline-block{display:inline-block!important}
-.mt-0{margin-top:0!important}.mt-1{margin-top:4px!important}.mt-2{margin-top:8px!important}
-.pt-1{padding-top:4px!important}
+.mt-0{margin-top:0!important}.mt-1{margin-top:8px!important}.mt-2{margin-top:14px!important}
+.pt-1{padding-top:8px!important}
 .px-3{padding-left:12px!important;padding-right:12px!important}
 .px-4{padding-left:16px!important;padding-right:16px!important}
-.py-1{padding-top:4px!important;padding-bottom:4px!important}
-.py-2{padding-top:8px!important;padding-bottom:8px!important}
-.my-0\.5{margin-top:2px!important;margin-bottom:2px!important}
-.my-2{margin-top:8px!important;margin-bottom:8px!important}
-.mb-2{margin-bottom:8px!important}.mb-3{margin-bottom:12px!important}
-.space-y-1>*+*{margin-top:4px!important}
-.space-y-1\.5>*+*{margin-top:6px!important}
-.space-y-2>*+*{margin-top:8px!important}
-.space-y-4>*+*{margin-top:16px!important}
-.leading-loose{line-height:1.9!important}
-.leading-relaxed{line-height:1.7!important}
+.py-1{padding-top:8px!important;padding-bottom:8px!important}
+.py-2{padding-top:14px!important;padding-bottom:14px!important}
+.my-0\.5{margin-top:4px!important;margin-bottom:4px!important}
+.my-2{margin-top:14px!important;margin-bottom:14px!important}
+.mb-2{margin-bottom:14px!important}.mb-3{margin-bottom:20px!important}
+.space-y-1>*+*{margin-top:8px!important}
+.space-y-1\.5>*+*{margin-top:12px!important}
+.space-y-2>*+*{margin-top:16px!important}
+.space-y-4>*+*{margin-top:24px!important}
+.leading-loose{line-height:2.5!important}
+.leading-relaxed{line-height:2.2!important}
 .opacity-80{opacity:.8!important}
 .w-10{width:40px!important}.w-12{width:48px!important}
 .h-\[2px\]{height:2px!important}
