@@ -136,13 +136,16 @@ export default function FractionExercises() {
   const val1Corretto = (mcmCorretto / nd1) * effNum1;
   const val2Corretto = (mcmCorretto / nd2) * effNum2;
 
-  const numFinaleCorretto = addSubOp ==="+"? val1Corretto + val2Corretto : val1Corretto - val2Corretto;
-  const sempl = semplificaFrazione(numFinaleCorretto, mcmCorretto);
+  const numFinaleRaw = addSubOp ==="+"? val1Corretto + val2Corretto : val1Corretto - val2Corretto;
+  const denFinaleRaw = mcmCorretto;
+  const sempl = semplificaFrazione(numFinaleRaw, mcmCorretto);
 
   return {
    mcmCorretto,
    val1Corretto,
    val2Corretto,
+   numFinaleRaw,
+   denFinaleRaw,
    numFinaleCorretto: sempl.num,
    denFinaleCorretto: sempl.den,
    fattori1,
@@ -187,9 +190,9 @@ export default function FractionExercises() {
   const divCom1 = trovaDivisoriComuni(num1, actualDen2);
   const divCom2 = trovaDivisoriComuni(nd1, actualNum2);
 
-  const numFinaleCorretto = num1 * actualNum2;
-  const denFinaleCorretto = nd1 * actualDen2;
-  const sempl = semplificaFrazione(numFinaleCorretto, denFinaleCorretto);
+  const numFinaleRaw = num1 * actualNum2;
+  const denFinaleRaw = nd1 * actualDen2;
+  const sempl = semplificaFrazione(numFinaleRaw, denFinaleRaw);
 
   return {
    actualNum2,
@@ -198,6 +201,8 @@ export default function FractionExercises() {
    displayDen2,
    divCom1,
    divCom2,
+   numFinaleRaw,
+   denFinaleRaw,
    numFinaleCorretto: sempl.num,
    denFinaleCorretto: sempl.den,
   };
@@ -684,12 +689,6 @@ function AddSubExercise({
       size="sm"
      />
     </div>
-    {/* Equal denominators message — outside dropdown, always visible when correct */}
-    {nd1 === nd2 && mcmUtente === computed.mcmCorretto && (
-     <p className="font-mono text-xs text-center mt-2">
-      Il m.c.m tra {nd1} e {nd2} corrisponde al numero stesso, cioè {nd1}
-     </p>
-    )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto}>
      <div className="flex justify-center my-2">
       <div className="flex items-center gap-3 text-sm font-mono bg-muted px-3.5 py-2 rounded-lg">
@@ -862,20 +861,25 @@ function AddSubExercise({
     )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true}>
      <p className="font-mono text-sm">
-      {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleCorretto}
+      {computed.val1Corretto} {op} ({computed.val2Corretto}) = {computed.numFinaleRaw}
      </p>
      <div className="flex justify-center my-2">
       <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
-       {computed.denFinaleCorretto === 1 ? (
-        <span className="font-bold">{computed.numFinaleCorretto}</span>
+       {computed.denFinaleRaw === 1 ? (
+        <span className="font-bold">{computed.numFinaleRaw}</span>
        ) : (
         <>
-         <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+         <span className="font-bold">{computed.numFinaleRaw}</span><br />
+         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleRaw}</span>
         </>
        )}
       </div>
      </div>
+     {(computed.numFinaleRaw !== computed.numFinaleCorretto || computed.denFinaleRaw !== computed.denFinaleCorretto) && (
+      <p className="font-mono text-sm text-center">
+       {computed.numFinaleRaw}/{computed.denFinaleRaw} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
+      </p>
+     )}
      </NotebookGuide>
 
    </div>
@@ -1261,16 +1265,21 @@ function MulDivExercise({
      </p>
      <div className="flex justify-center my-2">
       <div className="font-mono text-sm text-center bg-muted px-4 py-2 rounded-lg">
-       {computed.denFinaleCorretto === 1 ? (
-        <span className="font-bold">{computed.numFinaleCorretto}</span>
+       {computed.denFinaleRaw === 1 ? (
+        <span className="font-bold">{computed.numFinaleRaw}</span>
        ) : (
         <>
-         <span className="font-bold">{computed.numFinaleCorretto}</span><br />
-         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleCorretto}</span>
+         <span className="font-bold">{computed.numFinaleRaw}</span><br />
+         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleRaw}</span>
         </>
        )}
       </div>
      </div>
+     {(computed.numFinaleRaw !== computed.numFinaleCorretto || computed.denFinaleRaw !== computed.denFinaleCorretto) && (
+      <p className="font-mono text-sm text-center">
+       {computed.numFinaleRaw}/{computed.denFinaleRaw} = {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`}
+      </p>
+     )}
     </NotebookGuide>
 
    </div>
