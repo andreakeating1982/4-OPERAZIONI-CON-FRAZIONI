@@ -322,13 +322,13 @@ export default function FractionExercises() {
  return (
   <div className="min-h-screen bg-background flex flex-col">
    {/* Header */}
-   <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+   <header className="fixed top-0 left-0 right-0 z-50 bg-background">
     <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-center">
      <h1 className="text-lg font-bold text-foreground tracking-widest uppercase">OPERAZIONI CON LE FRAZIONI</h1>
     </div>
    </header>
 
-   <main className="flex-1 max-w-2xl mx-auto w-full p-3 sm:p-4">
+   <main className="flex-1 max-w-2xl mx-auto w-full p-3 sm:p-4 pt-16">
     {/* Mode selector */}
     <div className="flex gap-1 p-1 bg-card/60 backdrop-blur-sm rounded-xl border border-border mb-4">
      <button
