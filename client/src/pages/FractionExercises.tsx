@@ -1213,19 +1213,6 @@ function MulDivExercise({
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
-      {op === "/"&& (
-       <div className="flex justify-center my-2">
-        <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
-         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-         <span className="text-base">÷</span>
-         <FractionDisplay numerator={num2} denominator={nd2} size="xs"/>
-         <span className="text-base">→</span>
-         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
-         <span className="text-base">×</span>
-         <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="xs"/>
-        </div>
-       </div>
-      )}
       <div className="flex justify-center my-2">
        <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
         <div className="flex flex-col items-center">
