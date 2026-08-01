@@ -698,14 +698,14 @@ function AddSubExercise({
        <FractionDisplay numerator={num2} denominator={den2} size="xs"/>
       </div>
      </div>
-     <p className="font-mono text-sm text-center font-semibold mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
+     <p className="font-mono text-sm text-center text-primary mt-1">SCOMPOSIZIONE IN FATTORI PRIMI</p>
      {nd1 !== nd2 && (
      <>
      <p className="font-mono text-sm">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
       {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}
      </p>
-     <p className="font-mono text-sm">
+     <p className="font-mono text-sm text-primary mt-2">
       m.c.m.({nd1}, {nd2}) = {computed.mcmFormula} = {computed.mcmCorretto}
      </p>
      </>
