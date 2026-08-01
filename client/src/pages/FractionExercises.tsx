@@ -877,20 +877,7 @@ function AddSubExercise({
        )}
       </div>
      </div>
-     {(() => {
-      const absNum = Math.abs(computed.numFinaleCorretto);
-      if (absNum > computed.denFinaleCorretto) {
-       const intero = Math.floor(absNum / computed.denFinaleCorretto);
-       const resto = absNum % computed.denFinaleCorretto;
-       return (
-        <p className="font-mono text-sm">
-         {computed.denFinaleCorretto === 1 ? computed.numFinaleCorretto : `${computed.numFinaleCorretto}/${computed.denFinaleCorretto}`} = {computed.numFinaleCorretto < 0 ?"−":""}{intero} + {resto}/{computed.denFinaleCorretto}
-        </p>
-       );
-      }
-      return null;
-     })()}
-    </NotebookGuide>
+     </NotebookGuide>
 
    </div>
 
