@@ -812,12 +812,12 @@ function AddSubExercise({
        allowNegative
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
-      {computed.denFinaleCorretto !== 1 && (
+      {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
       </div>
       )}
-      {computed.denFinaleCorretto !== 1 && (
+      {computed.denFinaleRaw !== 1 && (
       <NumberInputCanvas
        value={finalDenUtente}
        onChange={(v) => {
@@ -1203,12 +1203,12 @@ function MulDivExercise({
        allowNegative
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
-      {computed.denFinaleCorretto !== 1 && (
+      {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
        <div className="w-[100px] h-[2.5px] bg-foreground/80"/>
       </div>
       )}
-      {computed.denFinaleCorretto !== 1 && (
+      {computed.denFinaleRaw !== 1 && (
       <NumberInputCanvas
        value={finalDenUtente}
        onChange={(v) => {
