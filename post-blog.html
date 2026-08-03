@@ -1,0 +1,35 @@
+<!-- INIZIO POST BLOG — OPERAZIONI CON LE FRAZIONI -->
+
+<p style="font-size: 17px; line-height: 1.7; text-align: justify; margin-bottom: 24px;">
+Ecco un'app interattiva per <strong>esercitarsi con le operazioni tra frazioni</strong> — addizione, sottrazione, moltiplicazione e divisione — pensata per studenti della secondaria di primo grado ma adatta anche al biennio delle superiori. L'app guida lo studente <strong>passo dopo passo</strong>: dal calcolo del minimo comune multiplo alla semplificazione incrociata, fino al risultato finale. Ogni passaggio viene corretto in tempo reale e, quando la risposta è giusta, compare un riquadro «RICOPIA SUL QUADERNO» che lo studente può copiare sul proprio quaderno fisico. Alla fine dell'esercizio, un pulsante <strong>SCARICA PDF</strong> genera automaticamente il quaderno completo di tutti i passaggi svolti, pronto per essere stampato o archiviato.
+</p>
+
+<p style="font-size: 17px; line-height: 1.7; text-align: justify; margin-bottom: 24px;">
+Il metodo è <strong>metacognitivo</strong>: lo studente non si limita a eseguire meccanicamente un'operazione, ma impara a <strong>riconoscere ogni singolo passaggio</strong> — scomposizione in fattori primi, calcolo del m.c.m., semplificazione incrociata, riduzione ai minimi termini — e a verificare da solo la correttezza del proprio lavoro grazie al feedback immediato. L'input avviene tramite <strong>scrittura a mano libera</strong> su canvas: il riconoscimento automatico converte le cifre scritte con il dito (o con il mouse) in numeri, rendendo l'esperienza più naturale e accessibile. L'approccio è costruito per funzionare anche con alunni <strong>BES e DSA</strong>, grazie alla chiarezza visiva dei passaggi, ai colori distintivi per numeratori e denominatori nella semplificazione incrociata, e alla possibilità di rivedere ogni fase dell'esercizio nel PDF finale.
+</p>
+
+<!--OPERAZIONI CON LE FRAZIONI-->
+<div style="background: rgb(250, 248, 245); border-radius: 16px; box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 20px; font-family: system-ui, -apple-system, sans-serif; margin: 0px auto; max-width: 800px; overflow: hidden;">
+  <div style="background: linear-gradient(135deg, rgb(210, 195, 170) 0%, rgb(235, 220, 200) 100%); padding: 16px 20px; text-align: center;">
+    <span style="color: #3d2b1f; font-family: 'Cambria Math','Cambria','Hoefler Text','Times New Roman',serif; font-size: 15px; font-weight: 600; letter-spacing: 1px;">OPERAZIONI CON LE FRAZIONI</span>
+  </div>
+  <iframe id="frazioniAppIframe" loading="lazy" src="https://math-input-panel.easy-peasy.site/" style="border: none; display: block; height: 600px; min-width: 100%; transition: height 0.2s ease; width: 1px;" title="Operazioni con le Frazioni">
+  </iframe>
+</div>
+
+<script>
+(function() {
+  var iframe = document.getElementById('frazioniAppIframe');
+  if (!iframe) return;
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'labvisivo:height' && typeof e.data.height === 'number') {
+      if (e.data.height > 100) iframe.style.height = e.data.height + 'px';
+    }
+  });
+})();
+</script><br /><br />
+
+<p style="font-size: 17px; line-height: 1.7; text-align: justify; margin-top: 24px;">
+<strong>Come si usa.</strong> Lo studente sceglie la modalità (Addizione/Sottrazione oppure Moltiplicazione/Divisione), scrive le due frazioni nei riquadri usando il dito o il mouse, e clicca su «INIZIA ESERCIZIO». Da quel momento l'app guida ogni passaggio: nel percorso Addizione/Sottrazione si calcola il m.c.m. scomponendo i denominatori in fattori primi, si divide il m.c.m. per ciascun denominatore e si moltiplica per il rispettivo numeratore, si sommano o sottraggono i risultati e si semplifica la frazione finale. Nel percorso Moltiplicazione/Divisione, la divisione viene prima trasformata in moltiplicazione invertendo la seconda frazione, poi si semplifica in croce (quando possibile) e infine si moltiplicano numeratori e denominatori. Ogni risposta viene corretta all'istante: se è sbagliata, lo studente può riprovare; quando è corretta, il passaggio viene registrato nel quaderno virtuale e si passa al passo successivo. Alla fine, il PDF scaricabile contiene tutti i passaggi in ordine, centrati e con il font Cambria Math, senza intestazioni né numerazione — pronto per essere incollato sul quaderno o condiviso con l'insegnante.
+</p>
+<!-- FINE POST BLOG -->

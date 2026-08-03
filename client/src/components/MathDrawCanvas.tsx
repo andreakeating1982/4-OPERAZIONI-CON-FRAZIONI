@@ -36,7 +36,7 @@ export function MathDrawCanvas({
   const isEmpty = strokes.length === 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 700, height: 250 });
+  const [canvasSize, setCanvasSize] = useState({ width: 700, height: 180 });
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentStroke, setCurrentStroke] = useState<Stroke | null>(null);
   const [eraserPos, setEraserPos] = useState<{ x: number; y: number } | null>(
@@ -57,7 +57,7 @@ export function MathDrawCanvas({
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const w = width || entry.contentRect.width;
-        const h = height || Math.max(200, entry.contentRect.height);
+        const h = height || Math.max(140, entry.contentRect.height);
         setCanvasSize({
           width: Math.floor(w),
           height: Math.floor(h),
@@ -305,7 +305,7 @@ export function MathDrawCanvas({
     <div
       ref={containerRef}
       className={`relative w-full overflow-hidden rounded-xl border-2 border-border bg-card shadow-inner shadow-black/[0.04] ring-1 ring-black/[0.04] group ${className}`}
-      style={{ minHeight: height || 200 }}
+      style={{ minHeight: height || 140 }}
     >
       {/* Empty state watermark */}
       {!hideWatermark && isEmpty && tool === "write" && (

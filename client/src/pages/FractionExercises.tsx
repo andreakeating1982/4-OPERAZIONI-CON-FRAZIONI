@@ -451,7 +451,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
      OPERAZIONI CON LE FRAZIONI
     </h1>
    </header>
-   <main className="flex-1 max-w-2xl mx-auto w-full px-3 sm:px-4 pb-16">
+   <main className="flex-1 max-w-md mx-auto w-full px-3 sm:px-4 pb-16">
     {/* Mode selector */}
     <div className="flex gap-1 p-1 bg-card/60 backdrop-blur-sm rounded-xl border border-border mb-4">
      <button
@@ -480,7 +480,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
 
     {/* Input phase */}
     {phase ==="input"&& (
-     <div className="space-y-6">
+     <div className="space-y-4">
       {/* Suggerimento */}
       <div className="text-center">
        <span className="text-base text-muted-foreground tracking-widest font-semibold">
@@ -489,7 +489,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
       </div>
 
       {/* Operation selector */}
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex items-center justify-center gap-2">
        <label className="text-base font-bold tracking-wider">OPERAZIONE:</label>
        {mode ==="addsub"? (
         <select
@@ -519,7 +519,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
          PRIMA FRAZIONE
         </span>
        </div>
-       <div className="p-4 space-y-1">
+       <div className="px-3 py-2.5 space-y-0.5">
         <NumberInputCanvas
          value={num1}
          onChange={setNum1}
@@ -528,7 +528,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
         />
         {/* Linea di frazione */}
         <div className="flex justify-start py-1">
-         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
          value={den1}
@@ -539,7 +539,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
       </div>
 
       {/* Segno dell'operazione tra le due frazioni */}
-      <div className="flex items-center justify-center py-1">
+      <div className="flex items-center justify-center py-0.5">
        <span className="text-2xl font-bold text-primary">
         {mode ==="addsub"? (addSubOp ==="+"?"+":"\u2212") : (mulDivOp ==="*"?"\u00d7":"\u00f7")}
        </span>
@@ -561,7 +561,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;padding:36px 24px;ma
         />
         {/* Linea di frazione */}
         <div className="flex justify-start py-1">
-         <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
         </div>
         <NumberInputCanvas
          value={den2}
@@ -955,7 +955,7 @@ function AddSubExercise({
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
-       <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
       </div>
       )}
       {computed.denFinaleRaw !== 1 && (
@@ -1168,7 +1168,7 @@ function MulDivExercise({
        )}
        {/* Linea di frazione */}
        <div className="flex justify-start py-1">
-        <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+        <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
         value={den2Semplificato}
@@ -1212,7 +1212,7 @@ function MulDivExercise({
        )}
        {/* Linea di frazione */}
        <div className="flex justify-start py-1">
-        <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+        <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
         value={num2Semplificato}
@@ -1334,7 +1334,7 @@ function MulDivExercise({
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
       <div className="flex items-center">
-       <div className="w-[130px] sm:w-[150px] h-[2.5px] bg-foreground/80"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
       </div>
       )}
       {computed.denFinaleRaw !== 1 && (
