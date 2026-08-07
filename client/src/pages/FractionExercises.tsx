@@ -651,9 +651,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
          <span className="text-sm font-bold tracking-widest">PRIMA FRAZIONE</span>
         </div>
         <div className="px-2 py-2">
-         <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative />
+         <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative labelOnTop />
          <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
-         <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" />
+         <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" labelOnTop />
         </div>
        </div>
 
@@ -666,9 +666,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
          <span className="text-sm font-bold tracking-widest">SECONDA FRAZIONE</span>
         </div>
         <div className="px-2 py-2">
-         <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative />
+         <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative labelOnTop />
          <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
-         <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" />
+         <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" labelOnTop />
         </div>
        </div>
 
@@ -698,9 +698,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
            </button>
           </div>
           <div className="px-2 py-2">
-           <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative />
+           <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative labelOnTop />
            <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
-           <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" />
+           <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" labelOnTop />
           </div>
          </div>
         </>
@@ -732,9 +732,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
            </button>
           </div>
           <div className="px-2 py-2">
-           <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative />
+           <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative labelOnTop />
            <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
-           <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" />
+           <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" labelOnTop />
           </div>
          </div>
         </>
