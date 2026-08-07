@@ -644,7 +644,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
       </div>
 
       {/* Fraction cards — horizontal, signs aligned with fraction lines */}
-      <div className="flex flex-row items-stretch justify-start gap-1 sm:gap-1.5 overflow-x-auto pb-2" style={{flexWrap:'nowrap'}}>
+      <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 ${showThirdFraction ? 'justify-start' : 'justify-center'}`} style={{flexWrap:'nowrap'}}>
        {/* ── PRIMA FRAZIONE ── */}
        <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[200px] sm:min-w-[210px]">
         <div className="py-1.5 border-b border-border bg-secondary/50">
@@ -652,7 +652,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2 space-y-0.5">
          <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative />
-         <div className="flex justify-start py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+         <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
          <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" />
         </div>
        </div>
@@ -667,7 +667,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2 space-y-0.5">
          <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative />
-         <div className="flex justify-start py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+         <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
          <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" />
         </div>
        </div>
@@ -699,7 +699,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2 space-y-0.5">
            <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative />
-           <div className="flex justify-start py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+           <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
            <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" />
           </div>
          </div>
@@ -733,7 +733,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2 space-y-0.5">
            <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative />
-           <div className="flex justify-start py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+           <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
            <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" />
           </div>
          </div>
@@ -1002,7 +1002,7 @@ function AddSubExercise({
  };
 
  return (
-  <div className="space-y-5">
+  <div className="space-y-5 max-w-2xl mx-auto">
    {/* Step 1: MCM */}
    <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
     <p className="text-base font-bold text-primary">1. Calcolo del m.c.m. tra i denominatori</p>
@@ -1393,7 +1393,7 @@ function MulDivExercise({
  const denU = denominatoreFinaleUtente;
 
  return (
-  <div className="space-y-5">
+  <div className="space-y-5 max-w-2xl mx-auto">
    {/* Step 1: Initial multiplication */}
    <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
     <p className="text-base font-bold text-primary">1. Moltiplicazione e inversione</p>
@@ -1461,7 +1461,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-start py-1">
+       <div className="flex justify-center py-1">
         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
@@ -1506,7 +1506,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-start py-1">
+       <div className="flex justify-center py-1">
         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
        </div>
        <NumberInputCanvas
@@ -1569,8 +1569,8 @@ function MulDivExercise({
     <div className="space-y-4">
      <div>
       <p className="text-base mb-2">
-       Moltiplicazione numeratori:{""}
-       <span className="text-orange-400 font-bold">{dNum1S}</span> · (<span className="text-red-400 font-bold">{dNum2S}</span>) = <span className="font-bold">Risultato numeratore finale</span>
+       <span className="text-amber-900">MOLTIPLICAZIONE NUMERATORI:</span>{" "}
+       <span className="text-orange-400 font-bold">{dNum1S}</span> · (<span className="text-red-400 font-bold">{dNum2S}</span>) = <span>RISULTATO NUMERATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={numeratoreFinaleUtente}
@@ -1582,8 +1582,8 @@ function MulDivExercise({
      </div>
      <div>
       <p className="text-base mb-2">
-       Moltiplicazione denominatori:{""}
-       <span className="text-sky-400 font-bold">{dDen1S}</span> · (<span className="text-blue-400 font-bold">{dDen2S}</span>) = <span className="font-bold">Risultato denominatore finale</span>
+       <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
+       <span className="text-sky-400 font-bold">{dDen1S}</span> · (<span className="text-blue-400 font-bold">{dDen2S}</span>) = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
