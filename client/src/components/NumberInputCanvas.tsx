@@ -198,7 +198,7 @@ export function NumberInputCanvas({
   const hasContent = strokes.length > 0;
 
   return (
-    <div className={cn("flex items-start gap-3", className)}>
+    <div className={cn("flex items-start gap-2 h-[75px] sm:h-[85px] overflow-visible", className)}>
       {/* Quadratino del canvas */}
       <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[75px] sm:h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <MathDrawCanvas
@@ -211,11 +211,11 @@ export function NumberInputCanvas({
         />
       </div>
 
-      {/* Colonna destra: label + valore + azioni */}
-      <div className="flex flex-col items-center gap-1.5 flex-1">
+      {/* Colonna destra compatta: label + valore + azioni */}
+      <div className="flex flex-col items-center gap-0.5 min-w-0">
         {/* Label */}
         <span className={cn(
-          "text-base tracking-widest text-amber-900",
+          "text-[10px] sm:text-[11px] font-bold tracking-widest text-amber-900 leading-tight",
           colorClass,
         )}>
           {label}
@@ -223,27 +223,27 @@ export function NumberInputCanvas({
 
         {/* Stato riconoscimento */}
         {isRecognizing && (
-          <span className="text-xs text-muted-foreground animate-pulse tracking-widest">
+          <span className="text-[9px] text-muted-foreground animate-pulse tracking-widest leading-tight">
             RICONOSCIMENTO...
           </span>
         )}
         {isLoading && (
-          <span className="text-xs text-muted-foreground">
+          <span className="text-[9px] text-muted-foreground leading-tight">
             CARICAMENTO...
           </span>
         )}
 
         {/* Valore riconosciuto + cancella */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {displayValue && (
-            <span className="inline-block px-2.5 py-0.5 rounded-lg bg-secondary text-base font-serif font-bold">
+            <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
               {displayValue}
             </span>
           )}
           {hasContent && (
             <button
               onClick={handleClear}
-              className="text-xs text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest"
+              className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
             >
               CANCELLA
             </button>
@@ -252,7 +252,7 @@ export function NumberInputCanvas({
 
         {/* ─── DIGITA IL VALORE ─────────────────────────────────── */}
         {isEditing ? (
-          <div className="flex items-center justify-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 flex-wrap">
             <input
               ref={editInputRef}
               type="text"
@@ -263,18 +263,18 @@ export function NumberInputCanvas({
                 if (e.key === "Escape") { setIsEditing(false); setEditValue(""); }
               }}
               placeholder='es. 7'
-              className="h-9 px-3 rounded-lg border-2 border-primary bg-background text-foreground text-sm font-mono w-36 text-center focus:outline-none"
+              className="h-6 px-2 rounded border-2 border-primary bg-background text-foreground text-[10px] font-mono w-16 text-center focus:outline-none"
               autoFocus
             />
             <button
               onClick={handleEditSubmit}
-              className="h-9 px-4 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold transition-colors"
+              className="h-6 px-2 rounded bg-primary hover:bg-primary/90 text-primary-foreground text-[10px] font-bold transition-colors"
             >
               OK
             </button>
             <button
               onClick={() => { setIsEditing(false); setEditValue(""); }}
-              className="h-9 w-9 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold transition-colors flex items-center justify-center"
+              className="h-6 w-6 rounded bg-secondary hover:bg-secondary/80 text-foreground text-[10px] font-bold transition-colors flex items-center justify-center"
             >
               ✕
             </button>
@@ -282,7 +282,7 @@ export function NumberInputCanvas({
         ) : (
           <button
             onClick={() => { setIsEditing(true); setEditValue(""); }}
-            className="text-muted-foreground hover:text-primary transition-colors text-xs tracking-wide"
+            className="text-muted-foreground hover:text-primary transition-colors text-[10px] tracking-wide leading-tight"
             title="Inserisci manualmente il valore"
           >
             ✎ digita il valore
