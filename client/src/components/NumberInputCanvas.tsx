@@ -204,32 +204,21 @@ export function NumberInputCanvas({
   // ─── Layout verticale: canvas sopra, label + pulsanti sotto ──────
   if (labelOnBottom) {
     return (
-      <div className={cn("flex flex-col items-center gap-1.5", className)}>
-        {/* Riga superiore: canvas + valore */}
-        <div className="flex items-start gap-2">
-          <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-            <MathDrawCanvas
-              strokes={strokes}
-              onStrokesChange={handleStrokesChange}
-              tool="write"
-              className="border-0 rounded-none shadow-none ring-0"
-              disabled={isLoading || isRecognizing}
-              hideWatermark
-            />
-          </div>
-
-          {/* Badge valore */}
-          {displayValue && (
-            <div className="flex flex-col items-center gap-0.5 min-w-0">
-              <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
-                {displayValue}
-              </span>
-            </div>
-          )}
+      <div className={cn("flex flex-col items-center gap-1", className)}>
+        {/* Canvas */}
+        <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          <MathDrawCanvas
+            strokes={strokes}
+            onStrokesChange={handleStrokesChange}
+            tool="write"
+            className="border-0 rounded-none shadow-none ring-0"
+            disabled={isLoading || isRecognizing}
+            hideWatermark
+          />
         </div>
 
-        {/* Riga inferiore: label + pulsanti */}
-        <div className="flex flex-col items-center gap-1">
+        {/* Label + pulsanti */}
+        <div className="flex flex-col items-center gap-0.5">
           <span className={cn(
             "text-[10px] sm:text-[11px] font-bold tracking-widest leading-tight",
             colorClass || "text-amber-900",
@@ -295,6 +284,13 @@ export function NumberInputCanvas({
             </span>
           )}
         </div>
+
+        {/* Badge valore — centrato sotto ✎ digita il valore */}
+        {displayValue && (
+          <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
+            {displayValue}
+          </span>
+        )}
       </div>
     );
   }
@@ -302,9 +298,9 @@ export function NumberInputCanvas({
   // ─── Layout verticale: label + pulsanti sopra, canvas sotto ──────
   if (labelOnTop) {
     return (
-      <div className={cn("flex flex-col items-center gap-1.5", className)}>
-        {/* Riga superiore: label + pulsanti (label sopra, pulsanti sotto) */}
-        <div className="flex flex-col items-center gap-1">
+      <div className={cn("flex flex-col items-center gap-1", className)}>
+        {/* Label + pulsanti */}
+        <div className="flex flex-col items-center gap-0.5">
           <span className={cn(
             "text-[10px] sm:text-[11px] font-bold tracking-widest leading-tight",
             colorClass || "text-amber-900",
@@ -371,28 +367,24 @@ export function NumberInputCanvas({
           )}
         </div>
 
-        {/* Riga inferiore: canvas + valore */}
-        <div className="flex items-start gap-2">
-          <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-            <MathDrawCanvas
-              strokes={strokes}
-              onStrokesChange={handleStrokesChange}
-              tool="write"
-              className="border-0 rounded-none shadow-none ring-0"
-              disabled={isLoading || isRecognizing}
-              hideWatermark
-            />
-          </div>
-
-          {/* Badge valore */}
-          {displayValue && (
-            <div className="flex flex-col items-center gap-0.5 min-w-0">
-              <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
-                {displayValue}
-              </span>
-            </div>
-          )}
+        {/* Canvas */}
+        <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          <MathDrawCanvas
+            strokes={strokes}
+            onStrokesChange={handleStrokesChange}
+            tool="write"
+            className="border-0 rounded-none shadow-none ring-0"
+            disabled={isLoading || isRecognizing}
+            hideWatermark
+          />
         </div>
+
+        {/* Badge valore — centrato sotto ✎ digita il valore */}
+        {displayValue && (
+          <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
+            {displayValue}
+          </span>
+        )}
       </div>
     );
   }
@@ -433,22 +425,15 @@ export function NumberInputCanvas({
           </span>
         )}
 
-        {/* Valore riconosciuto + cancella */}
-        <div className="flex items-center gap-1">
-          {displayValue && (
-            <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
-              {displayValue}
-            </span>
-          )}
-          {hasContent && (
-            <button
-              onClick={handleClear}
-              className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
-            >
-              CANCELLA
-            </button>
-          )}
-        </div>
+        {/* CANCELLA */}
+        {hasContent && (
+          <button
+            onClick={handleClear}
+            className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
+          >
+            CANCELLA
+          </button>
+        )}
 
         {/* ─── DIGITA IL VALORE ─────────────────────────────────── */}
         {isEditing ? (
@@ -487,6 +472,13 @@ export function NumberInputCanvas({
           >
             ✎ digita il valore
           </button>
+        )}
+
+        {/* Badge valore — centrato sotto ✎ digita il valore */}
+        {displayValue && (
+          <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
+            {displayValue}
+          </span>
         )}
       </div>
     </div>

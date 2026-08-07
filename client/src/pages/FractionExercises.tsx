@@ -701,9 +701,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
       {/* Fraction cards — horizontal, signs aligned with fraction lines */}
       <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 pl-2 sm:pl-0 ${showThirdFraction ? 'justify-start' : 'justify-start sm:justify-center'}`} style={{flexWrap:'nowrap'}}>
        {/* ── PRIMA FRAZIONE ── */}
-       <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
+       <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[185px] sm:min-w-[200px]">
         <div className="py-1.5 border-b border-border bg-secondary/50">
-         <span className="text-sm font-bold tracking-widest">PRIMA FRAZIONE</span>
+         <span className="text-xs font-bold tracking-widest">PRIMA FRAZIONE</span>
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative labelOnTop />
@@ -716,9 +716,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
        <SegnoOperazione op={mode ==="addsub"? (addSubOp ==="+"?"+":"\u2212") : (mulDivOp ==="*"?"\u00d7":"\u00f7")} />
 
        {/* ── SECONDA FRAZIONE ── */}
-       <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
+       <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[185px] sm:min-w-[200px]">
         <div className="py-1.5 border-b border-border bg-secondary/50">
-         <span className="text-sm font-bold tracking-widest">SECONDA FRAZIONE</span>
+         <span className="text-xs font-bold tracking-widest">SECONDA FRAZIONE</span>
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative labelOnTop />
@@ -742,9 +742,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
        {(mode ==="addsub" || mode ==="muldiv") && showThirdFraction && (
         <>
          <SegnoOperazione op={mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")} />
-         <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
+         <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[185px] sm:min-w-[200px]">
           <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
-           <span className="text-sm font-bold tracking-widest flex-1 text-center">TERZA FRAZIONE</span>
+           <span className="text-xs font-bold tracking-widest flex-1 text-center">TERZA FRAZIONE</span>
            <button
             onClick={() => { setShowThirdFraction(false); setNum3(null); setDen3(null); }}
             className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none absolute right-2"
@@ -776,9 +776,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
        {(mode ==="addsub" || mode ==="muldiv") && showFourthFraction && (
         <>
          <SegnoOperazione op={mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")} />
-         <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
+         <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[185px] sm:min-w-[200px]">
           <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
-           <span className="text-sm font-bold tracking-widest flex-1 text-center">QUARTA FRAZIONE</span>
+           <span className="text-xs font-bold tracking-widest flex-1 text-center">QUARTA FRAZIONE</span>
            <button
             onClick={() => { setShowFourthFraction(false); setNum4(null); setDen4(null); }}
             className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none absolute right-2"
@@ -1174,7 +1174,7 @@ function AddSubExercise({
       <NumberInputCanvas
        value={risultato1Utente}
        onChange={setRisultato1Utente}
-       label="Inserisci risultato 1:"
+       label="RISULTATO 1"
        colorClass="text-orange-400"
        allowNegative
        labelOnTop
@@ -1196,7 +1196,7 @@ function AddSubExercise({
       <NumberInputCanvas
        value={risultato2Utente}
        onChange={setRisultato2Utente}
-       label="Inserisci risultato 2:"
+       label="RISULTATO 2"
        colorClass="text-red-400"
        allowNegative
        labelOnTop
@@ -1220,7 +1220,7 @@ function AddSubExercise({
       <NumberInputCanvas
        value={risultato3Utente}
        onChange={setRisultato3Utente}
-       label="Inserisci risultato 3:"
+       label="RISULTATO 3"
        colorClass="text-blue-400"
        allowNegative
        labelOnTop
@@ -1245,7 +1245,7 @@ function AddSubExercise({
       <NumberInputCanvas
        value={risultato4Utente}
        onChange={setRisultato4Utente}
-       label="Inserisci risultato 4:"
+       label="RISULTATO 4"
        colorClass="text-orange-400"
        allowNegative
        labelOnTop
@@ -1319,7 +1319,8 @@ function AddSubExercise({
        }}
        label="NUMERATORE"
        allowNegative
-       labelOnTop
+       labelOnBottom
+       colorClass="text-red-400"
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
@@ -1338,6 +1339,7 @@ function AddSubExercise({
        }}
        label="DENOMINATORE"
        labelOnBottom
+       colorClass="text-blue-400"
       />
       )}
      </div>
