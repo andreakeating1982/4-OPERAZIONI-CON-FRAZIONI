@@ -699,7 +699,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
       </div>
 
       {/* Fraction cards — horizontal, signs aligned with fraction lines */}
-      <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 pl-2 sm:pl-0 ${showThirdFraction ? 'justify-start' : 'justify-start sm:justify-center'}`} style={{flexWrap:'nowrap'}}>
+      <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 pl-2 sm:pl-0 justify-start sm:justify-center`} style={{flexWrap:'nowrap'}}>
        {/* ── PRIMA FRAZIONE ── */}
        <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[185px] sm:min-w-[200px]">
         <div className="py-1.5 border-b border-border bg-secondary/50">
@@ -1111,11 +1111,17 @@ function AddSubExercise({
 
     {/* MCM fraction preview */}
     <div className="flex justify-center mt-4">
-     <FractionDisplay
-      numerator={`(${mcmDisplay} : ${nd1}) · ${effNum1 < 0 ? `(${effNum1})` : effNum1} ${op} (${mcmDisplay} : ${nd2}) · ${effNum2 < 0 ? `(${effNum2})` : effNum2}${computed.hasThird ? ` ${op} (${mcmDisplay} : ${computed.nd3}) · ${computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3}` : ""}${computed.hasFourth ? ` ${op} (${mcmDisplay} : ${computed.nd4}) · ${computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4}` : ""}`}
-      denominator={mcmDisplay}
-      size="sm"
-     />
+     <span className="inline-flex flex-col items-center align-middle mx-1 text-base min-w-[40px]">
+      <span className="block text-center px-1 whitespace-nowrap">
+       <span className="text-red-400">({mcmDisplay} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1}</span>
+       {' '}{op}{' '}
+       <span className="text-orange-400">({mcmDisplay} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2}</span>
+       {computed.hasThird && (<>{' '}{op}{' '}<span className="text-blue-400">({mcmDisplay} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3}</span></>)}
+       {computed.hasFourth && (<>{' '}{op}{' '}<span className="text-blue-500">({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4}</span></>)}
+      </span>
+      <span className="block w-full border-t border-black my-0.5" />
+      <span className="block text-center px-1">{mcmDisplay}</span>
+     </span>
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={mcmUtente === computed.mcmCorretto} forceOpen={generatingPdf}>
      <div className="flex justify-center my-2">
@@ -1153,7 +1159,7 @@ function AddSubExercise({
      )}
      <div className="flex justify-center my-2">
       <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
-       ({computed.mcmCorretto} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} {op} ({computed.mcmCorretto} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2}{computed.hasThird ? ` ${op} (${computed.mcmCorretto} : ${computed.nd3}) · ${computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3}` : ""}{computed.hasFourth ? ` ${op} (${computed.mcmCorretto} : ${computed.nd4}) · ${computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4}` : ""}<br />
+       <span className="text-red-400">({computed.mcmCorretto} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1}</span> {op} <span className="text-orange-400">({computed.mcmCorretto} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2}</span>{computed.hasThird ? <> {op} <span className="text-blue-400">({computed.mcmCorretto} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3}</span></> : ""}{computed.hasFourth ? <> {op} <span className="text-blue-500">({computed.mcmCorretto} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4}</span></> : ""}<br />
        <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
      </div>
@@ -1264,24 +1270,24 @@ function AddSubExercise({
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={risultato1Utente === computed.val1Corretto && risultato2Utente === computed.val2Corretto && (!computed.hasThird || risultato3Utente === computed.val3Corretto) && (!computed.hasFourth || risultato4Utente === computed.val4Corretto)} forceOpen={generatingPdf}>
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} = {round2(computed.mcmCorretto / nd1)} · {effNum1 < 0 ? `(${effNum1})` : effNum1} = <span className="font-bold text-primary">{computed.val1Corretto}</span>
+      <span className="text-red-400">({computed.mcmCorretto} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} = {round2(computed.mcmCorretto / nd1)} · {effNum1 < 0 ? `(${effNum1})` : effNum1} = {computed.val1Corretto}</span>
      </p>
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2} = {round2(computed.mcmCorretto / nd2)} · {effNum2 < 0 ? `(${effNum2})` : effNum2} = <span className="font-bold text-primary">{computed.val2Corretto}</span>
+      <span className="text-orange-400">({computed.mcmCorretto} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2} = {round2(computed.mcmCorretto / nd2)} · {effNum2 < 0 ? `(${effNum2})` : effNum2} = {computed.val2Corretto}</span>
      </p>
      {computed.hasThird && (
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = {round2(computed.mcmCorretto / computed.nd3)} · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = <span className="font-bold text-primary">{computed.val3Corretto}</span>
+      <span className="text-blue-400">({computed.mcmCorretto} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = {round2(computed.mcmCorretto / computed.nd3)} · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = {computed.val3Corretto}</span>
      </p>
      )}
      {computed.hasFourth && (
      <p className="font-mono text-base">
-      ({computed.mcmCorretto} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = {round2(computed.mcmCorretto / computed.nd4)} · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold text-primary">{computed.val4Corretto}</span>
+      <span className="text-blue-500">({computed.mcmCorretto} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = {round2(computed.mcmCorretto / computed.nd4)} · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = {computed.val4Corretto}</span>
      </p>
      )}
      <div className="flex justify-center my-2">
       <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
-       <span className="font-bold">{computed.val1Corretto}</span> {op} {computed.val2Corretto < 0 && '('}<span className="font-bold">{computed.val2Corretto}</span>{computed.val2Corretto < 0 && ')'}{computed.hasThird ? ` ${op} ${computed.val3Corretto < 0 ? `(${computed.val3Corretto})` : computed.val3Corretto}` : ""}{computed.hasFourth ? ` ${op} ${computed.val4Corretto < 0 ? `(${computed.val4Corretto})` : computed.val4Corretto}` : ""}<br />
+       <span className="font-bold text-red-400">{computed.val1Corretto}</span> {op} {computed.val2Corretto < 0 && '('}<span className="font-bold text-orange-400">{computed.val2Corretto}</span>{computed.val2Corretto < 0 && ')'}{computed.hasThird ? <> {op} <span className="font-bold text-blue-400">{computed.val3Corretto < 0 ? `(${computed.val3Corretto})` : computed.val3Corretto}</span></> : ""}{computed.hasFourth ? <> {op} <span className="font-bold text-blue-500">{computed.val4Corretto < 0 ? `(${computed.val4Corretto})` : computed.val4Corretto}</span></> : ""}<br />
        <span className="border-t border-black block mt-1 pt-1">{computed.mcmCorretto}</span>
       </div>
      </div>
@@ -1295,11 +1301,17 @@ function AddSubExercise({
 
     {/* Notebook Guide: Step 3 */}
     <div className="flex justify-center">
-     <FractionDisplay
-      numerator={`${r1Display} ${op} ${risultato2Utente !== null && risultato2Utente < 0 ? `(${r2Display})` : r2Display}${computed.hasThird ? ` ${op} ${risultato3Utente !== null && risultato3Utente < 0 ? `(${r3Display})` : r3Display}` : ""}${computed.hasFourth ? ` ${op} ${risultato4Utente !== null && risultato4Utente < 0 ? `(${r4Display})` : r4Display}` : ""}`}
-      denominator={mcmDisplay}
-      size="md"
-     />
+     <span className="inline-flex flex-col items-center align-middle mx-1 text-xl min-w-[56px]">
+      <span className="block text-center px-1 whitespace-nowrap">
+       <span className="text-red-400">{r1Display}</span>
+       {' '}{op}{' '}
+       <span className="text-orange-400">{risultato2Utente !== null && risultato2Utente < 0 ? `(${r2Display})` : r2Display}</span>
+       {computed.hasThird && (<>{' '}{op}{' '}<span className="text-blue-400">{risultato3Utente !== null && risultato3Utente < 0 ? `(${r3Display})` : r3Display}</span></>)}
+       {computed.hasFourth && (<>{' '}{op}{' '}<span className="text-blue-500">{risultato4Utente !== null && risultato4Utente < 0 ? `(${r4Display})` : r4Display}</span></>)}
+      </span>
+      <span className="block w-full border-t border-black my-0.5" />
+      <span className="block text-center px-1">{mcmDisplay}</span>
+     </span>
     </div>
 
     {/* Final result handwriting input */}
