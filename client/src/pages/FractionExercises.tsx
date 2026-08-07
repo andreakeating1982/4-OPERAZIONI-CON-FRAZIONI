@@ -1168,7 +1168,7 @@ function AddSubExercise({
     {/* Notebook Guide: Step 2 */}
     <div className="space-y-3">
      <p className="text-base">
-      ({mcmDisplay} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} = <span className="font-bold">Risultato 1</span>
+      ({mcmDisplay} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} = <span className="font-bold text-orange-400 text-sm">RISULTATO 1</span>
      </p>
      <div className="flex flex-col items-center">
       <NumberInputCanvas
@@ -1190,7 +1190,7 @@ function AddSubExercise({
      )}
 
      <p className="text-base">
-      ({mcmDisplay} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2} = <span className="font-bold">Risultato 2</span>
+      ({mcmDisplay} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2} = <span className="font-bold text-red-400 text-sm">RISULTATO 2</span>
      </p>
      <div className="flex flex-col items-center">
       <NumberInputCanvas
@@ -1214,7 +1214,7 @@ function AddSubExercise({
      {computed.hasThird && (
      <>
      <p className="text-base">
-      ({mcmDisplay} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = <span className="font-bold">Risultato 3</span>
+      ({mcmDisplay} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = <span className="font-bold text-blue-400 text-sm">RISULTATO 3</span>
      </p>
      <div className="flex flex-col items-center">
       <NumberInputCanvas
@@ -1239,14 +1239,14 @@ function AddSubExercise({
      {computed.hasFourth && (
      <>
      <p className="text-base">
-      ({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold">Risultato 4</span>
+      ({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold text-sky-500 text-sm">RISULTATO 4</span>
      </p>
      <div className="flex flex-col items-center">
       <NumberInputCanvas
        value={risultato4Utente}
        onChange={setRisultato4Utente}
        label="RISULTATO 4"
-       colorClass="text-orange-400"
+       colorClass="text-sky-500"
        allowNegative
        labelOnTop
       />
@@ -1319,8 +1319,7 @@ function AddSubExercise({
        }}
        label="NUMERATORE"
        allowNegative
-       labelOnBottom
-       colorClass="text-red-400"
+       labelOnTop
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
@@ -1339,7 +1338,6 @@ function AddSubExercise({
        }}
        label="DENOMINATORE"
        labelOnBottom
-       colorClass="text-blue-400"
       />
       )}
      </div>
@@ -1547,9 +1545,9 @@ function MulDivExercise({
        <NumberInputCanvas
         value={num1Semplificato}
         onChange={setNum1Semplificato}
-        label="Numeratore arancione"
-        colorClass="text-orange-400 font-bold"
-        labelOnTop
+        label="Numeratore rosso"
+        colorClass="text-orange-400"
+        labelOnBottom
        />
        {num1Semplificato !== null && (
         <p className={cn(
@@ -1565,8 +1563,8 @@ function MulDivExercise({
         value={den2Semplificato}
         onChange={setDen2Semplificato}
         label="Denominatore blu"
-        colorClass="text-blue-400 font-bold"
-        labelOnTop
+        colorClass="text-blue-400"
+        labelOnBottom
        />
        {den2Semplificato !== null && (
         <p className={cn(
@@ -1591,9 +1589,9 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den1Semplificato}
         onChange={setDen1Semplificato}
-        label="Denominatore azzurro"
-        colorClass="text-sky-400 font-bold"
-        labelOnTop
+        label="Denominatore blu"
+        colorClass="text-sky-400"
+        labelOnBottom
        />
        {den1Semplificato !== null && (
         <p className={cn(
@@ -1609,8 +1607,8 @@ function MulDivExercise({
         value={num2Semplificato}
         onChange={setNum2Semplificato}
         label="Numeratore rosso"
-        colorClass="text-red-400 font-bold"
-        labelOnTop
+        colorClass="text-red-400"
+        labelOnBottom
         allowNegative
        />
        {num2Semplificato !== null && (
