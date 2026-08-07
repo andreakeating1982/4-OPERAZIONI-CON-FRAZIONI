@@ -652,7 +652,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative />
-         <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
          <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" />
         </div>
        </div>
@@ -667,7 +667,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative />
-         <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
          <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" />
         </div>
        </div>
@@ -699,7 +699,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2">
            <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative />
-           <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
            <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" />
           </div>
          </div>
@@ -733,7 +733,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2">
            <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative />
-           <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
            <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" />
           </div>
          </div>

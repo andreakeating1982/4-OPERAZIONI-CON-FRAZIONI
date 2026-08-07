@@ -198,9 +198,9 @@ export function NumberInputCanvas({
   const hasContent = strokes.length > 0;
 
   return (
-    <div className={cn("flex items-start gap-2 h-[75px] sm:h-[85px] overflow-visible", className)}>
+    <div className={cn("flex items-start gap-2 h-[80px] sm:h-[90px] overflow-hidden", className)}>
       {/* Quadratino del canvas */}
-      <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[75px] sm:h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <MathDrawCanvas
           strokes={strokes}
           onStrokesChange={handleStrokesChange}
