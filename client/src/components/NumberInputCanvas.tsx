@@ -203,59 +203,61 @@ export function NumberInputCanvas({
   if (labelOnTop) {
     return (
       <div className={cn("flex flex-col items-center gap-1.5", className)}>
-        {/* Riga superiore: label + pulsanti */}
-        <div className="flex items-center gap-2 flex-wrap justify-center">
+        {/* Riga superiore: label + pulsanti (label sopra, pulsanti sotto) */}
+        <div className="flex flex-col items-center gap-1">
           <span className={cn(
             "text-[10px] sm:text-[11px] font-bold tracking-widest leading-tight",
             colorClass || "text-amber-900",
           )}>
             {label}
           </span>
-          {hasContent && !isEditing && (
-            <button
-              onClick={handleClear}
-              className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
-            >
-              CANCELLA
-            </button>
-          )}
-          {isEditing ? (
-            <div className="flex items-center gap-1">
-              <input
-                ref={editInputRef}
-                type="text"
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleEditSubmit();
-                  if (e.key === "Escape") { setIsEditing(false); setEditValue(""); }
-                }}
-                placeholder='es. 7'
-                className="h-6 px-2 rounded border-2 border-primary bg-background text-foreground text-[10px] font-mono w-16 text-center focus:outline-none"
-                autoFocus
-              />
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {hasContent && !isEditing && (
               <button
-                onClick={handleEditSubmit}
-                className="h-6 px-2 rounded bg-primary hover:bg-primary/90 text-primary-foreground text-[10px] font-bold transition-colors"
+                onClick={handleClear}
+                className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
               >
-                OK
+                CANCELLA
               </button>
+            )}
+            {isEditing ? (
+              <div className="flex items-center gap-1">
+                <input
+                  ref={editInputRef}
+                  type="text"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleEditSubmit();
+                    if (e.key === "Escape") { setIsEditing(false); setEditValue(""); }
+                  }}
+                  placeholder='es. 7'
+                  className="h-6 px-2 rounded border-2 border-primary bg-background text-foreground text-[10px] font-mono w-16 text-center focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  onClick={handleEditSubmit}
+                  className="h-6 px-2 rounded bg-primary hover:bg-primary/90 text-primary-foreground text-[10px] font-bold transition-colors"
+                >
+                  OK
+                </button>
+                <button
+                  onClick={() => { setIsEditing(false); setEditValue(""); }}
+                  className="h-6 w-6 rounded bg-secondary hover:bg-secondary/80 text-foreground text-[10px] font-bold transition-colors flex items-center justify-center"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={() => { setIsEditing(false); setEditValue(""); }}
-                className="h-6 w-6 rounded bg-secondary hover:bg-secondary/80 text-foreground text-[10px] font-bold transition-colors flex items-center justify-center"
+                onClick={() => { setIsEditing(true); setEditValue(""); }}
+                className="text-muted-foreground hover:text-primary transition-colors text-[10px] tracking-wide leading-tight"
+                title="Inserisci manualmente il valore"
               >
-                ✕
+                ✎ digita il valore
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => { setIsEditing(true); setEditValue(""); }}
-              className="text-muted-foreground hover:text-primary transition-colors text-[10px] tracking-wide leading-tight"
-              title="Inserisci manualmente il valore"
-            >
-              ✎ digita il valore
-            </button>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Riga inferiore: canvas + valore */}
