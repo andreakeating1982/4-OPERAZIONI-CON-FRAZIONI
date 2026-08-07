@@ -644,7 +644,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
       </div>
 
       {/* Fraction cards — horizontal, signs aligned with fraction lines */}
-      <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 ${showThirdFraction ? 'justify-start' : 'justify-center'}`} style={{flexWrap:'nowrap'}}>
+      <div className={`flex flex-row items-stretch gap-1 sm:gap-1.5 overflow-x-auto pb-2 pl-2 sm:pl-0 ${showThirdFraction ? 'justify-start' : 'justify-start sm:justify-center'}`} style={{flexWrap:'nowrap'}}>
        {/* ── PRIMA FRAZIONE ── */}
        <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
         <div className="py-1.5 border-b border-border bg-secondary/50">
