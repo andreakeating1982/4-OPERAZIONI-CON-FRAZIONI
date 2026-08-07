@@ -1167,10 +1167,10 @@ function AddSubExercise({
      <>
      <p className="font-mono text-base text-center text-primary mt-3">SCOMPOSIZIONE IN FATTORI PRIMI</p>
      <p className="font-mono text-base">
-      {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
-      {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
-      {computed.hasThird && (<>{computed.nd3} = {computed.fattori3[1] === 1 ?"1": Object.entries(computed.fattori3).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br /></>)}
-      {computed.hasFourth && (<>{computed.nd4} = {computed.fattori4[1] === 1 ?"1": Object.entries(computed.fattori4).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br /></>)}
+      {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => (e as number) === 1 ? f : `${f}${toSuperscript(e as number)}`).join("·")}<br />
+      {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => (e as number) === 1 ? f : `${f}${toSuperscript(e as number)}`).join("·")}<br />
+      {computed.hasThird && (<>{computed.nd3} = {computed.fattori3[1] === 1 ?"1": Object.entries(computed.fattori3).map(([f, e]) => (e as number) === 1 ? f : `${f}${toSuperscript(e as number)}`).join("·")}<br /></>)}
+      {computed.hasFourth && (<>{computed.nd4} = {computed.fattori4[1] === 1 ?"1": Object.entries(computed.fattori4).map(([f, e]) => (e as number) === 1 ? f : `${f}${toSuperscript(e as number)}`).join("·")}<br /></>)}
      </p>
      <p className="font-mono text-base text-primary mt-4">
       m.c.m.({nd1}, {nd2}{computed.hasThird ? `, ${computed.nd3}` : ""}{computed.hasFourth ? `, ${computed.nd4}` : ""}) = {computed.mcmFormula} = {computed.mcmCorretto}
