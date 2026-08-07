@@ -1544,11 +1544,11 @@ function MulDivExercise({
      {wrapParens && <span className="text-xl text-foreground">)</span>}
      {computed.hasThird && (<>
       <span className="text-xl font-bold text-foreground">×</span>
-      <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-orange-400"denClass="text-sky-400"/>
+      <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-green-500"denClass="text-teal-500"/>
      </>)}
      {computed.hasFourth && (<>
       <span className="text-xl font-bold text-foreground">×</span>
-      <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-red-400"denClass="text-blue-400"/>
+      <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-purple-500"denClass="text-pink-500"/>
      </>)}
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct} forceOpen={generatingPdf}>
@@ -1572,11 +1572,11 @@ function MulDivExercise({
        <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400"denClass="text-blue-400"size="xs"/>
        {computed.hasThird && (<>
         <span className="text-base font-bold">×</span>
-        <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-orange-400"denClass="text-sky-400"size="xs"/>
+        <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-green-500"denClass="text-teal-500"size="xs"/>
        </>)}
        {computed.hasFourth && (<>
         <span className="text-base font-bold">×</span>
-        <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-red-400"denClass="text-blue-400"size="xs"/>
+        <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-purple-500"denClass="text-pink-500"size="xs"/>
        </>)}
       </div>
      </div>
