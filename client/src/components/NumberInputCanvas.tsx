@@ -12,6 +12,7 @@ interface NumberInputCanvasProps {
   className?: string;
   allowNegative?: boolean;
   labelOnTop?: boolean;
+  labelOnBottom?: boolean;
 }
 
 export function NumberInputCanvas({
@@ -23,6 +24,7 @@ export function NumberInputCanvas({
   className,
   allowNegative = true,
   labelOnTop = false,
+  labelOnBottom = false,
 }: NumberInputCanvasProps) {
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [recognizedText, setRecognizedText] = useState<string>("");
@@ -198,6 +200,104 @@ export function NumberInputCanvas({
       : recognizedText || "";
 
   const hasContent = strokes.length > 0;
+
+  // ─── Layout verticale: canvas sopra, label + pulsanti sotto ──────
+  if (labelOnBottom) {
+    return (
+      <div className={cn("flex flex-col items-center gap-1.5", className)}>
+        {/* Riga superiore: canvas + valore */}
+        <div className="flex items-start gap-2">
+          <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[80px] sm:h-[90px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+            <MathDrawCanvas
+              strokes={strokes}
+              onStrokesChange={handleStrokesChange}
+              tool="write"
+              className="border-0 rounded-none shadow-none ring-0"
+              disabled={isLoading || isRecognizing}
+              hideWatermark
+            />
+          </div>
+
+          {/* Badge valore */}
+          <div className="flex flex-col items-center gap-0.5 min-w-0">
+            {displayValue && (
+              <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
+                {displayValue}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Riga inferiore: label + pulsanti */}
+        <div className="flex flex-col items-center gap-1">
+          <span className={cn(
+            "text-[10px] sm:text-[11px] font-bold tracking-widest leading-tight",
+            colorClass || "text-amber-900",
+          )}>
+            {label}
+          </span>
+          <div className="flex items-center gap-2 flex-wrap justify-center">
+            {hasContent && !isEditing && (
+              <button
+                onClick={handleClear}
+                className="text-[10px] text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest leading-tight"
+              >
+                CANCELLA
+              </button>
+            )}
+            {isEditing ? (
+              <div className="flex items-center gap-1">
+                <input
+                  ref={editInputRef}
+                  type="text"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleEditSubmit();
+                    if (e.key === "Escape") { setIsEditing(false); setEditValue(""); }
+                  }}
+                  placeholder='es. 7'
+                  className="h-6 px-2 rounded border-2 border-primary bg-background text-foreground text-[10px] font-mono w-16 text-center focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  onClick={handleEditSubmit}
+                  className="h-6 px-2 rounded bg-primary hover:bg-primary/90 text-primary-foreground text-[10px] font-bold transition-colors"
+                >
+                  OK
+                </button>
+                <button
+                  onClick={() => { setIsEditing(false); setEditValue(""); }}
+                  className="h-6 w-6 rounded bg-secondary hover:bg-secondary/80 text-foreground text-[10px] font-bold transition-colors flex items-center justify-center"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setIsEditing(true); setEditValue(""); }}
+                className="text-muted-foreground hover:text-primary transition-colors text-[10px] tracking-wide leading-tight"
+                title="Inserisci manualmente il valore"
+              >
+                ✎ digita il valore
+              </button>
+            )}
+          </div>
+          {/* Stato riconoscimento / caricamento — sotto i pulsanti */}
+          {isRecognizing && (
+            <span className="text-[9px] text-muted-foreground animate-pulse tracking-widest leading-tight">
+              RICONOSCIMENTO...
+            </span>
+          )}
+          {isLoading && (
+            <span className="text-[9px] text-muted-foreground leading-tight">
+              CARICAMENTO...
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   // ─── Layout verticale: label + pulsanti sopra, canvas sotto ──────
   if (labelOnTop) {
