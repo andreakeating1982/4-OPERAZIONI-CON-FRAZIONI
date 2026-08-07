@@ -172,6 +172,10 @@ export default function FractionExercises() {
  const [den2Semplificato, setDen2Semplificato] = useState<number | null>(null);
  const [den1Semplificato, setDen1Semplificato] = useState<number | null>(null);
  const [num2Semplificato, setNum2Semplificato] = useState<number | null>(null);
+ const [num3Semplificato, setNum3Semplificato] = useState<number | null>(null);
+ const [den4Semplificato, setDen4Semplificato] = useState<number | null>(null);
+ const [den3Semplificato, setDen3Semplificato] = useState<number | null>(null);
+ const [num4Semplificato, setNum4Semplificato] = useState<number | null>(null);
  const [numeratoreFinaleUtente, setNumeratoreFinaleUtente] = useState<number | null>(null);
  const [denominatoreFinaleUtente, setDenominatoreFinaleUtente] = useState<number | null>(null);
 
@@ -381,6 +385,10 @@ export default function FractionExercises() {
   setDen2Semplificato(null);
   setDen1Semplificato(null);
   setNum2Semplificato(null);
+  setNum3Semplificato(null);
+  setDen4Semplificato(null);
+  setDen3Semplificato(null);
+  setNum4Semplificato(null);
   setNumeratoreFinaleUtente(null);
   setDenominatoreFinaleUtente(null);
  }, []);
@@ -651,8 +659,8 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         :"text-muted-foreground hover:text-foreground hover:bg-secondary",
       )}
      >
-      <span class="text-base leading-none">+ / &minus;</span>
-      <span class="text-[10px] tracking-wide">ADDIZIONE E SOTTRAZIONE</span>
+      <span className="text-base leading-none">+ / &minus;</span>
+      <span className="text-[10px] tracking-wide">ADDIZIONE E SOTTRAZIONE</span>
      </button>
      <button
       onClick={() => { setMode("muldiv"); handleNewExercise(); }}
@@ -663,8 +671,8 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         :"text-muted-foreground hover:text-foreground hover:bg-secondary",
       )}
      >
-      <span class="text-base leading-none">&times; / &divide;</span>
-      <span class="text-[10px] tracking-wide">MOLTIPLICAZIONE E DIVISIONE</span>
+      <span className="text-base leading-none">&times; / &divide;</span>
+      <span className="text-[10px] tracking-wide">MOLTIPLICAZIONE E DIVISIONE</span>
      </button>
     </div>
 
