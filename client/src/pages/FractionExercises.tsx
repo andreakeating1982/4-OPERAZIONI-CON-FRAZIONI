@@ -1028,7 +1028,7 @@ function SegnoOperazione({ op }: { op: string }) {
 
 interface AddSubExerciseProps {
  num1: number; den1: number; num2: number; den2: number; op:"+"|"-";
- computed: NonNullable<ReturnType<typeof useMemo> extends infer U ? U : never>;
+ computed: any;
  mcmUtente: number | null; setMcmUtente: (v: number | null) => void;
  risultato1Utente: number | null; setRisultato1Utente: (v: number | null) => void;
  risultato2Utente: number | null; setRisultato2Utente: (v: number | null) => void;
@@ -1395,7 +1395,7 @@ function AddSubExercise({
      {(() => {{
       const numRaw = computed.val1Corretto + computed.val2Corretto + (computed.hasThird ? computed.val3Corretto : 0) + (computed.hasFourth ? computed.val4Corretto : 0);
       const denRaw = computed.mcmCorretto;
-      const mcd = MCD(Math.abs(numRaw), denRaw);
+      const mcd = gcd(Math.abs(numRaw), denRaw);
       const numCorr = Math.round(numRaw / mcd);
       const denCorr = Math.round(denRaw / mcd);
       return (<>

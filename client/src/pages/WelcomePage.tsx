@@ -66,7 +66,7 @@ export default function WelcomePage() {
         {/* Main heading — due righe come l'originale */}
         <h2 className="text-base font-bold text-foreground tracking-wide mb-1">
           OPERAZIONI CON LE FRAZIONI<br />
-          <span class="text-amber-900">ADDIZIONE · SOTTRAZIONE · MOLTIPLICAZIONE · DIVISIONE</span>
+          <span className="text-amber-900">ADDIZIONE · SOTTRAZIONE · MOLTIPLICAZIONE · DIVISIONE</span>
         </h2>
         <p className="text-[11px] text-muted-foreground mb-4 tracking-wide">
           COMPLETA GLI ESERCIZI{" "}
