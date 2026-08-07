@@ -23,7 +23,7 @@ export default function Home() {
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activeTool, setActiveTool] = useState<ToolType>("write");
   const [recognizedLatex, setRecognizedLatex] = useState<string | null>(null);
-  const [realtimeMode, setRealtimeMode] = useState(false);
+  const [realtimeMode, setRealtimeMode] = useState(true);
   const [recognitionMode, setRecognitionMode] = useState<RecognitionMode>("auto");
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [stats, setStats] = useState<{
@@ -39,7 +39,7 @@ export default function Home() {
     (newStrokes: Stroke[]) => {
       setStrokes(newStrokes);
 
-      if (realtimeMode && newStrokes.length > 0) {
+      if (newStrokes.length > 0) {
         // Debounce recognition: wait 800ms after last stroke
         if (debounceTimer.current) {
           clearTimeout(debounceTimer.current);
@@ -59,18 +59,6 @@ export default function Home() {
     },
     [realtimeMode, recognitionMode, recognize, isModelReady],
   );
-
-  // Manual recognition trigger
-  const handleManualRecognize = useCallback(async () => {
-    if (strokes.length === 0 || !isModelReady) return;
-    setIsRecognizing(true);
-    const result = await recognize(strokes, recognitionMode);
-    if (result) {
-      setRecognizedLatex(result.latex);
-      setStats({ totalMs: result.totalMs, encoderMs: result.encoderMs });
-    }
-    setIsRecognizing(false);
-  }, [strokes, recognitionMode, recognize, isModelReady]);
 
   // Undo last stroke
   const handleUndo = () => {
@@ -204,26 +192,7 @@ export default function Home() {
             disabled={isLoading}
           />
 
-          {/* Manual recognize button */}
-          {!realtimeMode && (
-            <button
-              onClick={handleManualRecognize}
-              disabled={strokes.length === 0 || !isModelReady || isRecognizing}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground font-semibold transition-all duration-200 shadow-lg shadow-primary/20"
-            >
-              {isRecognizing ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Riconoscimento in corso...</span>
-                </>
-              ) : (
-                <>
-                  <Brain className="w-4 h-4" />
-                  <span>Converti formula</span>
-                </>
-              )}
-            </button>
-          )}
+
 
           {/* Status info */}
           <div className="flex items-center gap-2 sm:gap-4 text-sm text-muted-foreground flex-wrap">

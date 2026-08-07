@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MathDrawCanvas, type Stroke } from "@/components/MathDrawCanvas";
 import { useMathRecognition } from "@/hooks/useMathRecognition";
 import { cn } from "@/lib/utils";
@@ -27,70 +27,168 @@ export function NumberInputCanvas({
   const [isRecognizing, setIsRecognizing] = useState(false);
   const { recognize, isModelReady, isLoading } = useMathRecognition();
 
+  // ─── DIGITA IL VALORE state ──────────────────────────────────────
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  // ─── Auto-riconoscimento con debounce ─────────────────────────────
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const strokesRef = useRef<Stroke[]>([]);
+  // Tieni traccia dell'ultimo set di strokes già riconosciuto per evitare loop
+  const lastRecognizedStrokesRef = useRef<string>("");
+  // Aumentato a 2000ms per permettere la scrittura di numeri a più cifre
+  const DEBOUNCE_MS = 2000;
+
+  // Aggiorna il ref ogni volta che strokes cambia
+  useEffect(() => {
+    strokesRef.current = strokes;
+  }, [strokes]);
+
   const handleStrokesChange = useCallback(
     (newStrokes: Stroke[]) => {
       setStrokes(newStrokes);
       if (newStrokes.length === 0) {
         setRecognizedText("");
+        lastRecognizedStrokesRef.current = "";
+        // Cancella eventuale debounce pendente
+        if (debounceRef.current) {
+          clearTimeout(debounceRef.current);
+          debounceRef.current = null;
+        }
+      } else {
+        // L'utente sta aggiungendo nuovi tratti: resetta il flag di riconoscimento
+        // così il debounce riparte con TUTTI i tratti (vecchi + nuovi)
+        lastRecognizedStrokesRef.current = "";
       }
     },
     [],
   );
 
-  const handleManualRecognize = useCallback(async () => {
-    if (strokes.length === 0 || !isModelReady) return;
-    setIsRecognizing(true);
-    // Prima prova la modalità "number" (ottimizzata per cifre 0-9, include il 9)
-    let result = await recognize(strokes, "number");
-    // Fallback: se "number" non produce risultati, prova "expression"
-    if (!result) {
-      result = await recognize(strokes, "expression");
+  // ─── Auto-riconoscimento: parte dopo 2s di inattività sul canvas ──
+  useEffect(() => {
+    // Non fare nulla se non ci sono tratti o il modello non è pronto
+    if (strokes.length === 0 || !isModelReady || isLoading) return;
+
+    // Salta se questi strokes sono già stati riconosciuti
+    const strokesKey = JSON.stringify(strokes.map(s => s.points.length));
+    if (strokesKey === lastRecognizedStrokesRef.current) return;
+
+    // Cancella il timer precedente
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
     }
-    if (result) {
-      // 1. Rimuovi spazi bianchi (causa principale del bug multi-cifra)
-      let numStr = result.latex.replace(/\s+/g, "");
-      // 2. Sostituisci virgole decimali con punti
-      numStr = numStr.replace(/,/g, ".");
-      // 3. Rimuovi comandi LaTeX e parentesi
-      numStr = numStr
-        .replace(/\\mathrm\{([^}]*)\}/g, "$1")
-        .replace(/\\[a-zA-Z]+(\{[^}]*\})?/g, "")
-        .replace(/[{}]/g, "");
-      // 4. Tieni solo cifre, punto decimale e segno meno (se consentito)
-      if (allowNegative) {
-        numStr = numStr.replace(/[^0-9.\-]/g, "");
-        // Gestisci eventuali meno multipli: tieni solo il primo
-        const minusCount = (numStr.match(/-/g) || []).length;
-        if (minusCount > 1) {
-          numStr = "-" + numStr.replace(/-/g, "");
-        }
-      } else {
-        numStr = numStr.replace(/[^0-9.]/g, "");
-      }
-      // 5. Gestisci edge case: stringa vuota o solo un meno
-      if (!numStr || numStr === "-" || numStr === ".") {
-        setRecognizedText("?");
-        setIsRecognizing(false);
-        return;
+
+    // Imposta un nuovo timer: dopo 800ms di inattività, fai il riconoscimento
+    debounceRef.current = setTimeout(async () => {
+      const currentStrokes = strokesRef.current;
+      if (currentStrokes.length === 0) return;
+
+      setIsRecognizing(true);
+
+      // Prima prova la modalità "number" (ottimizzata per cifre 0-9)
+      let result = await recognize(currentStrokes, "number");
+      // Fallback: se "number" non produce risultati, prova "expression"
+      if (!result) {
+        result = await recognize(currentStrokes, "expression");
       }
 
-      const parsed = parseFloat(numStr);
-      if (!isNaN(parsed)) {
-        setRecognizedText(parsed.toString());
-        onChange(parsed);
-        setTimeout(() => setStrokes([]), 1200);
-      } else {
-        setRecognizedText(numStr || "?");
+      if (result) {
+        // 1. Rimuovi spazi bianchi
+        let numStr = result.latex.replace(/\s+/g, "");
+        // 2. Sostituisci virgole decimali con punti
+        numStr = numStr.replace(/,/g, ".");
+        // 3. Rimuovi comandi LaTeX e parentesi
+        numStr = numStr
+          .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+          .replace(/\\[a-zA-Z]+(\{[^}]*\})?/g, "")
+          .replace(/[{}]/g, "");
+        // 4. Tieni solo cifre, punto decimale e segno meno
+        if (allowNegative) {
+          numStr = numStr.replace(/[^0-9.\-]/g, "");
+          const minusCount = (numStr.match(/-/g) || []).length;
+          if (minusCount > 1) {
+            numStr = "-" + numStr.replace(/-/g, "");
+          }
+        } else {
+          numStr = numStr.replace(/[^0-9.]/g, "");
+        }
+        // 5. Edge case
+        if (!numStr || numStr === "-" || numStr === ".") {
+          setRecognizedText("?");
+          setIsRecognizing(false);
+          return;
+        }
+
+        const parsed = parseFloat(numStr);
+        if (!isNaN(parsed)) {
+          setRecognizedText(parsed.toString());
+          onChange(parsed);
+          lastRecognizedStrokesRef.current = strokesKey;
+          // NON pulire il canvas: così l'utente può aggiungere altre cifre
+          // (es. scrivere prima "1", poi "2" → riconosce "12")
+        } else {
+          setRecognizedText(numStr || "?");
+        }
       }
-    }
-    setIsRecognizing(false);
-  }, [strokes, recognize, isModelReady, onChange, allowNegative]);
+
+      setIsRecognizing(false);
+    }, DEBOUNCE_MS);
+
+    // Cleanup: cancella il timer se il componente viene smontato
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [strokes, isModelReady, isLoading, recognize, onChange, allowNegative]);
 
   const handleClear = () => {
     setStrokes([]);
     setRecognizedText("");
+    lastRecognizedStrokesRef.current = "";
     onChange(null);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+      debounceRef.current = null;
+    }
   };
+
+  // ─── DIGITA IL VALORE submit ─────────────────────────────────────
+  const handleEditSubmit = useCallback(() => {
+    const cleaned = editValue.trim().replace(/\s+/g, "").replace(/,/g, ".");
+    if (!cleaned) { setIsEditing(false); return; }
+
+    // Supporta frazioni semplici: "3/4" → 0.75
+    const fracMatch = cleaned.match(/^(-?)(\d+\.?\d*)\/(\d+\.?\d*)$/);
+    if (fracMatch) {
+      const sign = fracMatch[1] === "-" ? -1 : 1;
+      const num = parseFloat(fracMatch[2]);
+      const den = parseFloat(fracMatch[3]);
+      if (!isNaN(num) && !isNaN(den) && den !== 0) {
+        const parsed = sign * (num / den);
+        onChange(round2(parsed));
+        setRecognizedText(round2(parsed).toString());
+      }
+    } else {
+      let numStr = cleaned.replace(/[^0-9.\-]/g, "");
+      if (allowNegative) {
+        const minusCount = (numStr.match(/-/g) || []).length;
+        if (minusCount > 1) numStr = "-" + numStr.replace(/-/g, "");
+      } else {
+        numStr = numStr.replace(/[^0-9.]/g, "");
+      }
+      if (numStr && numStr !== "-" && numStr !== ".") {
+        const parsed = parseFloat(numStr);
+        if (!isNaN(parsed)) {
+          onChange(parsed);
+          setRecognizedText(parsed.toString());
+        }
+      }
+    }
+    setIsEditing(false);
+    setEditValue("");
+  }, [editValue, onChange, allowNegative]);
 
   const displayValue =
     value !== null && !isNaN(value)
@@ -107,31 +205,33 @@ export function NumberInputCanvas({
           strokes={strokes}
           onStrokesChange={handleStrokesChange}
           tool="write"
-          
           className="border-0 rounded-none shadow-none ring-0"
           disabled={isLoading || isRecognizing}
           hideWatermark
         />
       </div>
 
-      {/* Colonna destra: label + Riconosci + valore */}
+      {/* Colonna destra: label + valore + azioni */}
       <div className="flex flex-col items-center gap-1.5 flex-1">
-        {/* Label sopra il pulsante */}
+        {/* Label */}
         <span className={cn(
-          "text-base font-bold tracking-widest",
+          "text-base tracking-widest text-amber-900",
           colorClass,
         )}>
           {label}
         </span>
 
-        {/* Pulsante Riconosci — compatto */}
-        <button
-          onClick={handleManualRecognize}
-          disabled={!hasContent || !isModelReady || isRecognizing}
-          className="h-10 px-4 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-base font-bold tracking-widest transition-all shadow-sm"
-        >
-          {isRecognizing ? "..." : "RICONOSCI"}
-        </button>
+        {/* Stato riconoscimento */}
+        {isRecognizing && (
+          <span className="text-xs text-muted-foreground animate-pulse tracking-widest">
+            RICONOSCIMENTO...
+          </span>
+        )}
+        {isLoading && (
+          <span className="text-xs text-muted-foreground">
+            CARICAMENTO...
+          </span>
+        )}
 
         {/* Valore riconosciuto + cancella */}
         <div className="flex items-center gap-2">
@@ -143,20 +243,57 @@ export function NumberInputCanvas({
           {hasContent && (
             <button
               onClick={handleClear}
-              className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold tracking-widest"
+              className="text-xs text-amber-900 hover:text-amber-700 transition-colors font-bold tracking-widest"
             >
               CANCELLA
             </button>
           )}
         </div>
 
-        {/* Caricamento AI */}
-        {isLoading && (
-          <span className="text-base text-muted-foreground">
-            CARICAMENTO...
-          </span>
+        {/* ─── DIGITA IL VALORE ─────────────────────────────────── */}
+        {isEditing ? (
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <input
+              ref={editInputRef}
+              type="text"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleEditSubmit();
+                if (e.key === "Escape") { setIsEditing(false); setEditValue(""); }
+              }}
+              placeholder='es. 7'
+              className="h-9 px-3 rounded-lg border-2 border-primary bg-background text-foreground text-sm font-mono w-36 text-center focus:outline-none"
+              autoFocus
+            />
+            <button
+              onClick={handleEditSubmit}
+              className="h-9 px-4 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold transition-colors"
+            >
+              OK
+            </button>
+            <button
+              onClick={() => { setIsEditing(false); setEditValue(""); }}
+              className="h-9 w-9 rounded-lg bg-secondary hover:bg-secondary/80 text-foreground text-sm font-bold transition-colors flex items-center justify-center"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => { setIsEditing(true); setEditValue(""); }}
+            className="text-muted-foreground hover:text-primary transition-colors text-xs tracking-wide"
+            title="Inserisci manualmente il valore"
+          >
+            ✎ digita il valore
+          </button>
         )}
       </div>
     </div>
   );
+}
+
+/** Arrotonda a 2 decimali */
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
 }
