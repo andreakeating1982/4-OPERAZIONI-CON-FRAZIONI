@@ -1444,11 +1444,12 @@ function MulDivExercise({
        }
       </p>
       <div className="flex flex-col items-center gap-3">
-       <span className="text-[11px] font-bold tracking-widest text-orange-400 leading-tight">Numeratore arancione</span>
        <NumberInputCanvas
         value={num1Semplificato}
         onChange={setNum1Semplificato}
-        label=""
+        label="Numeratore arancione"
+        colorClass="text-orange-400 font-bold"
+        labelOnTop
        />
        {num1Semplificato !== null && (
         <p className={cn(
@@ -1463,7 +1464,9 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den2Semplificato}
         onChange={setDen2Semplificato}
-        label=""
+        label="Denominatore blu"
+        colorClass="text-blue-400 font-bold"
+        labelOnTop
        />
        {den2Semplificato !== null && (
         <p className={cn(
@@ -1473,7 +1476,6 @@ function MulDivExercise({
          {(den2Semplificato ?? 1) === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
-       <span className="text-[11px] font-bold tracking-widest text-blue-400 leading-tight">Denominatore blu</span>
       </div>
      </div>
 
@@ -1486,11 +1488,12 @@ function MulDivExercise({
        }
       </p>
       <div className="flex flex-col items-center gap-3">
-       <span className="text-[11px] font-bold tracking-widest text-sky-400 leading-tight">Denominatore azzurro</span>
        <NumberInputCanvas
         value={den1Semplificato}
         onChange={setDen1Semplificato}
-        label=""
+        label="Denominatore azzurro"
+        colorClass="text-sky-400 font-bold"
+        labelOnTop
        />
        {den1Semplificato !== null && (
         <p className={cn(
@@ -1505,7 +1508,9 @@ function MulDivExercise({
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
-        label=""
+        label="Numeratore rosso"
+        colorClass="text-red-400 font-bold"
+        labelOnTop
         allowNegative
        />
        {num2Semplificato !== null && (
@@ -1516,7 +1521,6 @@ function MulDivExercise({
          {num2Semplificato === (computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
-       <span className="text-[11px] font-bold tracking-widest text-red-400 leading-tight">Numeratore rosso</span>
       </div>
      </div>
     </div>
@@ -1565,11 +1569,12 @@ function MulDivExercise({
        <span className="text-amber-900">MOLTIPLICAZIONE NUMERATORI:</span>{" "}
        <span className="text-orange-400 font-bold">{dNum1S}</span> · (<span className="text-red-400 font-bold">{dNum2S}</span>) = <span>RISULTATO NUMERATORE FINALE</span>
       </p>
-      <span className="text-[11px] font-bold tracking-widest text-primary leading-tight mb-1">Risultato numeratore finale:</span>
       <NumberInputCanvas
        value={numeratoreFinaleUtente}
        onChange={setNumeratoreFinaleUtente}
-       label=""
+       label="Risultato numeratore finale:"
+       colorClass="text-primary"
+       labelOnTop
        allowNegative
       />
      </div>
@@ -1578,11 +1583,12 @@ function MulDivExercise({
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
        <span className="text-sky-400 font-bold">{dDen1S}</span> · (<span className="text-blue-400 font-bold">{dDen2S}</span>) = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
-      <span className="text-[11px] font-bold tracking-widest text-primary leading-tight mb-1">Risultato denominatore finale:</span>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
        onChange={setDenominatoreFinaleUtente}
-       label=""
+       label="Risultato denominatore finale:"
+       colorClass="text-primary"
+       labelOnTop
       />
      </div>
     </div>
