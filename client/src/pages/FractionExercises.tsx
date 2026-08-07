@@ -688,11 +688,11 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         <>
          <SegnoOperazione op={addSubOp ==="+"?"+":"\u2212"} />
          <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[200px] sm:min-w-[210px]">
-          <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center justify-between px-2">
-           <span className="text-sm font-bold tracking-widest">TERZA FRAZIONE</span>
+          <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
+           <span className="text-sm font-bold tracking-widest flex-1 text-center">TERZA FRAZIONE</span>
            <button
             onClick={() => { setShowThirdFraction(false); setNum3(null); setDen3(null); }}
-            className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none"
+            className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none absolute right-2"
            >
             ✕
            </button>
@@ -722,11 +722,11 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         <>
          <SegnoOperazione op={addSubOp ==="+"?"+":"\u2212"} />
          <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[200px] sm:min-w-[210px]">
-          <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center justify-between px-2">
-           <span className="text-sm font-bold tracking-widest">QUARTA FRAZIONE</span>
+          <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
+           <span className="text-sm font-bold tracking-widest flex-1 text-center">QUARTA FRAZIONE</span>
            <button
             onClick={() => { setShowFourthFraction(false); setNum4(null); setDen4(null); }}
-            className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none"
+            className="text-base text-muted-foreground hover:text-destructive transition-colors font-bold leading-none absolute right-2"
            >
             ✕
            </button>
@@ -1246,7 +1246,7 @@ function AddSubExercise({
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
-      <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+      <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
       )}
       {computed.denFinaleRaw !== 1 && (
       <NumberInputCanvas
@@ -1459,7 +1459,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
        <NumberInputCanvas
         value={den2Semplificato}
         onChange={setDen2Semplificato}
@@ -1502,7 +1502,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-2"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-2"/>
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
