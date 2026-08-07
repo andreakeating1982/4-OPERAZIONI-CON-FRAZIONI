@@ -219,13 +219,13 @@ export function NumberInputCanvas({
           </div>
 
           {/* Badge valore */}
-          <div className="flex flex-col items-center gap-0.5 min-w-0">
-            {displayValue && (
+          {displayValue && (
+            <div className="flex flex-col items-center gap-0.5 min-w-0">
               <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
                 {displayValue}
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Riga inferiore: label + pulsanti */}
@@ -385,13 +385,13 @@ export function NumberInputCanvas({
           </div>
 
           {/* Badge valore */}
-          <div className="flex flex-col items-center gap-0.5 min-w-0">
-            {displayValue && (
+          {displayValue && (
+            <div className="flex flex-col items-center gap-0.5 min-w-0">
               <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
                 {displayValue}
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     );
