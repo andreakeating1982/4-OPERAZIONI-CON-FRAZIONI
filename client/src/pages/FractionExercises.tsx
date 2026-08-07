@@ -1030,12 +1030,15 @@ function AddSubExercise({
      )}
     </div>
 
-    <NumberInputCanvas
-     value={mcmUtente}
-     onChange={setMcmUtente}
-     label="Inserisci il tuo risultato (m.c.m.):"
-     colorClass="text-primary"
-    />
+    <div className="flex flex-col items-center">
+     <NumberInputCanvas
+      value={mcmUtente}
+      onChange={setMcmUtente}
+      label="Inserisci il tuo risultato (m.c.m.):"
+      colorClass="text-primary"
+      labelOnTop
+     />
+    </div>
     {mcmUtente !== null && (
      <p className={cn(
      "text-base font-bold text-center mt-3",
@@ -1106,13 +1109,16 @@ function AddSubExercise({
      <p className="text-base">
       ({mcmDisplay} : {nd1}) · {effNum1 < 0 ? `(${effNum1})` : effNum1} = <span className="font-bold">Risultato 1</span>
      </p>
-     <NumberInputCanvas
-      value={risultato1Utente}
-      onChange={setRisultato1Utente}
-      label="Inserisci risultato 1:"
-      colorClass="text-orange-400"
-      allowNegative
-     />
+     <div className="flex flex-col items-center">
+      <NumberInputCanvas
+       value={risultato1Utente}
+       onChange={setRisultato1Utente}
+       label="Inserisci risultato 1:"
+       colorClass="text-orange-400"
+       allowNegative
+       labelOnTop
+      />
+     </div>
      {risultato1Utente !== null && (
       <p className={cn(
       "text-base font-bold text-center",
@@ -1125,13 +1131,16 @@ function AddSubExercise({
      <p className="text-base">
       ({mcmDisplay} : {nd2}) · {effNum2 < 0 ? `(${effNum2})` : effNum2} = <span className="font-bold">Risultato 2</span>
      </p>
-     <NumberInputCanvas
-      value={risultato2Utente}
-      onChange={setRisultato2Utente}
-      label="Inserisci risultato 2:"
-      colorClass="text-red-400"
-      allowNegative
-     />
+     <div className="flex flex-col items-center">
+      <NumberInputCanvas
+       value={risultato2Utente}
+       onChange={setRisultato2Utente}
+       label="Inserisci risultato 2:"
+       colorClass="text-red-400"
+       allowNegative
+       labelOnTop
+      />
+     </div>
      {risultato2Utente !== null && (
       <p className={cn(
       "text-base font-bold text-center",
@@ -1146,13 +1155,16 @@ function AddSubExercise({
      <p className="text-base">
       ({mcmDisplay} : {computed.nd3}) · {computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3} = <span className="font-bold">Risultato 3</span>
      </p>
-     <NumberInputCanvas
-      value={risultato3Utente}
-      onChange={setRisultato3Utente}
-      label="Inserisci risultato 3:"
-      colorClass="text-blue-400"
-      allowNegative
-     />
+     <div className="flex flex-col items-center">
+      <NumberInputCanvas
+       value={risultato3Utente}
+       onChange={setRisultato3Utente}
+       label="Inserisci risultato 3:"
+       colorClass="text-blue-400"
+       allowNegative
+       labelOnTop
+      />
+     </div>
      {risultato3Utente !== null && (
       <p className={cn(
       "text-base font-bold text-center",
@@ -1168,13 +1180,16 @@ function AddSubExercise({
      <p className="text-base">
       ({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold">Risultato 4</span>
      </p>
-     <NumberInputCanvas
-      value={risultato4Utente}
-      onChange={setRisultato4Utente}
-      label="Inserisci risultato 4:"
-      colorClass="text-orange-400"
-      allowNegative
-     />
+     <div className="flex flex-col items-center">
+      <NumberInputCanvas
+       value={risultato4Utente}
+       onChange={setRisultato4Utente}
+       label="Inserisci risultato 4:"
+       colorClass="text-orange-400"
+       allowNegative
+       labelOnTop
+      />
+     </div>
      {risultato4Utente !== null && (
       <p className={cn(
       "text-base font-bold text-center",
@@ -1231,7 +1246,7 @@ function AddSubExercise({
      <p className="text-base font-semibold text-foreground">
       Scrivi il risultato finale:
      </p>
-     <div className="rounded-xl border border-border bg-card/60 p-3 space-y-1">
+     <div className="rounded-xl border border-border bg-card/60 p-3 flex flex-col items-center gap-1">
       <NumberInputCanvas
        value={finalNumUtente}
        onChange={(v) => {
@@ -1243,6 +1258,7 @@ function AddSubExercise({
        }}
        label="NUMERATORE"
        allowNegative
+       labelOnTop
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
@@ -1260,6 +1276,7 @@ function AddSubExercise({
         }
        }}
        label="DENOMINATORE"
+       labelOnTop
       />
       )}
      </div>
