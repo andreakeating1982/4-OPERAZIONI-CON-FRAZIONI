@@ -198,7 +198,7 @@ export function NumberInputCanvas({
   const hasContent = strokes.length > 0;
 
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-start gap-3", className)}>
       {/* Quadratino del canvas */}
       <div className="flex-shrink-0 w-[120px] sm:w-[135px] h-[75px] sm:h-[85px] rounded-xl border border-border bg-card shadow-sm overflow-hidden">
         <MathDrawCanvas
