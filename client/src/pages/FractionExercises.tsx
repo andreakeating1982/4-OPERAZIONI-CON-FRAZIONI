@@ -652,7 +652,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2 space-y-0.5">
          <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative />
-         <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+         <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-1"/>
          <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" />
         </div>
        </div>
@@ -667,7 +667,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2 space-y-0.5">
          <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative />
-         <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+         <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-1"/>
          <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" />
         </div>
        </div>
@@ -699,7 +699,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2 space-y-0.5">
            <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative />
-           <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+           <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-1"/>
            <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" />
           </div>
          </div>
@@ -733,7 +733,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2 space-y-0.5">
            <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative />
-           <div className="flex justify-center py-0.5"><div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80"/></div>
+           <div className="w-[80px] sm:w-[100px] h-[2px] bg-foreground/80 mx-auto my-1"/>
            <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" />
           </div>
          </div>
@@ -1246,9 +1246,7 @@ function AddSubExercise({
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
-      <div className="flex items-center">
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
-      </div>
+      <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-1"/>
       )}
       {computed.denFinaleRaw !== 1 && (
       <NumberInputCanvas
@@ -1395,7 +1393,7 @@ function MulDivExercise({
  return (
   <div className="space-y-5 max-w-2xl mx-auto">
    {/* Step 1: Initial multiplication */}
-   <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
+   <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose max-w-md mx-auto">
     <p className="text-base font-bold text-primary">1. Moltiplicazione e inversione</p>
 
     {/* Notebook Guide: Step 1 */}
@@ -1461,9 +1459,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-center py-1">
-        <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
-       </div>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-1"/>
        <NumberInputCanvas
         value={den2Semplificato}
         onChange={setDen2Semplificato}
@@ -1506,9 +1502,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="flex justify-center py-1">
-        <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80"/>
-       </div>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 mx-auto my-1"/>
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
