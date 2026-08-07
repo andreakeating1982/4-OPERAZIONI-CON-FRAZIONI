@@ -614,7 +614,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
      <div className="space-y-4">
       {/* Suggerimento */}
       <div className="text-center">
-       <span className="text-base text-muted-foreground tracking-widest">
+       <span className="text-xs text-amber-900 tracking-widest font-medium">
         SCRIVI IL NUMERO NEL RIQUADRO
        </span>
       </div>

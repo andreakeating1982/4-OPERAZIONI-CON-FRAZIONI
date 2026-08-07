@@ -258,6 +258,17 @@ export function NumberInputCanvas({
               </button>
             )}
           </div>
+          {/* Stato riconoscimento / caricamento — sotto i pulsanti */}
+          {isRecognizing && (
+            <span className="text-[9px] text-muted-foreground animate-pulse tracking-widest leading-tight">
+              RICONOSCIMENTO...
+            </span>
+          )}
+          {isLoading && (
+            <span className="text-[9px] text-muted-foreground leading-tight">
+              CARICAMENTO...
+            </span>
+          )}
         </div>
 
         {/* Riga inferiore: canvas + valore */}
@@ -275,16 +286,6 @@ export function NumberInputCanvas({
 
           {/* Badge valore */}
           <div className="flex flex-col items-center gap-0.5 min-w-0">
-            {isRecognizing && (
-              <span className="text-[9px] text-muted-foreground animate-pulse tracking-widest leading-tight">
-                RICONOSCIMENTO...
-              </span>
-            )}
-            {isLoading && (
-              <span className="text-[9px] text-muted-foreground leading-tight">
-                CARICAMENTO...
-              </span>
-            )}
             {displayValue && (
               <span className="inline-block px-1.5 py-0 rounded bg-secondary text-xs font-serif font-bold">
                 {displayValue}
