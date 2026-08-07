@@ -1112,7 +1112,7 @@ function AddSubExercise({
     {/* MCM fraction preview */}
     <div className="flex justify-center mt-4">
      <FractionDisplay
-      numerator={`(${mcmDisplay} : ${nd1}) · ${effNum1 < 0 ? `(${effNum1})` : effNum1} ${op} (${mcmDisplay} : ${nd2}) · ${effNum2 < 0 ? `(${effNum2})` : effNum2}`}
+      numerator={`(${mcmDisplay} : ${nd1}) · ${effNum1 < 0 ? `(${effNum1})` : effNum1} ${op} (${mcmDisplay} : ${nd2}) · ${effNum2 < 0 ? `(${effNum2})` : effNum2}${computed.hasThird ? ` ${op} (${mcmDisplay} : ${computed.nd3}) · ${computed.effNum3 < 0 ? `(${computed.effNum3})` : computed.effNum3}` : ""}${computed.hasFourth ? ` ${op} (${mcmDisplay} : ${computed.nd4}) · ${computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4}` : ""}`}
       denominator={mcmDisplay}
       size="sm"
      />
@@ -1142,7 +1142,7 @@ function AddSubExercise({
      <p className="font-mono text-base text-center text-primary mt-3">SCOMPOSIZIONE IN FATTORI PRIMI</p>
      <p className="font-mono text-base">
       {nd1} = {computed.fattori1[1] === 1 ?"1": Object.entries(computed.fattori1).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
-      {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}
+      {nd2} = {computed.fattori2[1] === 1 ?"1": Object.entries(computed.fattori2).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br />
       {computed.hasThird && (<>{computed.nd3} = {computed.fattori3[1] === 1 ?"1": Object.entries(computed.fattori3).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br /></>)}
       {computed.hasFourth && (<>{computed.nd4} = {computed.fattori4[1] === 1 ?"1": Object.entries(computed.fattori4).map(([f, e]) => e === 1 ? f : `${f}${toSuperscript(e)}`).join("·")}<br /></>)}
      </p>
@@ -1239,14 +1239,14 @@ function AddSubExercise({
      {computed.hasFourth && (
      <>
      <p className="text-base">
-      ({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold text-sky-500 text-sm">RISULTATO 4</span>
+      ({mcmDisplay} : {computed.nd4}) · {computed.effNum4 < 0 ? `(${computed.effNum4})` : computed.effNum4} = <span className="font-bold text-blue-500 text-sm">RISULTATO 4</span>
      </p>
      <div className="flex flex-col items-center">
       <NumberInputCanvas
        value={risultato4Utente}
        onChange={setRisultato4Utente}
        label="RISULTATO 4"
-       colorClass="text-sky-500"
+       colorClass="text-blue-500"
        allowNegative
        labelOnTop
       />
