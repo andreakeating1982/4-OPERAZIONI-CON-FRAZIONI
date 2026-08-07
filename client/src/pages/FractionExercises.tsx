@@ -1392,28 +1392,37 @@ function AddSubExercise({
      </div>
     )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true || generatingPdf}>
-     <p className="font-mono text-base">
-      {computed.val1Corretto} {op} {computed.val2Corretto < 0 ? `(${computed.val2Corretto})` : computed.val2Corretto}{computed.hasThird ? ` ${op} ${computed.val3Corretto < 0 ? `(${computed.val3Corretto})` : computed.val3Corretto}` : ""}{computed.hasFourth ? ` ${op} ${computed.val4Corretto < 0 ? `(${computed.val4Corretto})` : computed.val4Corretto}` : ""} = {computed.numFinaleRaw}
-     </p>
-     <div className="flex justify-center my-2">
-      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
-       {computed.denFinaleRaw === 1 ? (
-        <span className="font-bold">{computed.numFinaleRaw}</span>
-       ) : (
-        <>
-         <span className="font-bold">{computed.numFinaleRaw}</span><br />
-         <span className="border-t border-black block mt-1 pt-1">{computed.denFinaleRaw}</span>
-        </>
+     {(() => {{
+      const numRaw = computed.val1Corretto + computed.val2Corretto + (computed.hasThird ? computed.val3Corretto : 0) + (computed.hasFourth ? computed.val4Corretto : 0);
+      const denRaw = computed.mcmCorretto;
+      const mcd = MCD(Math.abs(numRaw), denRaw);
+      const numCorr = Math.round(numRaw / mcd);
+      const denCorr = Math.round(denRaw / mcd);
+      return (<>
+       <p className="font-mono text-base">
+        {computed.val1Corretto} {op} {computed.val2Corretto < 0 ? `(${computed.val2Corretto})` : computed.val2Corretto}{computed.hasThird ? ` ${op} ${computed.val3Corretto < 0 ? `(${computed.val3Corretto})` : computed.val3Corretto}` : ""}{computed.hasFourth ? ` ${op} ${computed.val4Corretto < 0 ? `(${computed.val4Corretto})` : computed.val4Corretto}` : ""} = {numRaw}
+       </p>
+       <div className="flex justify-center my-2">
+        <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
+         {denRaw === 1 ? (
+          <span className="font-bold">{numRaw}</span>
+         ) : (
+          <>
+           <span className="font-bold">{numRaw}</span><br />
+           <span className="border-t border-black block mt-1 pt-1">{denRaw}</span>
+          </>
+         )}
+        </div>
+       </div>
+       {(numRaw !== numCorr || denRaw !== denCorr) && (
+        <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
+         <FractionDisplay numerator={numRaw} denominator={denRaw} size="sm" />
+         <span className="font-bold">=</span>
+         <FractionDisplay numerator={numCorr} denominator={denCorr} size="sm" />
+        </p>
        )}
-      </div>
-     </div>
-     {(computed.numFinaleRaw !== computed.numFinaleCorretto || computed.denFinaleRaw !== computed.denFinaleCorretto) && (
-      <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
-       <FractionDisplay numerator={computed.numFinaleRaw} denominator={computed.denFinaleRaw} size="sm" />
-       <span className="font-bold">=</span>
-       <FractionDisplay numerator={computed.numFinaleCorretto} denominator={computed.denFinaleCorretto} size="sm" />
-      </p>
-     )}
+      </>);
+     }})()}
      </NotebookGuide>
 
    </div>
@@ -1765,7 +1774,7 @@ function MulDivExercise({
        <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
         <div className="flex flex-col items-center">
          <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
-         {(dDen1S !== 1 && dDen1S !=="1") && (
+         {(dDen1S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span>
@@ -1775,7 +1784,7 @@ function MulDivExercise({
         <span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
          <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
-         {(dDen2S !== 1 && dDen2S !=="1") && (
+         {(dDen2S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span>
@@ -1787,7 +1796,7 @@ function MulDivExercise({
         <span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
          <span className="text-green-500 font-bold font-serif text-base">{dNum3S}</span>
-         {(dDen4S !== 1 && dDen4S !=="1") && (
+         {(dDen4S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-teal-500 font-bold font-serif text-base">{dDen4S}</span>
@@ -1801,7 +1810,7 @@ function MulDivExercise({
         <span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
          <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
-         {(dDen3S !== 1 && dDen3S !=="1") && (
+         {(dDen3S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
           <span className="text-pink-500 font-bold font-serif text-base">{dDen3S}</span>
