@@ -259,7 +259,7 @@ export default function FractionExercises() {
   };
  }, [num1, den1, num2, den2, num3, den3, num4, den4, showThirdFraction, showFourthFraction, addSubOp]);
 
- // Mul/Div computed values
+ // Mul/Div computed values (supporta 2, 3 o 4 frazioni)
  const mulDivComputed = useMemo(() => {
   if (num1 === null || num2 === null) return null;
 
@@ -269,12 +269,21 @@ export default function FractionExercises() {
   const nd1 = Math.abs(dn1);
   const nd2 = Math.abs(dn2);
 
+  const hasThird = showThirdFraction && num3 !== null;
+  const dn3 = hasThird ? (den3 ?? 1) : 1;
+  const nd3 = hasThird ? Math.abs(dn3) : 1;
+  const hasFourth = showFourthFraction && num4 !== null;
+  const dn4 = hasFourth ? (den4 ?? 1) : 1;
+  const nd4 = hasFourth ? Math.abs(dn4) : 1;
+
+  const invert = mulDivOp ==="/";
+
+  // Seconda frazione
   let actualNum2: number;
   let actualDen2: number;
   let displayNum2: number;
   let displayDen2: number;
-
-  if (mulDivOp ==="/") {
+  if (invert) {
    actualNum2 = nd2;
    actualDen2 = Math.abs(num2);
    displayNum2 = nd2;
@@ -287,26 +296,72 @@ export default function FractionExercises() {
    displayDen2 = nd2;
   }
 
+  // Terza frazione
+  let actualNum3 = 1, actualDen3 = 1, displayNum3: number | null = null, displayDen3: number | null = null;
+  if (hasThird) {
+   if (invert) {
+    actualNum3 = nd3;
+    actualDen3 = Math.abs(num3!);
+    displayNum3 = nd3;
+    displayDen3 = Math.abs(num3!);
+    if (num3! < 0) displayNum3 = -displayNum3;
+   } else {
+    actualNum3 = num3!;
+    actualDen3 = nd3;
+    displayNum3 = num3!;
+    displayDen3 = nd3;
+   }
+  }
+
+  // Quarta frazione
+  let actualNum4 = 1, actualDen4 = 1, displayNum4: number | null = null, displayDen4: number | null = null;
+  if (hasFourth) {
+   if (invert) {
+    actualNum4 = nd4;
+    actualDen4 = Math.abs(num4!);
+    displayNum4 = nd4;
+    displayDen4 = Math.abs(num4!);
+    if (num4! < 0) displayNum4 = -displayNum4;
+   } else {
+    actualNum4 = num4!;
+    actualDen4 = nd4;
+    displayNum4 = num4!;
+    displayDen4 = nd4;
+   }
+  }
+
   const divCom1 = trovaDivisoriComuni(num1, actualDen2);
   const divCom2 = trovaDivisoriComuni(nd1, actualNum2);
 
-  const numFinaleRaw = round2(num1 * actualNum2);
-  const denFinaleRaw = round2(nd1 * actualDen2);
+  const numFinaleRaw = round2(num1 * actualNum2 * (hasThird ? actualNum3 : 1) * (hasFourth ? actualNum4 : 1));
+  const denFinaleRaw = round2(nd1 * actualDen2 * (hasThird ? actualDen3 : 1) * (hasFourth ? actualDen4 : 1));
   const sempl = semplificaFrazione(numFinaleRaw, denFinaleRaw);
 
   return {
    actualNum2,
    actualDen2,
+   actualNum3,
+   actualDen3,
+   actualNum4,
+   actualDen4,
    displayNum2,
    displayDen2,
+   displayNum3,
+   displayDen3,
+   displayNum4,
+   displayDen4,
    divCom1,
    divCom2,
    numFinaleRaw,
    denFinaleRaw,
    numFinaleCorretto: sempl.num,
    denFinaleCorretto: sempl.den,
+   hasThird,
+   hasFourth,
+   nd3,
+   nd4,
   };
- }, [num1, den1, num2, den2, mulDivOp]);
+ }, [num1, den1, num2, den2, num3, den3, num4, den4, showThirdFraction, showFourthFraction, mulDivOp]);
 
  // ─── Handlers ──────────────────────────────────────────────────────
 
@@ -652,7 +707,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num1} onChange={setNum1} label="NUMERATORE" allowNegative labelOnTop />
-         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
          <NumberInputCanvas value={den1} onChange={setDen1} label="DENOMINATORE" labelOnBottom />
         </div>
        </div>
@@ -667,13 +722,13 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         <div className="px-2 py-2">
          <NumberInputCanvas value={num2} onChange={setNum2} label="NUMERATORE" allowNegative labelOnTop />
-         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+         <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
          <NumberInputCanvas value={den2} onChange={setDen2} label="DENOMINATORE" labelOnBottom />
         </div>
        </div>
 
        {/* ── TERZA FRAZIONE (solo AddSub) ── */}
-       {mode ==="addsub"&& !showThirdFraction && (
+       {(mode ==="addsub" || mode ==="muldiv") && !showThirdFraction && (
         <div className="flex items-center flex-shrink-0">
          <button
           onClick={() => setShowThirdFraction(true)}
@@ -684,9 +739,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
          </button>
         </div>
        )}
-       {mode ==="addsub"&& showThirdFraction && (
+       {(mode ==="addsub" || mode ==="muldiv") && showThirdFraction && (
         <>
-         <SegnoOperazione op={addSubOp ==="+"?"+":"\u2212"} />
+         <SegnoOperazione op={mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")} />
          <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
           <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
            <span className="text-sm font-bold tracking-widest flex-1 text-center">TERZA FRAZIONE</span>
@@ -699,7 +754,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2">
            <NumberInputCanvas value={num3} onChange={setNum3} label="NUMERATORE" allowNegative labelOnTop />
-           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
            <NumberInputCanvas value={den3} onChange={setDen3} label="DENOMINATORE" labelOnBottom />
           </div>
          </div>
@@ -707,7 +762,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
        )}
 
        {/* ── QUARTA FRAZIONE ── */}
-       {mode ==="addsub"&& showThirdFraction && !showFourthFraction && (
+       {(mode ==="addsub" || mode ==="muldiv") && showThirdFraction && !showFourthFraction && (
         <div className="flex items-center flex-shrink-0">
          <button
           onClick={() => setShowFourthFraction(true)}
@@ -718,9 +773,9 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
          </button>
         </div>
        )}
-       {mode ==="addsub"&& showFourthFraction && (
+       {(mode ==="addsub" || mode ==="muldiv") && showFourthFraction && (
         <>
-         <SegnoOperazione op={addSubOp ==="+"?"+":"\u2212"} />
+         <SegnoOperazione op={mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")} />
          <div className="rounded-xl border border-border bg-card overflow-hidden animate-pop-in flex-shrink-0 min-w-[170px] sm:min-w-[180px]">
           <div className="py-1.5 border-b border-border bg-secondary/50 flex items-center px-2 relative">
            <span className="text-sm font-bold tracking-widest flex-1 text-center">QUARTA FRAZIONE</span>
@@ -733,7 +788,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
           </div>
           <div className="px-2 py-2">
            <NumberInputCanvas value={num4} onChange={setNum4} label="NUMERATORE" allowNegative labelOnTop />
-           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+           <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
            <NumberInputCanvas value={den4} onChange={setDen4} label="DENOMINATORE" labelOnBottom />
           </div>
          </div>
@@ -757,7 +812,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         </div>
         {showThirdFraction && num3 !== null && (
          <>
-          <span className="text-lg font-bold text-primary">{addSubOp ==="+"?"+":"\u2212"}</span>
+          <span className="text-lg font-bold text-primary">{mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")}</span>
           <div className="flex flex-col items-center">
            <span className="text-base font-bold font-serif">{num3}</span>
            {(den3 !== null && den3 !== 1) && (<div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>)}
@@ -767,7 +822,7 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         )}
         {showFourthFraction && num4 !== null && (
          <>
-          <span className="text-lg font-bold text-primary">{addSubOp ==="+"?"+":"\u2212"}</span>
+          <span className="text-lg font-bold text-primary">{mode ==="addsub" ? (addSubOp ==="+" ? "+" : "\u2212") : (mulDivOp ==="*" ? "\u00d7" : "\u00f7")}</span>
           <div className="flex flex-col items-center">
            <span className="text-base font-bold font-serif">{num4}</span>
            {(den4 !== null && den4 !== 1) && (<div className="w-10 h-[2px] bg-foreground/70 my-0.5"/>)}
@@ -827,6 +882,12 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         den1={den1!}
         num2={num2!}
         den2={den2!}
+        num3={num3}
+        den3={den3}
+        num4={num4}
+        den4={den4}
+        showThirdFraction={showThirdFraction}
+        showFourthFraction={showFourthFraction}
         op={mulDivOp}
         computed={mulDivComputed}
         num1Semplificato={num1Semplificato}
@@ -1262,7 +1323,7 @@ function AddSubExercise({
       />
       {/* Linea di frazione — nascosta se denominatore è 1 */}
       {computed.denFinaleRaw !== 1 && (
-      <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+      <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
       )}
       {computed.denFinaleRaw !== 1 && (
       <NumberInputCanvas
@@ -1276,7 +1337,7 @@ function AddSubExercise({
         }
        }}
        label="DENOMINATORE"
-       labelOnTop
+       labelOnBottom
       />
       )}
      </div>
@@ -1347,7 +1408,10 @@ function AddSubExercise({
 // ─── MUL/DIV EXERCISE SUB-COMPONENT ─────────────────────────────────
 
 interface MulDivExerciseProps {
- num1: number; den1: number; num2: number; den2: number; op:"*"|"/";
+ num1: number; den1: number; num2: number; den2: number;
+ num3: number | null; den3: number | null; num4: number | null; den4: number | null;
+ showThirdFraction: boolean; showFourthFraction: boolean;
+ op:"*"|"/";
  computed: any;
  num1Semplificato: number | null; setNum1Semplificato: (v: number | null) => void;
  den2Semplificato: number | null; setDen2Semplificato: (v: number | null) => void;
@@ -1362,7 +1426,8 @@ interface MulDivExerciseProps {
 }
 
 function MulDivExercise({
- num1, den1, num2, den2, op, computed,
+ num1, den1, num2, den2, num3, den3, num4, den4, showThirdFraction, showFourthFraction,
+ op, computed,
  num1Semplificato, setNum1Semplificato,
  den2Semplificato, setDen2Semplificato,
  den1Semplificato, setDen1Semplificato,
@@ -1414,12 +1479,20 @@ function MulDivExercise({
     <p className="text-base font-bold text-primary">1. Moltiplicazione e inversione</p>
 
     {/* Notebook Guide: Step 1 */}
-    <div className="flex justify-center items-center gap-3 text-lg">
+    <div className="flex justify-center items-center gap-3 text-lg flex-wrap">
      <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400"denClass="text-sky-400"/>
      <span className="text-xl font-bold text-foreground">×</span>
      {wrapParens && <span className="text-xl text-foreground">(</span>}
      <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400"denClass="text-blue-400"/>
      {wrapParens && <span className="text-xl text-foreground">)</span>}
+     {computed.hasThird && (<>
+      <span className="text-xl font-bold text-foreground">×</span>
+      <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-orange-400"denClass="text-sky-400"/>
+     </>)}
+     {computed.hasFourth && (<>
+      <span className="text-xl font-bold text-foreground">×</span>
+      <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-red-400"denClass="text-blue-400"/>
+     </>)}
     </div>
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct} forceOpen={generatingPdf}>
      {op ==="/"&& (
@@ -1436,10 +1509,18 @@ function MulDivExercise({
       </div>
      )}
      <div className="flex justify-center my-2">
-      <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
+      <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
        <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400"denClass="text-sky-400"size="xs"/>
        <span className="text-base font-bold">×</span>
        <FractionDisplay numerator={displayNum2} denominator={displayDen2} numClass="text-red-400"denClass="text-blue-400"size="xs"/>
+       {computed.hasThird && (<>
+        <span className="text-base font-bold">×</span>
+        <FractionDisplay numerator={computed.displayNum3} denominator={computed.displayDen3} numClass="text-orange-400"denClass="text-sky-400"size="xs"/>
+       </>)}
+       {computed.hasFourth && (<>
+        <span className="text-base font-bold">×</span>
+        <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-red-400"denClass="text-blue-400"size="xs"/>
+       </>)}
       </div>
      </div>
     </NotebookGuide>
@@ -1477,7 +1558,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
        <NumberInputCanvas
         value={den2Semplificato}
         onChange={setDen2Semplificato}
@@ -1521,7 +1602,7 @@ function MulDivExercise({
         </p>
        )}
        {/* Linea di frazione */}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5"/>
+       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
@@ -1584,7 +1665,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE NUMERATORI:</span>{" "}
-       <span className="text-orange-400 font-bold">{dNum1S}</span> · (<span className="text-red-400 font-bold">{dNum2S}</span>) = <span>RISULTATO NUMERATORE FINALE</span>
+       <span className="text-orange-400 font-bold">{dNum1S}</span> · <span className="text-red-400 font-bold">{dNum2S}</span>{computed.hasThird && (<> · <span className="text-orange-400 font-bold">{computed.displayNum3}</span></>)}{computed.hasFourth && (<> · <span className="text-red-400 font-bold">{computed.displayNum4}</span></>)} = <span>RISULTATO NUMERATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={numeratoreFinaleUtente}
@@ -1598,7 +1679,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
-       <span className="text-sky-400 font-bold">{dDen1S}</span> · (<span className="text-blue-400 font-bold">{dDen2S}</span>) = <span>RISULTATO DENOMINATORE FINALE</span>
+       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-sky-400 font-bold">{computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-blue-400 font-bold">{computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
@@ -1633,37 +1714,52 @@ function MulDivExercise({
      </div>
     )}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={feedbackFinale?.corretto === true} forceOpen={feedbackFinale?.corretto === true || generatingPdf}>
-     <p className="font-mono text-base">
-      {num1Semplificato !== null && num2Semplificato !== null
-       ? <span className="font-bold text-primary">{num1Semplificato} × {num2Semplificato} = {num1Semplificato * num2Semplificato}</span>
-       : <span className="italic">... × ... = ?</span>
-      }
-     </p>
-     <p className="font-mono text-base">
-      {den1Semplificato !== null && den2Semplificato !== null
-       ? <span className="font-bold text-primary">{den1Semplificato} × {den2Semplificato} = {den1Semplificato * den2Semplificato}</span>
-       : <span className="italic">... × ... = ?</span>
-      }
-     </p>
-     <div className="flex justify-center my-2">
-      <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
-       {((den1Semplificato ?? 1) * (den2Semplificato ?? 1)) === 1 ? (
-        <span className="font-bold">{(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}</span>
-       ) : (
-        <>
-         <span className="font-bold">{(num1Semplificato ?? 1) * (num2Semplificato ?? 1)}</span><br />
-         <span className="border-t border-black block mt-1 pt-1">{(den1Semplificato ?? 1) * (den2Semplificato ?? 1)}</span>
-        </>
+     {(() => {
+      const ns1 = num1Semplificato ?? 1;
+      const ns2 = num2Semplificato ?? 1;
+      const ds1 = den1Semplificato ?? 1;
+      const ds2 = den2Semplificato ?? 1;
+      const ns3 = computed.hasThird ? computed.displayNum3 : 1;
+      const ns4 = computed.hasFourth ? computed.displayNum4 : 1;
+      const ds3 = computed.hasThird ? computed.displayDen3 : 1;
+      const ds4 = computed.hasFourth ? computed.displayDen4 : 1;
+      const numCalc = ns1 * ns2 * ns3 * ns4;
+      const denCalc = ds1 * ds2 * ds3 * ds4;
+      const allEnt = num1Semplificato !== null && num2Semplificato !== null && (!computed.hasThird || computed.displayNum3 !== null) && (!computed.hasFourth || computed.displayNum4 !== null) && den1Semplificato !== null && den2Semplificato !== null && (!computed.hasThird || computed.displayDen3 !== null) && (!computed.hasFourth || computed.displayDen4 !== null);
+      return (<>
+       <p className="font-mono text-base">
+        {num1Semplificato !== null && num2Semplificato !== null
+         ? <span className="font-bold text-primary">{ns1} × {ns2}{computed.hasThird ? ` × ${ns3}` : ''}{computed.hasFourth ? ` × ${ns4}` : ''} = {numCalc}</span>
+         : <span className="italic">... × ... = ?</span>
+        }
+       </p>
+       <p className="font-mono text-base">
+        {den1Semplificato !== null && den2Semplificato !== null
+         ? <span className="font-bold text-primary">{ds1} × {ds2}{computed.hasThird ? ` × ${ds3}` : ''}{computed.hasFourth ? ` × ${ds4}` : ''} = {denCalc}</span>
+         : <span className="italic">... × ... = ?</span>
+        }
+       </p>
+       <div className="flex justify-center my-2">
+        <div className="font-mono text-base text-center bg-muted px-4 py-2 rounded-lg">
+         {denCalc === 1 ? (
+          <span className="font-bold">{numCalc}</span>
+         ) : (
+          <>
+           <span className="font-bold">{numCalc}</span><br />
+           <span className="border-t border-black block mt-1 pt-1">{denCalc}</span>
+          </>
+         )}
+        </div>
+       </div>
+       {(numCalc !== computed.numFinaleCorretto || denCalc !== computed.denFinaleCorretto) && (
+        <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
+         <FractionDisplay numerator={numCalc} denominator={denCalc} size="sm" />
+         <span className="font-bold">=</span>
+         <FractionDisplay numerator={computed.numFinaleCorretto} denominator={computed.denFinaleCorretto} size="sm" />
+        </p>
        )}
-      </div>
-     </div>
-     {((num1Semplificato ?? 1) * (num2Semplificato ?? 1) !== computed.numFinaleCorretto || (den1Semplificato ?? 1) * (den2Semplificato ?? 1) !== computed.denFinaleCorretto) && (
-      <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
-       <FractionDisplay numerator={(num1Semplificato ?? 1) * (num2Semplificato ?? 1)} denominator={(den1Semplificato ?? 1) * (den2Semplificato ?? 1)} size="sm" />
-       <span className="font-bold">=</span>
-       <FractionDisplay numerator={computed.numFinaleCorretto} denominator={computed.denFinaleCorretto} size="sm" />
-      </p>
-     )}
+      </>);
+     })()}
     </NotebookGuide>
 
    </div>
