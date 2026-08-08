@@ -1955,6 +1955,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <div className="flex justify-center items-end gap-3 sm:gap-4 my-2 flex-wrap font-serif text-center">
+       {/* I segni × e = sono allineati con la linea di frazione tramite mb-[25px] */}
        {/* ── Frazione 1 ── */}
        <div className="flex flex-col items-center">
         {/* Numeratore */}
@@ -1977,7 +1978,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         </span>
        </div>
 
-       <span className="text-[22px] font-bold -mb-1">×</span>
+       <span className="text-[22px] font-bold mb-[25px]">×</span>
 
        {/* ── Frazione 2 ── */}
        <div className="flex flex-col items-center">
@@ -2000,7 +2001,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
 
        {/* ── Frazione 3 ── */}
        {computed.hasThird && (<>
-        <span className="text-[22px] font-bold -mb-1">×</span>
+        <span className="text-[22px] font-bold mb-[25px]">×</span>
         <div className="flex flex-col items-center">
          <span className="relative inline-flex flex-col items-center">
           {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; const o = num3 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
@@ -2022,7 +2023,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
 
        {/* ── Frazione 4 ── */}
        {computed.hasFourth && (<>
-        <span className="text-[22px] font-bold -mb-1">×</span>
+        <span className="text-[22px] font-bold mb-[25px]">×</span>
         <div className="flex flex-col items-center">
          <span className="relative inline-flex flex-col items-center">
           {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; const o = num4 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
@@ -2042,13 +2043,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         </div>
        </>)}
 
-       {/* ── Uguale e risultato ── */}
-       <span className="text-[22px] font-bold -mb-1">=</span>
-       <div className="flex flex-col items-center">
-        <span className="font-bold font-serif text-[22px] text-black">{computed.numFinaleCorretto}</span>
-        <div className="w-10 h-[2px] bg-black my-0.5" />
-        <span className="font-bold font-serif text-[22px] text-black">{computed.denFinaleCorretto}</span>
-       </div>
+       {/* ── Risultato finale rimosso (come da richiesta) ── */}
       </div>
      )}
     </NotebookGuide>
