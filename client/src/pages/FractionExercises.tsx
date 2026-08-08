@@ -1907,7 +1907,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <div className="flex justify-center items-end gap-3 sm:gap-4 my-2 flex-wrap font-serif text-center">
-       {/* I segni × e = sono allineati con la linea di frazione tramite mb-[25px] */}
+       {/* I segni × e = sono allineati con la linea di frazione tramite mb-[28px] */}
        {/* ── Frazione 1 ── */}
        <div className="flex flex-col items-center">
         {/* Numeratore */}
@@ -1930,7 +1930,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         </span>
        </div>
 
-       <span className="text-[22px] font-bold mb-[25px]">×</span>
+       <span className="text-[22px] font-bold mb-[28px]">×</span>
 
        {/* ── Frazione 2 ── */}
        <div className="flex flex-col items-center">
@@ -1953,7 +1953,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
 
        {/* ── Frazione 3 ── */}
        {computed.hasThird && (<>
-        <span className="text-[22px] font-bold mb-[25px]">×</span>
+        <span className="text-[22px] font-bold mb-[28px]">×</span>
         <div className="flex flex-col items-center">
          <span className="relative inline-flex flex-col items-center">
           {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; const o = num3 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
@@ -1975,7 +1975,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
 
        {/* ── Frazione 4 ── */}
        {computed.hasFourth && (<>
-        <span className="text-[22px] font-bold mb-[25px]">×</span>
+        <span className="text-[22px] font-bold mb-[28px]">×</span>
         <div className="flex flex-col items-center">
          <span className="relative inline-flex flex-col items-center">
           {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; const o = num4 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
