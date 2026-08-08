@@ -177,6 +177,10 @@ export default function FractionExercises() {
  const [den4Semplificato, setDen4Semplificato] = useState<number | null>(null);
  const [den3Semplificato, setDen3Semplificato] = useState<number | null>(null);
  const [num4Semplificato, setNum4Semplificato] = useState<number | null>(null);
+const [den2Sempl2, setDen2Sempl2] = useState<number | null>(null);
+const [num2Sempl2, setNum2Sempl2] = useState<number | null>(null);
+const [den3Sempl2, setDen3Sempl2] = useState<number | null>(null);
+const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
  const [numeratoreFinaleUtente, setNumeratoreFinaleUtente] = useState<number | null>(null);
  const [denominatoreFinaleUtente, setDenominatoreFinaleUtente] = useState<number | null>(null);
 
@@ -390,6 +394,10 @@ export default function FractionExercises() {
   setDen4Semplificato(null);
   setDen3Semplificato(null);
   setNum4Semplificato(null);
+  setDen2Sempl2(null);
+  setNum2Sempl2(null);
+  setDen3Sempl2(null);
+  setNum3Sempl2(null);
   setNumeratoreFinaleUtente(null);
   setDenominatoreFinaleUtente(null);
  }, []);
@@ -919,6 +927,14 @@ body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margi
         setDen3Semplificato={setDen3Semplificato}
         num4Semplificato={num4Semplificato}
         setNum4Semplificato={setNum4Semplificato}
+        den2Sempl2={den2Sempl2}
+        setDen2Sempl2={setDen2Sempl2}
+        num2Sempl2={num2Sempl2}
+        setNum2Sempl2={setNum2Sempl2}
+        den3Sempl2={den3Sempl2}
+        setDen3Sempl2={setDen3Sempl2}
+        num3Sempl2={num3Sempl2}
+        setNum3Sempl2={setNum3Sempl2}
         numeratoreFinaleUtente={numeratoreFinaleUtente}
         setNumeratoreFinaleUtente={setNumeratoreFinaleUtente}
         denominatoreFinaleUtente={denominatoreFinaleUtente}
@@ -1463,6 +1479,10 @@ interface MulDivExerciseProps {
  den4Semplificato: number | null; setDen4Semplificato: (v: number | null) => void;
  den3Semplificato: number | null; setDen3Semplificato: (v: number | null) => void;
  num4Semplificato: number | null; setNum4Semplificato: (v: number | null) => void;
+ den2Sempl2: number | null; setDen2Sempl2: (v: number | null) => void;
+ num2Sempl2: number | null; setNum2Sempl2: (v: number | null) => void;
+ den3Sempl2: number | null; setDen3Sempl2: (v: number | null) => void;
+ num3Sempl2: number | null; setNum3Sempl2: (v: number | null) => void;
  numeratoreFinaleUtente: number | null; setNumeratoreFinaleUtente: (v: number | null) => void;
  denominatoreFinaleUtente: number | null; setDenominatoreFinaleUtente: (v: number | null) => void;
  risultatoFinaleUtente: string; feedbackFinale: { testo: string; corretto: boolean } | null;
@@ -1482,6 +1502,10 @@ function MulDivExercise({
  den4Semplificato, setDen4Semplificato,
  den3Semplificato, setDen3Semplificato,
  num4Semplificato, setNum4Semplificato,
+ den2Sempl2, setDen2Sempl2,
+ num2Sempl2, setNum2Sempl2,
+ den3Sempl2, setDen3Sempl2,
+ num3Sempl2, setNum3Sempl2,
  numeratoreFinaleUtente, setNumeratoreFinaleUtente,
  denominatoreFinaleUtente, setDenominatoreFinaleUtente,
  risultatoFinaleUtente, feedbackFinale, verificaFinale, onNew, generatingPdf,
@@ -1498,33 +1522,47 @@ function MulDivExercise({
  const dDen3S = den3Semplificato !== null ? den3Semplificato :"...";
  const dNum4S = num4Semplificato !== null ? num4Semplificato :"...";
  // Most up-to-date den1 value after sequential simplifications
- const dDen1Final = computed.hasFourth && den3Semplificato !== null ? den3Semplificato : computed.hasThird && den4Semplificato !== null ? den4Semplificato : dDen1S;
+ const dDen1Final = dDen1S;
+const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
 
  // Display the initial operation with colors
  const displayNum2 = computed.displayNum2;
  const displayDen2 = computed.displayDen2;
  const wrapParens = num2 < 0 && op ==="/";
 
- // Valori corretti per visibilità NotebookGuide (solo quando l'utente inserisce il risultato esatto)
- const num1Correct = computed.divCom1 > 1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1;
- const den2Correct = computed.divCom1 > 1 ? Math.round(Math.abs(computed.actualDen2) / computed.divCom1) : Math.abs(computed.actualDen2);
- const den1Correct = computed.divCom2 > 1 ? Math.round(nd1 / computed.divCom2) : nd1;
- const num2Correct = computed.divCom2 > 1 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
- // Sequential cross-simplification: S3/S4 only visible after previous steps correct
+ // ═══ Valori corretti — SEMPLIFICAZIONE A CROCE A COPPIE ═══
+ // Pair 1 (1st ↔ 2nd): S1 = num1↔den2, S2 = den1↔num2
+ const mcd1 = computed.divCom1;
+ const num1Correct = mcd1 > 1 ? Math.round(Math.abs(num1) / mcd1) * (num1 < 0 ? -1 : 1) : num1;
+ const den2Correct = mcd1 > 1 ? Math.round(Math.abs(computed.actualDen2) / mcd1) : Math.abs(computed.actualDen2);
+ const mcd2 = computed.divCom2;
+ const den1Correct = mcd2 > 1 ? Math.round(nd1 / mcd2) : nd1;
+ const num2Correct = mcd2 > 1 ? Math.round(Math.abs(computed.actualNum2) / mcd2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
  const s12Correct = num1Semplificato === num1Correct && den2Semplificato === den2Correct && den1Semplificato === den1Correct && num2Semplificato === num2Correct;
- // S3: cross-simplify num3 (3rd fraction numerator) with den1Correct (running den1 from S2)
- const divCom3_seq = computed.hasThird ? gcd(den1Correct, Math.abs(computed.actualNum3)) : 0;
- const num3Correct = divCom3_seq > 1 ? Math.round(Math.abs(computed.actualNum3) / divCom3_seq) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
- const den4Correct = divCom3_seq > 1 ? Math.round(den1Correct / divCom3_seq) : den1Correct;
- const den1AfterS3 = den4Correct;
- const s3Correct = num3Semplificato === num3Correct && (den4Semplificato ?? 1) === den4Correct;
- const showS3 = computed.hasThird && s12Correct;
- // S4: cross-simplify num4 (4th fraction numerator) with den1AfterS3
- const divCom4_seq = computed.hasFourth ? gcd(den1AfterS3, Math.abs(computed.actualNum4)) : 0;
- const num4Correct = divCom4_seq > 1 ? Math.round(Math.abs(computed.actualNum4) / divCom4_seq) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
- const den3Correct = divCom4_seq > 1 ? Math.round(den1AfterS3 / divCom4_seq) : den1AfterS3;
- const s4Correct = num4Semplificato === num4Correct && (den3Semplificato ?? 1) === den3Correct;
- const showS4 = computed.hasFourth && s12Correct && s3Correct;
+
+ // Pair 2 (2nd ↔ 3rd): S3 = num3↔den2S, S4 = den3↔num2S
+ const den2S = den2Semplificato ?? computed.actualDen2;
+ const mcd3 = computed.hasThird ? gcd(Math.abs(computed.actualNum3), Math.abs(den2S)) : 0;
+ const num3Correct = mcd3 > 1 ? Math.round(Math.abs(computed.actualNum3) / mcd3) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
+ const den2S2Correct = mcd3 > 1 ? Math.round(Math.abs(den2S) / mcd3) : Math.abs(den2S);
+ const num2S = num2Semplificato ?? computed.actualNum2;
+ const mcd4 = computed.hasThird ? gcd(Math.abs(computed.actualDen3), Math.abs(num2S)) : 0;
+ const den3Correct = mcd4 > 1 ? Math.round(Math.abs(computed.actualDen3) / mcd4) : Math.abs(computed.actualDen3);
+ const num2S2Correct = mcd4 > 1 ? Math.round(Math.abs(num2S) / mcd4) * (num2S < 0 ? -1 : 1) : num2S;
+ const s34Correct = computed.hasThird ? num3Semplificato === num3Correct && den2Sempl2 === den2S2Correct && den3Semplificato === den3Correct && num2Sempl2 === num2S2Correct : false;
+ const showPair2 = computed.hasThird && s12Correct;
+
+ // Pair 3 (3rd ↔ 4th): S5 = num4↔den3S, S6 = den4↔num3S
+ const den3S = den3Semplificato ?? computed.displayDen3;
+ const mcd5 = computed.hasFourth ? gcd(Math.abs(computed.actualNum4), Math.abs(den3S)) : 0;
+ const num4Correct = mcd5 > 1 ? Math.round(Math.abs(computed.actualNum4) / mcd5) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
+ const den3S2Correct = mcd5 > 1 ? Math.round(Math.abs(den3S) / mcd5) : Math.abs(den3S);
+ const num3S = num3Semplificato ?? computed.actualNum3;
+ const mcd6 = computed.hasFourth ? gcd(Math.abs(computed.actualDen4), Math.abs(num3S)) : 0;
+ const den4Correct = mcd6 > 1 ? Math.round(Math.abs(computed.actualDen4) / mcd6) : Math.abs(computed.actualDen4);
+ const num3S2Correct = mcd6 > 1 ? Math.round(Math.abs(num3S) / mcd6) * (num3S < 0 ? -1 : 1) : num3S;
+ const s56Correct = computed.hasFourth ? num4Semplificato === num4Correct && den3Sempl2 === den3S2Correct && den4Semplificato === den4Correct && num3Sempl2 === num3S2Correct : false;
+ const showPair3 = computed.hasFourth && s12Correct && s34Correct;
 
  // Auto-verifica: quando entrambi i valori sono inseriti, determina automaticamente il risultato
  const lastVerifiedRef = useRef<string>("");
@@ -1600,259 +1638,172 @@ function MulDivExercise({
 
    {/* Step 2: Cross simplification */}
    <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
-    <p className="text-base font-bold text-amber-900">2. SEMPLIFICAZIONE tra frazioni</p>
+    <p className="text-base font-bold text-amber-900">2. SEMPLIFICAZIONE TRA FRAZIONI</p>
 
-    {/* Notebook Guide: Step 2 */}
-    <div className="space-y-4">
-     <div className="bg-orange-50/50 border border-orange-200 rounded-lg p-3">
-      <p className="text-base mb-2">
-       <span className="font-bold">1ª SEMPLIFICAZIONE A CROCE</span><br/>
-       <span className="text-muted-foreground">Confronto il </span>
-       <span className="text-orange-400 font-bold">NUMERATORE della 1ª frazione ({num1})</span>
-       <span className="text-muted-foreground"> con il </span>
-       <span className="text-blue-400 font-bold">DENOMINATORE della 2ª frazione ({computed.actualDen2})</span>
-       {computed.divCom1 > 1 ? (
-        <>: il MCD è <span className="font-bold text-lg">{computed.divCom1}</span>. Divido entrambi → </>)
-        : (<>: <span className="font-bold">nessun divisore comune</span>. Riscrivo gli stessi numeri.</>)
-       }
-      </p>
-      <div className="flex flex-col items-center gap-3">
-       <NumberInputCanvas
-        value={num1Semplificato}
-        onChange={setNum1Semplificato}
-        label="Num. 1ª fraz. sempl."
-        colorClass="text-orange-400"
-        labelOnTop
-       />
-       {num1Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         num1Semplificato === num1Correct ?"text-success":"text-destructive",
-        )}>
-         {num1Semplificato === num1Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
-        </p>
-       )}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
-       <NumberInputCanvas
-        value={den2Semplificato}
-        onChange={setDen2Semplificato}
-        label="Den. 2ª fraz. sempl."
-        colorClass="text-blue-400"
-        labelOnBottom
-       />
-       {den2Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         den2Semplificato === den2Correct ?"text-success":"text-destructive",
-        )}>
-         {den2Semplificato === den2Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+    {/* ═══ PAIR 1: 1ª frazione ↔ 2ª frazione ═══ */}
+    <div className="space-y-2">
+     <p className="text-sm font-medium text-amber-900/80">📐 Coppia 1: 1ª frazione ↔ 2ª frazione</p>
+     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {/* S1: num1 ↔ den2 */}
+      <div className="bg-orange-50/60 border border-orange-200 rounded-lg p-3">
+       <p className="text-xs font-medium text-center mb-2">
+        <span className="text-orange-500 font-bold">Num 1ª ({num1})</span>{" "}
+        ↔{" "}
+        <span className="text-blue-400 font-bold">Den 2ª ({computed.actualDen2})</span>
+        {mcd1 > 1 ? <> — MCD <b>{mcd1}</b></> : <> — nessun MCD</>}
+       </p>
+       <div className="flex gap-2 justify-center flex-wrap">
+        <NumberInputCanvas value={num1Semplificato} onChange={setNum1Semplificato} label="Num. sempl." colorClass="text-orange-400" labelOnTop />
+        <NumberInputCanvas value={den2Semplificato} onChange={setDen2Semplificato} label="Den. sempl." colorClass="text-blue-400" labelOnTop />
+       </div>
+       {num1Semplificato !== null && den2Semplificato !== null && (
+        <p className={cn("text-xs font-bold text-center mt-1", num1Semplificato === num1Correct && den2Semplificato === den2Correct ? "text-green-600" : "text-red-500")}>
+         {num1Semplificato === num1Correct && den2Semplificato === den2Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
         </p>
        )}
       </div>
-     </div>
-
-     <div className="bg-red-50/50 border border-red-200 rounded-lg p-3">
-      <p className="text-base mb-2">
-       <span className="font-bold">2ª SEMPLIFICAZIONE A CROCE</span><br/>
-       <span className="text-muted-foreground">Confronto il </span>
-       <span className="text-red-400 font-bold">NUMERATORE della 2ª frazione ({computed.actualNum2})</span>
-       <span className="text-muted-foreground"> con il </span>
-       <span className="text-sky-400 font-bold">DENOMINATORE della 1ª frazione ({nd1})</span>
-       {computed.divCom2 > 1 ? (
-        <>: il MCD è <span className="font-bold text-lg">{computed.divCom2}</span>. Divido entrambi → </>)
-        : (<>: <span className="font-bold">nessun divisore comune</span>. Riscrivo gli stessi numeri.</>)
-       }
-      </p>
-      <div className="flex flex-col items-center gap-3">
-       <NumberInputCanvas
-        value={num2Semplificato}
-        onChange={setNum2Semplificato}
-        label="Num. 2ª fraz. sempl."
-        colorClass="text-red-400"
-        labelOnTop
-        allowNegative
-       />
-       {num2Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         num2Semplificato === num2Correct ?"text-success":"text-destructive",
-        )}>
-         {num2Semplificato === num2Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
-        </p>
-       )}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
-       <NumberInputCanvas
-        value={den1Semplificato}
-        onChange={setDen1Semplificato}
-        label="Den. 1ª fraz. sempl."
-        colorClass="text-sky-400"
-        labelOnBottom
-       />
-       {den1Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         den1Semplificato === den1Correct ?"text-success":"text-destructive",
-        )}>
-         {den1Semplificato === den1Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+      {/* S2: den1 ↔ num2 */}
+      <div className="bg-red-50/60 border border-red-200 rounded-lg p-3">
+       <p className="text-xs font-medium text-center mb-2">
+        <span className="text-red-400 font-bold">Num 2ª ({computed.actualNum2})</span>{" "}
+        ↔{" "}
+        <span className="text-sky-400 font-bold">Den 1ª ({nd1})</span>
+        {mcd2 > 1 ? <> — MCD <b>{mcd2}</b></> : <> — nessun MCD</>}
+       </p>
+       <div className="flex gap-2 justify-center flex-wrap">
+        <NumberInputCanvas value={num2Semplificato} onChange={setNum2Semplificato} label="Num. sempl." colorClass="text-red-400" labelOnTop allowNegative />
+        <NumberInputCanvas value={den1Semplificato} onChange={setDen1Semplificato} label="Den. sempl." colorClass="text-sky-400" labelOnTop />
+       </div>
+       {num2Semplificato !== null && den1Semplificato !== null && (
+        <p className={cn("text-xs font-bold text-center mt-1", num2Semplificato === num2Correct && den1Semplificato === den1Correct ? "text-green-600" : "text-red-500")}>
+         {num2Semplificato === num2Correct && den1Semplificato === den1Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
         </p>
        )}
       </div>
      </div>
     </div>
-    {showS3 && (
-     <div className="bg-green-50/50 border border-green-200 rounded-lg p-3">
-      <p className="text-base mb-2">
-       <span className="font-bold">3ª SEMPLIFICAZIONE A CROCE</span><br/>
-       <span className="text-muted-foreground">Ora che le prime due semplificazioni sono corrette, confronto il </span>
-       <span className="text-green-500 font-bold">NUMERATORE della 3ª frazione ({computed.actualNum3})</span>
-       <span className="text-muted-foreground"> con il </span>
-       <span className="text-teal-500 font-bold">DENOMINATORE della 1ª frazione già semplificato ({den1Correct})</span>
-       {divCom3_seq > 1 ? (
-        <>: il MCD è <span className="font-bold text-lg">{divCom3_seq}</span>. Divido entrambi → </>)
-        : (<>: <span className="font-bold">nessun divisore comune</span>. Riscrivo gli stessi numeri.</>)
-       }
-      </p>
-      <div className="flex flex-col items-center gap-3">
-       <NumberInputCanvas
-        value={num3Semplificato}
-        onChange={setNum3Semplificato}
-        label="Num. 3ª fraz. sempl."
-        colorClass="text-green-500"
-        labelOnTop
-        allowNegative
-       />
-       {num3Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         num3Semplificato === num3Correct ?"text-success":"text-destructive",
-        )}>
-         {num3Semplificato === num3Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+
+    {/* ═══ PAIR 2: 2ª frazione ↔ 3ª frazione ═══ */}
+    {showPair2 && (
+     <div className="space-y-2">
+      <p className="text-sm font-medium text-amber-900/80">📐 Coppia 2: 2ª frazione (sempl.) ↔ 3ª frazione</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+       {/* S3: num3 ↔ den2S */}
+       <div className="bg-green-50/60 border border-green-200 rounded-lg p-3">
+        <p className="text-xs font-medium text-center mb-2">
+         <span className="text-green-500 font-bold">Num 3ª ({computed.actualNum3})</span>{" "}
+         ↔{" "}
+         <span className="text-blue-400 font-bold">Den 2ª sempl. ({den2S})</span>
+         {mcd3 > 1 ? <> — MCD <b>{mcd3}</b></> : <> — nessun MCD</>}
         </p>
-       )}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
-       <NumberInputCanvas
-        value={den4Semplificato}
-        onChange={setDen4Semplificato}
-        label="Den. 1ª fraz. ulter. sempl."
-        colorClass="text-teal-500"
-        labelOnBottom
-       />
-       {den4Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         den4Semplificato === den4Correct ?"text-success":"text-destructive",
-        )}>
-         {den4Semplificato === den4Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+        <div className="flex gap-2 justify-center flex-wrap">
+         <NumberInputCanvas value={num3Semplificato} onChange={setNum3Semplificato} label="Num 3ª sempl." colorClass="text-green-500" labelOnTop allowNegative />
+         <NumberInputCanvas value={den2Sempl2} onChange={setDen2Sempl2} label="Den 2ª sempl." colorClass="text-blue-400" labelOnTop />
+        </div>
+        {num3Semplificato !== null && den2Sempl2 !== null && (
+         <p className={cn("text-xs font-bold text-center mt-1", num3Semplificato === num3Correct && den2Sempl2 === den2S2Correct ? "text-green-600" : "text-red-500")}>
+          {num3Semplificato === num3Correct && den2Sempl2 === den2S2Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
+         </p>
+        )}
+       </div>
+       {/* S4: den3 ↔ num2S */}
+       <div className="bg-teal-50/60 border border-teal-200 rounded-lg p-3">
+        <p className="text-xs font-medium text-center mb-2">
+         <span className="text-teal-500 font-bold">Den 3ª ({computed.actualDen3})</span>{" "}
+         ↔{" "}
+         <span className="text-red-400 font-bold">Num 2ª sempl. ({num2S})</span>
+         {mcd4 > 1 ? <> — MCD <b>{mcd4}</b></> : <> — nessun MCD</>}
         </p>
-       )}
+        <div className="flex gap-2 justify-center flex-wrap">
+         <NumberInputCanvas value={den3Semplificato} onChange={setDen3Semplificato} label="Den 3ª sempl." colorClass="text-teal-500" labelOnTop />
+         <NumberInputCanvas value={num2Sempl2} onChange={setNum2Sempl2} label="Num 2ª sempl." colorClass="text-red-400" labelOnTop allowNegative />
+        </div>
+        {den3Semplificato !== null && num2Sempl2 !== null && (
+         <p className={cn("text-xs font-bold text-center mt-1", den3Semplificato === den3Correct && num2Sempl2 === num2S2Correct ? "text-green-600" : "text-red-500")}>
+          {den3Semplificato === den3Correct && num2Sempl2 === num2S2Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
+         </p>
+        )}
+       </div>
       </div>
      </div>
     )}
 
-{showS4 && (
-     <div className="bg-purple-50/50 border border-purple-200 rounded-lg p-3">
-      <p className="text-base mb-2">
-       <span className="font-bold">4ª SEMPLIFICAZIONE A CROCE</span><br/>
-       <span className="text-muted-foreground">Ora che le prime tre semplificazioni sono corrette, confronto il </span>
-       <span className="text-purple-500 font-bold">NUMERATORE della 4ª frazione ({computed.actualNum4})</span>
-       <span className="text-muted-foreground"> con il </span>
-       <span className="text-pink-500 font-bold">DENOMINATORE della 1ª frazione già semplificato ({den1AfterS3})</span>
-       {divCom4_seq > 1 ? (
-        <>: il MCD è <span className="font-bold text-lg">{divCom4_seq}</span>. Divido entrambi → </>)
-        : (<>: <span className="font-bold">nessun divisore comune</span>. Riscrivo gli stessi numeri.</>)
-       }
-      </p>
-      <div className="flex flex-col items-center gap-3">
-       <NumberInputCanvas
-        value={num4Semplificato}
-        onChange={setNum4Semplificato}
-        label="Num. 4ª fraz. sempl."
-        colorClass="text-purple-500"
-        labelOnTop
-        allowNegative
-       />
-       {num4Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         num4Semplificato === num4Correct ?"text-success":"text-destructive",
-        )}>
-         {num4Semplificato === num4Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+    {/* ═══ PAIR 3: 3ª frazione ↔ 4ª frazione ═══ */}
+    {showPair3 && (
+     <div className="space-y-2">
+      <p className="text-sm font-medium text-amber-900/80">📐 Coppia 3: 3ª frazione (sempl.) ↔ 4ª frazione</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+       {/* S5: num4 ↔ den3S */}
+       <div className="bg-purple-50/60 border border-purple-200 rounded-lg p-3">
+        <p className="text-xs font-medium text-center mb-2">
+         <span className="text-purple-500 font-bold">Num 4ª ({computed.actualNum4})</span>{" "}
+         ↔{" "}
+         <span className="text-teal-500 font-bold">Den 3ª sempl. ({den3S})</span>
+         {mcd5 > 1 ? <> — MCD <b>{mcd5}</b></> : <> — nessun MCD</>}
         </p>
-       )}
-       <div className="w-[120px] sm:w-[135px] h-[2px] bg-foreground/80 my-1.5 mx-auto"/>
-       <NumberInputCanvas
-        value={den3Semplificato}
-        onChange={setDen3Semplificato}
-        label="Den. 1ª fraz. ulter. sempl."
-        colorClass="text-pink-500"
-        labelOnBottom
-       />
-       {den3Semplificato !== null && (
-        <p className={cn(
-        "text-base font-bold text-center",
-         den3Semplificato === den3Correct ?"text-success":"text-destructive",
-        )}>
-         {den3Semplificato === den3Correct ?"✅ CORRETTO" : `❌ RISULTATO SBAGLIATO`}
+        <div className="flex gap-2 justify-center flex-wrap">
+         <NumberInputCanvas value={num4Semplificato} onChange={setNum4Semplificato} label="Num 4ª sempl." colorClass="text-purple-500" labelOnTop allowNegative />
+         <NumberInputCanvas value={den3Sempl2} onChange={setDen3Sempl2} label="Den 3ª sempl." colorClass="text-teal-500" labelOnTop />
+        </div>
+        {num4Semplificato !== null && den3Sempl2 !== null && (
+         <p className={cn("text-xs font-bold text-center mt-1", num4Semplificato === num4Correct && den3Sempl2 === den3S2Correct ? "text-green-600" : "text-red-500")}>
+          {num4Semplificato === num4Correct && den3Sempl2 === den3S2Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
+         </p>
+        )}
+       </div>
+       {/* S6: den4 ↔ num3S */}
+       <div className="bg-pink-50/60 border border-pink-200 rounded-lg p-3">
+        <p className="text-xs font-medium text-center mb-2">
+         <span className="text-pink-500 font-bold">Den 4ª ({computed.actualDen4})</span>{" "}
+         ↔{" "}
+         <span className="text-green-500 font-bold">Num 3ª sempl. ({num3S})</span>
+         {mcd6 > 1 ? <> — MCD <b>{mcd6}</b></> : <> — nessun MCD</>}
         </p>
-       )}
+        <div className="flex gap-2 justify-center flex-wrap">
+         <NumberInputCanvas value={den4Semplificato} onChange={setDen4Semplificato} label="Den 4ª sempl." colorClass="text-pink-500" labelOnTop />
+         <NumberInputCanvas value={num3Sempl2} onChange={setNum3Sempl2} label="Num 3ª sempl." colorClass="text-green-500" labelOnTop allowNegative />
+        </div>
+        {den4Semplificato !== null && num3Sempl2 !== null && (
+         <p className={cn("text-xs font-bold text-center mt-1", den4Semplificato === den4Correct && num3Sempl2 === num3S2Correct ? "text-green-600" : "text-red-500")}>
+          {den4Semplificato === den4Correct && num3Sempl2 === num3S2Correct ? "✅ CORRETTO" : "❌ RIPROVA"}
+         </p>
+        )}
+       </div>
       </div>
      </div>
     )}
 
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s3Correct) && (!computed.hasFourth || s4Correct)} forceOpen={generatingPdf}>
-     {(!(computed.divCom1 > 1) && !(computed.divCom2 > 1) && !(divCom3_seq > 1) && !(divCom4_seq > 1)) ? (
+    {/* ═══ RICOPIA SUL QUADERNO ═══ */}
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct)} forceOpen={generatingPdf}>
+     {(!(mcd1 > 1) && !(mcd2 > 1) && !(mcd3 > 1) && !(mcd4 > 1) && !(mcd5 > 1) && !(mcd6 > 1)) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
       <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg">
+       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
+        {/* 1st fraction */}
         <div className="flex flex-col items-center">
          <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
-         {(dDen1S !== 1) && (
-         <>
-          <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-sky-400 font-bold font-serif text-base">{dDen1Final}</span>
-         </>
-         )}
+         {(dDen1S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span></>)}
         </div>
         <span className="text-base font-bold">×</span>
+        {/* 2nd fraction */}
         <div className="flex flex-col items-center">
-         <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
-         {(dDen2S !== 1) && (
-         <>
-          <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span>
-         </>
-         )}
+         <span className="text-red-400 font-bold font-serif text-base">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>
+         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span></>)}
         </div>
-       {computed.hasThird && (
-       <>
-        <span className="text-base font-bold">×</span>
+        {/* 3rd fraction */}
+        {computed.hasThird && (<><span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
-         <span className="text-green-500 font-bold font-serif text-base">{dNum3S}</span>
-         {(dDen4S !== 1) && (
-         <>
-          <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-teal-500 font-bold font-serif text-base">{computed.displayDen3}</span>
-         </>
-         )}
-        </div>
-       </>
-       )}
-       {computed.hasFourth && (
-       <>
-        <span className="text-base font-bold">×</span>
+         <span className="text-green-500 font-bold font-serif text-base">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span>
+         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}
+        </div></>)}
+        {/* 4th fraction */}
+        {computed.hasFourth && (<><span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
          <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
-         {(dDen3S !== 1) && (
-         <>
-          <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-pink-500 font-bold font-serif text-base">{computed.displayDen4}</span>
-         </>
-         )}
-        </div>
-       </>
-       )}
+         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S_final}</span></>)}
+        </div></>)}
        </div>
       </div>
       </>
@@ -1870,7 +1821,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE NUMERATORI:</span>{" "}
-       <span className="text-orange-400 font-bold">{dNum1S}</span> · <span className="text-red-400 font-bold">{dNum2S}</span>{computed.hasThird && (<> · <span className="text-green-500 font-bold">{dNum3S}</span></>)}{computed.hasFourth && (<> · <span className="text-purple-500 font-bold">{dNum4S}</span></>)} = <span>RISULTATO NUMERATORE FINALE</span>
+       <span className="text-orange-400 font-bold">{dNum1S}</span> · <span className="text-red-400 font-bold">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>{computed.hasThird && (<> · <span className="text-green-500 font-bold">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span></>)}{computed.hasFourth && (<> · <span className="text-purple-500 font-bold">{dNum4S}</span></>)} = <span>RISULTATO NUMERATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={numeratoreFinaleUtente}
@@ -1884,7 +1835,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
-       <span className="text-sky-400 font-bold">{dDen1Final}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
+       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{dDen4S_final !== "..." ? dDen4S_final : computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
@@ -1922,15 +1873,15 @@ function MulDivExercise({
      {(() => {
       const ns1 = num1Semplificato ?? 1;
       const ns2 = num2Semplificato ?? 1;
-      const ds1 = computed.hasFourth && den3Semplificato !== null ? den3Semplificato : computed.hasThird && den4Semplificato !== null ? den4Semplificato : (den1Semplificato ?? 1);
-      const ds2 = den2Semplificato ?? 1;
+      const ds1 = den1Semplificato ?? 1;
+      const ds2 = den2Sempl2 ?? den2Semplificato ?? 1;
       const ns3 = computed.hasThird ? (num3Semplificato ?? 1) : 1;
       const ns4 = computed.hasFourth ? (num4Semplificato ?? 1) : 1;
-      const ds3 = computed.hasThird ? computed.displayDen3 : 1;
-      const ds4 = computed.hasFourth ? computed.displayDen4 : 1;
+      const ds3 = computed.hasThird ? (den3Sempl2 ?? computed.displayDen3) : 1;
+      const ds4 = computed.hasFourth ? (den4Semplificato ?? computed.displayDen4) : 1;
       const numCalc = ns1 * ns2 * ns3 * ns4;
       const denCalc = ds1 * ds2 * ds3 * ds4;
-      const allEnt = num1Semplificato !== null && num2Semplificato !== null && (!computed.hasThird || num3Semplificato !== null) && (!computed.hasFourth || num4Semplificato !== null) && den1Semplificato !== null && den2Semplificato !== null && (!computed.hasThird || den4Semplificato !== null) && (!computed.hasFourth || den3Semplificato !== null);
+      const allEnt = num1Semplificato !== null && num2Semplificato !== null && (!computed.hasThird || num3Semplificato !== null) && (!computed.hasFourth || num4Semplificato !== null) && den1Semplificato !== null && den2Semplificato !== null && (!computed.hasThird || den3Semplificato !== null) && (!computed.hasFourth || den4Semplificato !== null);
       return (<>
        <p className="font-mono text-base">
         {num1Semplificato !== null && num2Semplificato !== null
