@@ -2156,7 +2156,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
          <FractionDisplay numerator={numCalc} denominator={denCalc} size="sm" />
          <span className="font-bold">=</span>
-         <FractionDisplay numerator={computed.computed.numFinaleCorretto} denominator={computed.computed.denFinaleCorretto} size="sm" />
+         <FractionDisplay numerator={computed.numFinaleCorretto} denominator={computed.denFinaleCorretto} size="sm" />
         </p>
        )}
       </>);
