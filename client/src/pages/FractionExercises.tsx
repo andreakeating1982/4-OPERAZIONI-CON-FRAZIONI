@@ -313,22 +313,38 @@ const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
    displayDen2 = nd2;
   }
 
-  // Terza frazione (MAI invertita — l'inversione riguarda solo la 2ª frazione)
+  // Terza frazione
   let actualNum3 = 1, actualDen3 = 1, displayNum3: number | null = null, displayDen3: number | null = null;
   if (hasThird) {
-   actualNum3 = num3!;
-   actualDen3 = nd3;
-   displayNum3 = num3!;
-   displayDen3 = nd3;
+   if (invert) {
+    actualNum3 = nd3;
+    actualDen3 = Math.abs(num3!);
+    displayNum3 = nd3;
+    displayDen3 = Math.abs(num3!);
+    if (num3! < 0) displayNum3 = -displayNum3;
+   } else {
+    actualNum3 = num3!;
+    actualDen3 = nd3;
+    displayNum3 = num3!;
+    displayDen3 = nd3;
+   }
   }
 
-  // Quarta frazione (MAI invertita — l'inversione riguarda solo la 2ª frazione)
+  // Quarta frazione
   let actualNum4 = 1, actualDen4 = 1, displayNum4: number | null = null, displayDen4: number | null = null;
   if (hasFourth) {
-   actualNum4 = num4!;
-   actualDen4 = nd4;
-   displayNum4 = num4!;
-   displayDen4 = nd4;
+   if (invert) {
+    actualNum4 = nd4;
+    actualDen4 = Math.abs(num4!);
+    displayNum4 = nd4;
+    displayDen4 = Math.abs(num4!);
+    if (num4! < 0) displayNum4 = -displayNum4;
+   } else {
+    actualNum4 = num4!;
+    actualDen4 = nd4;
+    displayNum4 = num4!;
+    displayDen4 = nd4;
+   }
   }
 
   const divCom1 = gcd(Math.abs(num1), actualDen2);
@@ -1668,14 +1684,32 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={true} forceOpen={generatingPdf}>
      {op ==="/"&& (
       <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
+       <div className="flex items-center gap-2 text-base font-mono bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
+        {/* Frazioni originali con ÷ */}
         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
         <span className="text-base">÷</span>
         <FractionDisplay numerator={num2} denominator={nd2} size="xs"/>
+        {computed.hasThird && (<>
+         <span className="text-base">÷</span>
+         <FractionDisplay numerator={num3!} denominator={computed.nd3} size="xs"/>
+        </>)}
+        {computed.hasFourth && (<>
+         <span className="text-base">÷</span>
+         <FractionDisplay numerator={num4!} denominator={computed.nd4} size="xs"/>
+        </>)}
         <span className="text-base">→</span>
+        {/* Frazioni dopo inversione: 1ª invariata, tutte le altre invertite */}
         <FractionDisplay numerator={num1} denominator={nd1} size="xs"/>
         <span className="text-base">×</span>
         <FractionDisplay numerator={displayNum2} denominator={displayDen2} size="xs"/>
+        {computed.hasThird && (<>
+         <span className="text-base">×</span>
+         <FractionDisplay numerator={computed.displayNum3!} denominator={computed.displayDen3!} size="xs"/>
+        </>)}
+        {computed.hasFourth && (<>
+         <span className="text-base">×</span>
+         <FractionDisplay numerator={computed.displayNum4!} denominator={computed.displayDen4!} size="xs"/>
+        </>)}
        </div>
       </div>
      )}
@@ -1921,31 +1955,122 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
+      {/* ─── FRAZIONI ORIGINALI ─── */}
+      <p className="text-sm font-bold text-amber-900 mb-2 text-center">FRAZIONI DA SEMPLIFICARE:</p>
       <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
-        {/* 1st fraction */}
-        <div className="flex flex-col items-center">
-         <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
-         {(dDen1S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span></>)}
+       <div className="flex items-center gap-3 text-base flex-wrap justify-center">
+        <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" size="sm"/>
+        <span className="text-lg font-bold">×</span>
+        <FractionDisplay numerator={num2} denominator={nd2} numClass="text-red-400" denClass="text-blue-400" size="sm"/>
+        {computed.hasThird && (<>
+         <span className="text-lg font-bold">×</span>
+         <FractionDisplay numerator={num3!} denominator={Math.abs(den3 ?? 1)} numClass="text-green-500" denClass="text-teal-500" size="sm"/>
+        </>)}
+        {computed.hasFourth && (<>
+         <span className="text-lg font-bold">×</span>
+         <FractionDisplay numerator={num4!} denominator={Math.abs(den4 ?? 1)} numClass="text-purple-500" denClass="text-pink-500" size="sm"/>
+        </>)}
+       </div>
+      </div>
+
+      {/* ─── SEMPLIFICAZIONI A CROCE ─── */}
+      <p className="text-sm font-bold text-amber-900 mt-4 mb-2 text-center">SEMPLIFICAZIONI A CROCE:</p>
+      <div className="space-y-2 text-sm">
+       {/* Pair 1: num1 ↔ den2, den1 ↔ num2 */}
+       <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
+        <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 1: 1ª frazione ↔ 2ª frazione</p>
+        <div className="grid grid-cols-2 gap-2">
+         {mcd1 > 1 ? (
+          <div className="text-center bg-orange-50/80 rounded px-2 py-1">
+           <p className="text-xs"><span className="text-orange-400 font-bold">{num1}</span> : <b>{mcd1}</b> = <span className="text-orange-400 font-bold">{num1Correct}</span></p>
+           <p className="text-xs"><span className="text-blue-400 font-bold">{Math.abs(nd2)}</span> : <b>{mcd1}</b> = <span className="text-blue-400 font-bold">{den2Correct}</span></p>
+           <p className="text-[10px] text-muted-foreground">MCD = {mcd1}</p>
+          </div>
+         ) : (
+          <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 1ª e den 2ª</div>
+         )}
+         {mcd2 > 1 ? (
+          <div className="text-center bg-sky-50/80 rounded px-2 py-1">
+           <p className="text-xs"><span className="text-sky-400 font-bold">{nd1}</span> : <b>{mcd2}</b> = <span className="text-sky-400 font-bold">{den1Correct}</span></p>
+           <p className="text-xs"><span className="text-red-400 font-bold">{Math.abs(num2)}</span> : <b>{mcd2}</b> = <span className="text-red-400 font-bold">{num2Correct}</span></p>
+           <p className="text-[10px] text-muted-foreground">MCD = {mcd2}</p>
+          </div>
+         ) : (
+          <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 1ª e num 2ª</div>
+         )}
         </div>
-        <span className="text-base font-bold">×</span>
-        {/* 2nd fraction */}
-        <div className="flex flex-col items-center">
-         <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
-         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span></>)}
+       </div>
+
+       {/* Pair 2: 2ª sempl. ↔ 3ª frazione */}
+       {showPair2 && (
+        <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
+         <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 2: 2ª frazione (sempl.) ↔ 3ª frazione</p>
+         <div className="grid grid-cols-2 gap-2">
+          {mcd3 > 1 ? (
+           <div className="text-center bg-green-50/80 rounded px-2 py-1">
+            <p className="text-xs"><span className="text-green-500 font-bold">{Math.abs(computed.actualNum3)}</span> : <b>{mcd3}</b> = <span className="text-green-500 font-bold">{num3Correct}</span></p>
+            <p className="text-xs"><span className="text-blue-400 font-bold">{den2Semplificato ?? computed.actualDen2}</span> : <b>{mcd3}</b> = <span className="text-blue-400 font-bold">{den2S2Correct}</span></p>
+            <p className="text-[10px] text-muted-foreground">MCD = {mcd3}</p>
+           </div>
+          ) : (
+           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 3ª e den 2ª sempl.</div>
+          )}
+          {mcd4 > 1 ? (
+           <div className="text-center bg-teal-50/80 rounded px-2 py-1">
+            <p className="text-xs"><span className="text-teal-500 font-bold">{Math.abs(computed.actualDen3)}</span> : <b>{mcd4}</b> = <span className="text-teal-500 font-bold">{den3Correct}</span></p>
+            <p className="text-xs"><span className="text-red-400 font-bold">{num2Semplificato ?? computed.actualNum2}</span> : <b>{mcd4}</b> = <span className="text-red-400 font-bold">{num2S2Correct}</span></p>
+            <p className="text-[10px] text-muted-foreground">MCD = {mcd4}</p>
+           </div>
+          ) : (
+           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 3ª e num 2ª sempl.</div>
+          )}
+         </div>
         </div>
-        {/* 3rd fraction */}
-        {computed.hasThird && (<><span className="text-base font-bold">×</span>
-        <div className="flex flex-col items-center">
-         <span className="text-green-500 font-bold font-serif text-base">{dNum3S}</span>
-         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{dDen3S}</span></>)}
-        </div></>)}
-        {/* 4th fraction */}
-        {computed.hasFourth && (<><span className="text-base font-bold">×</span>
-        <div className="flex flex-col items-center">
-         <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
-         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S}</span></>)}
-        </div></>)}
+       )}
+
+       {/* Pair 3: 3ª sempl. ↔ 4ª frazione */}
+       {showPair3 && (
+        <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
+         <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 3: 3ª frazione (sempl.) ↔ 4ª frazione</p>
+         <div className="grid grid-cols-2 gap-2">
+          {mcd5 > 1 ? (
+           <div className="text-center bg-purple-50/80 rounded px-2 py-1">
+            <p className="text-xs"><span className="text-purple-500 font-bold">{Math.abs(computed.actualNum4)}</span> : <b>{mcd5}</b> = <span className="text-purple-500 font-bold">{num4Correct}</span></p>
+            <p className="text-xs"><span className="text-teal-500 font-bold">{den3Semplificato ?? computed.actualDen3}</span> : <b>{mcd5}</b> = <span className="text-teal-500 font-bold">{den3S2Correct}</span></p>
+            <p className="text-[10px] text-muted-foreground">MCD = {mcd5}</p>
+           </div>
+          ) : (
+           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 4ª e den 3ª sempl.</div>
+          )}
+          {mcd6 > 1 ? (
+           <div className="text-center bg-pink-50/80 rounded px-2 py-1">
+            <p className="text-xs"><span className="text-pink-500 font-bold">{Math.abs(computed.actualDen4)}</span> : <b>{mcd6}</b> = <span className="text-pink-500 font-bold">{den4Correct}</span></p>
+            <p className="text-xs"><span className="text-green-500 font-bold">{num3Semplificato ?? computed.actualNum3}</span> : <b>{mcd6}</b> = <span className="text-green-500 font-bold">{num3S2Correct}</span></p>
+            <p className="text-[10px] text-muted-foreground">MCD = {mcd6}</p>
+           </div>
+          ) : (
+           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 4ª e num 3ª sempl.</div>
+          )}
+         </div>
+        </div>
+       )}
+      </div>
+
+      {/* ─── FRAZIONI SEMPLIFICATE ─── */}
+      <p className="text-sm font-bold text-amber-900 mt-4 mb-2 text-center">FRAZIONI SEMPLIFICATE:</p>
+      <div className="flex justify-center my-2">
+       <div className="flex items-center gap-3 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
+        <FractionDisplay numerator={dNum1S !== "..." ? Number(dNum1S) : (num1Semplificato ?? num1)} denominator={dDen1S !== "..." ? Number(dDen1S) : (den1Semplificato ?? nd1)} numClass="text-orange-400" denClass="text-sky-400" size="sm"/>
+        <span className="text-lg font-bold">×</span>
+        <FractionDisplay numerator={dNum2S !== "..." ? Number(dNum2S) : (num2Sempl2 ?? num2Semplificato ?? num2)} denominator={dDen2S !== "..." ? Number(dDen2S) : (den2Sempl2 ?? den2Semplificato ?? nd2)} numClass="text-red-400" denClass="text-blue-400" size="sm"/>
+        {computed.hasThird && (<>
+         <span className="text-lg font-bold">×</span>
+         <FractionDisplay numerator={dNum3S !== "..." ? Number(dNum3S) : (num3Sempl2 ?? num3Semplificato ?? num3!)} denominator={dDen3S !== "..." ? Number(dDen3S) : (den3Sempl2 ?? den3Semplificato ?? computed.nd3)} numClass="text-green-500" denClass="text-teal-500" size="sm"/>
+        </>)}
+        {computed.hasFourth && (<>
+         <span className="text-lg font-bold">×</span>
+         <FractionDisplay numerator={dNum4S !== "..." ? Number(dNum4S) : (num4Semplificato ?? num4!)} denominator={dDen4S !== "..." ? Number(dDen4S) : (den4Semplificato ?? computed.nd4)} numClass="text-purple-500" denClass="text-pink-500" size="sm"/>
+        </>)}
        </div>
       </div>
       </>
