@@ -507,7 +507,13 @@ const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
 ${stylesHtml}
 <style>
 *{box-sizing:border-box}
-@media print{body{padding:0!important;font-size:14px;line-height:1.65;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@page{size:A4;margin:2.5cm 2cm 2cm 2cm}}
+body{font-family:'Cambria Math',Cambria,serif!important;font-size:12pt!important;color:#1a1a1a;max-width:100%;margin:0 auto;text-align:center;line-height:1.6;background:#fff}
+/* Forza Cambria Math 12pt su OGNI elemento testuale */
+*,*::before,*::after{font-family:'Cambria Math',Cambria,serif!important}
+body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u,small,sup,sub,code,pre,blockquote{font-size:12pt!important;line-height:1.55!important}
+/* Preserva la dimensione delle linee di frazione (non testuali) */
+.fraction-line,.frac-line,[class*="h-["]{font-size:inherit!important}
+@media print{body{padding:0!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@page{size:A4;margin:2.5cm 2cm 2cm 2cm}}
 </style></head>
 <body>${bodyHtml}<script>window.onload=function(){window.print()}<\/script></body></html>`;
 
