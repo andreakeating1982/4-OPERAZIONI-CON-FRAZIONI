@@ -1731,8 +1731,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
         {mcd1 > 1 ? <> — MCD <b>{mcd1}</b></> : <> — nessun MCD</>}
        </p>
        <div className="flex gap-2 justify-center flex-wrap">
-        <NumberInputCanvas value={num1Semplificato} onChange={setNum1Semplificato} label={mcd1 > 1 ? `${num1} : ${mcd1} = ?` : "Num. sempl."} colorClass="text-orange-400" labelOnTop />
-        <NumberInputCanvas value={den2Semplificato} onChange={setDen2Semplificato} label={mcd1 > 1 ? `${computed.actualDen2} : ${mcd1} = ?` : "Den. sempl."} colorClass="text-blue-400" labelOnTop />
+        <NumberInputCanvas value={num1Semplificato} onChange={setNum1Semplificato} label={mcd1 > 1 ? `${num1} : ${mcd1} = ?` : `Copia ${num1}`} colorClass="text-orange-400" labelOnTop />
+        <NumberInputCanvas value={den2Semplificato} onChange={setDen2Semplificato} label={mcd1 > 1 ? `${computed.actualDen2} : ${mcd1} = ?` : `Copia ${computed.actualDen2}`} colorClass="text-blue-400" labelOnTop />
        </div>
        {num1Semplificato !== null && den2Semplificato !== null && (
         <p className={cn("text-xs font-bold text-center mt-1", num1Semplificato === num1Correct && den2Semplificato === den2Correct ? "text-green-600" : "text-red-500")}>
@@ -1749,8 +1749,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
         {mcd2 > 1 ? <> — MCD <b>{mcd2}</b></> : <> — nessun MCD</>}
        </p>
        <div className="flex gap-2 justify-center flex-wrap">
-        <NumberInputCanvas value={num2Semplificato} onChange={setNum2Semplificato} label={mcd2 > 1 ? `${computed.actualNum2} : ${mcd2} = ?` : "Num. sempl."} colorClass="text-red-400" labelOnTop allowNegative />
-        <NumberInputCanvas value={den1Semplificato} onChange={setDen1Semplificato} label={mcd2 > 1 ? `${nd1} : ${mcd2} = ?` : "Den. sempl."} colorClass="text-sky-400" labelOnTop />
+        <NumberInputCanvas value={num2Semplificato} onChange={setNum2Semplificato} label={mcd2 > 1 ? `${computed.actualNum2} : ${mcd2} = ?` : `Copia ${computed.actualNum2}`} colorClass="text-red-400" labelOnTop allowNegative />
+        <NumberInputCanvas value={den1Semplificato} onChange={setDen1Semplificato} label={mcd2 > 1 ? `${nd1} : ${mcd2} = ?` : `Copia ${nd1}`} colorClass="text-sky-400" labelOnTop />
        </div>
        {num2Semplificato !== null && den1Semplificato !== null && (
         <p className={cn("text-xs font-bold text-center mt-1", num2Semplificato === num2Correct && den1Semplificato === den1Correct ? "text-green-600" : "text-red-500")}>
@@ -1775,8 +1775,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
          {mcd3 > 1 ? <> — MCD <b>{mcd3}</b></> : <> — nessun MCD</>}
         </p>
         <div className="flex gap-2 justify-center flex-wrap">
-         <NumberInputCanvas value={num3Semplificato} onChange={setNum3Semplificato} label={mcd3 > 1 ? `${computed.actualNum3} : ${mcd3} = ?` : "Num 3ª sempl."} colorClass="text-green-500" labelOnTop allowNegative />
-         <NumberInputCanvas value={den2Sempl2} onChange={setDen2Sempl2} label={mcd3 > 1 ? `${den2S} : ${mcd3} = ?` : "Den 2ª sempl."} colorClass="text-blue-400" labelOnTop />
+         <NumberInputCanvas value={num3Semplificato} onChange={setNum3Semplificato} label={mcd3 > 1 ? `${computed.actualNum3} : ${mcd3} = ?` : `Copia ${computed.actualNum3}`} colorClass="text-green-500" labelOnTop allowNegative />
+         <NumberInputCanvas value={den2Sempl2} onChange={setDen2Sempl2} label={mcd3 > 1 ? `${den2S} : ${mcd3} = ?` : `Copia ${den2S}`} colorClass="text-blue-400" labelOnTop />
         </div>
         {num3Semplificato !== null && den2Sempl2 !== null && (
          <p className={cn("text-xs font-bold text-center mt-1", num3Semplificato === num3Correct && den2Sempl2 === den2S2Correct ? "text-green-600" : "text-red-500")}>
@@ -1793,8 +1793,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
          {mcd4 > 1 ? <> — MCD <b>{mcd4}</b></> : <> — nessun MCD</>}
         </p>
         <div className="flex gap-2 justify-center flex-wrap">
-         <NumberInputCanvas value={den3Semplificato} onChange={setDen3Semplificato} label={mcd4 > 1 ? `${computed.actualDen3} : ${mcd4} = ?` : "Den 3ª sempl."} colorClass="text-teal-500" labelOnTop />
-         <NumberInputCanvas value={num2Sempl2} onChange={setNum2Sempl2} label={mcd4 > 1 ? `${num2S} : ${mcd4} = ?` : "Num 2ª sempl."} colorClass="text-red-400" labelOnTop allowNegative />
+         <NumberInputCanvas value={den3Semplificato} onChange={setDen3Semplificato} label={mcd4 > 1 ? `${computed.actualDen3} : ${mcd4} = ?` : `Copia ${computed.actualDen3}`} colorClass="text-teal-500" labelOnTop />
+         <NumberInputCanvas value={num2Sempl2} onChange={setNum2Sempl2} label={mcd4 > 1 ? `${num2S} : ${mcd4} = ?` : `Copia ${num2S}`} colorClass="text-red-400" labelOnTop allowNegative />
         </div>
         {den3Semplificato !== null && num2Sempl2 !== null && (
          <p className={cn("text-xs font-bold text-center mt-1", den3Semplificato === den3Correct && num2Sempl2 === num2S2Correct ? "text-green-600" : "text-red-500")}>
@@ -1820,8 +1820,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
          {mcd5 > 1 ? <> — MCD <b>{mcd5}</b></> : <> — nessun MCD</>}
         </p>
         <div className="flex gap-2 justify-center flex-wrap">
-         <NumberInputCanvas value={num4Semplificato} onChange={setNum4Semplificato} label={mcd5 > 1 ? `${computed.actualNum4} : ${mcd5} = ?` : "Num 4ª sempl."} colorClass="text-purple-500" labelOnTop allowNegative />
-         <NumberInputCanvas value={den3Sempl2} onChange={setDen3Sempl2} label={mcd5 > 1 ? `${den3S} : ${mcd5} = ?` : "Den 3ª sempl."} colorClass="text-teal-500" labelOnTop />
+         <NumberInputCanvas value={num4Semplificato} onChange={setNum4Semplificato} label={mcd5 > 1 ? `${computed.actualNum4} : ${mcd5} = ?` : `Copia ${computed.actualNum4}`} colorClass="text-purple-500" labelOnTop allowNegative />
+         <NumberInputCanvas value={den3Sempl2} onChange={setDen3Sempl2} label={mcd5 > 1 ? `${den3S} : ${mcd5} = ?` : `Copia ${den3S}`} colorClass="text-teal-500" labelOnTop />
         </div>
         {num4Semplificato !== null && den3Sempl2 !== null && (
          <p className={cn("text-xs font-bold text-center mt-1", num4Semplificato === num4Correct && den3Sempl2 === den3S2Correct ? "text-green-600" : "text-red-500")}>
@@ -1838,8 +1838,8 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
          {mcd6 > 1 ? <> — MCD <b>{mcd6}</b></> : <> — nessun MCD</>}
         </p>
         <div className="flex gap-2 justify-center flex-wrap">
-         <NumberInputCanvas value={den4Semplificato} onChange={setDen4Semplificato} label={mcd6 > 1 ? `${computed.actualDen4} : ${mcd6} = ?` : "Den 4ª sempl."} colorClass="text-pink-500" labelOnTop />
-         <NumberInputCanvas value={num3Sempl2} onChange={setNum3Sempl2} label={mcd6 > 1 ? `${num3S} : ${mcd6} = ?` : "Num 3ª sempl."} colorClass="text-green-500" labelOnTop allowNegative />
+         <NumberInputCanvas value={den4Semplificato} onChange={setDen4Semplificato} label={mcd6 > 1 ? `${computed.actualDen4} : ${mcd6} = ?` : `Copia ${computed.actualDen4}`} colorClass="text-pink-500" labelOnTop />
+         <NumberInputCanvas value={num3Sempl2} onChange={setNum3Sempl2} label={mcd6 > 1 ? `${num3S} : ${mcd6} = ?` : `Copia ${num3S}`} colorClass="text-green-500" labelOnTop allowNegative />
         </div>
         {den4Semplificato !== null && num3Sempl2 !== null && (
          <p className={cn("text-xs font-bold text-center mt-1", den4Semplificato === den4Correct && num3Sempl2 === num3S2Correct ? "text-green-600" : "text-red-500")}>
@@ -2039,18 +2039,6 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
       const denCalc = ds1 * ds2 * ds3 * ds4;
       const allEnt = num1Semplificato !== null && num2Semplificato !== null && (!computed.hasThird || num3Semplificato !== null) && (!computed.hasFourth || num4Semplificato !== null) && den1Semplificato !== null && den2Semplificato !== null && (!computed.hasThird || den3Semplificato !== null) && (!computed.hasFourth || den4Semplificato !== null) && (!showInternal || allInternalDone);
       return (<>
-       <div className="text-base space-y-2">
-        <p className="text-muted-foreground text-sm">Frazioni semplificate (dal tuo lavoro):</p>
-        <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
-         <FractionDisplay numerator={ns1} denominator={ds1} numClass="text-orange-400" denClass="text-sky-400" size="xs"/>
-         <span className="text-base font-bold">×</span>
-         <FractionDisplay numerator={ns2} denominator={ds2} numClass="text-red-400" denClass="text-blue-400" size="xs"/>
-         {computed.hasThird && (<><span className="text-base font-bold">×</span>
-         <FractionDisplay numerator={ns3} denominator={ds3} numClass="text-green-500" denClass="text-teal-500" size="xs"/></>)}
-         {computed.hasFourth && (<><span className="text-base font-bold">×</span>
-         <FractionDisplay numerator={ns4} denominator={ds4} numClass="text-purple-500" denClass="text-pink-500" size="xs"/></>)}
-        </div>
-       </div>
        <p className="font-mono text-base mt-2">
         {allEnt
          ? <span className="font-bold text-primary">Numeratori: {ns1} × {ns2}{computed.hasThird ? ` × ${ns3}` : ''}{computed.hasFourth ? ` × ${ns4}` : ''} = {numCalc}</span>
