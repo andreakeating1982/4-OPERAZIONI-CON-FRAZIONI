@@ -313,38 +313,22 @@ const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
    displayDen2 = nd2;
   }
 
-  // Terza frazione
+  // Terza frazione (MAI invertita — l'inversione riguarda solo la 2ª frazione)
   let actualNum3 = 1, actualDen3 = 1, displayNum3: number | null = null, displayDen3: number | null = null;
   if (hasThird) {
-   if (invert) {
-    actualNum3 = nd3;
-    actualDen3 = Math.abs(num3!);
-    displayNum3 = nd3;
-    displayDen3 = Math.abs(num3!);
-    if (num3! < 0) displayNum3 = -displayNum3;
-   } else {
-    actualNum3 = num3!;
-    actualDen3 = nd3;
-    displayNum3 = num3!;
-    displayDen3 = nd3;
-   }
+   actualNum3 = num3!;
+   actualDen3 = nd3;
+   displayNum3 = num3!;
+   displayDen3 = nd3;
   }
 
-  // Quarta frazione
+  // Quarta frazione (MAI invertita — l'inversione riguarda solo la 2ª frazione)
   let actualNum4 = 1, actualDen4 = 1, displayNum4: number | null = null, displayDen4: number | null = null;
   if (hasFourth) {
-   if (invert) {
-    actualNum4 = nd4;
-    actualDen4 = Math.abs(num4!);
-    displayNum4 = nd4;
-    displayDen4 = Math.abs(num4!);
-    if (num4! < 0) displayNum4 = -displayNum4;
-   } else {
-    actualNum4 = num4!;
-    actualDen4 = nd4;
-    displayNum4 = num4!;
-    displayDen4 = nd4;
-   }
+   actualNum4 = num4!;
+   actualDen4 = nd4;
+   displayNum4 = num4!;
+   displayDen4 = nd4;
   }
 
   const divCom1 = gcd(Math.abs(num1), actualDen2);
