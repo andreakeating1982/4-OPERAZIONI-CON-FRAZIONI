@@ -1871,7 +1871,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
-       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
+       <span className="text-sky-400 font-bold">{dDen1Final}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
@@ -1909,7 +1909,7 @@ function MulDivExercise({
      {(() => {
       const ns1 = num1Semplificato ?? 1;
       const ns2 = num2Semplificato ?? 1;
-      const ds1 = den1Semplificato ?? 1;
+      const ds1 = computed.hasFourth && den3Semplificato !== null ? den3Semplificato : computed.hasThird && den4Semplificato !== null ? den4Semplificato : (den1Semplificato ?? 1);
       const ds2 = den2Semplificato ?? 1;
       const ns3 = computed.hasThird ? (num3Semplificato ?? 1) : 1;
       const ns4 = computed.hasFourth ? (num4Semplificato ?? 1) : 1;
