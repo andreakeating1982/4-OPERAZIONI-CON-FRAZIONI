@@ -1949,131 +1949,107 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
 
    </div>
 
-   {/* ═══ RICOPIA SUL QUADERNO ═══ */}
+   {/* ═══ RICOPIA SUL QUADERNO — stile penna su carta ═══ */}
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct) && (!showInternal || allInternalDone)} forceOpen={generatingPdf}>
      {(!(mcd1 > 1) && !(mcd2 > 1) && !(mcd3 > 1) && !(mcd4 > 1) && !(mcd5 > 1) && !(mcd6 > 1)) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
-      <>
-      {/* ─── FRAZIONI ORIGINALI ─── */}
-      <p className="text-sm font-bold text-amber-900 mb-2 text-center">FRAZIONI DA SEMPLIFICARE:</p>
-      <div className="flex justify-center my-2">
-       <div className="flex items-center gap-3 text-base flex-wrap justify-center">
-        <FractionDisplay numerator={num1} denominator={nd1} numClass="text-orange-400" denClass="text-sky-400" size="sm"/>
-        <span className="text-lg font-bold">×</span>
-        <FractionDisplay numerator={num2} denominator={nd2} numClass="text-red-400" denClass="text-blue-400" size="sm"/>
-        {computed.hasThird && (<>
-         <span className="text-lg font-bold">×</span>
-         <FractionDisplay numerator={num3!} denominator={Math.abs(den3 ?? 1)} numClass="text-green-500" denClass="text-teal-500" size="sm"/>
-        </>)}
-        {computed.hasFourth && (<>
-         <span className="text-lg font-bold">×</span>
-         <FractionDisplay numerator={num4!} denominator={Math.abs(den4 ?? 1)} numClass="text-purple-500" denClass="text-pink-500" size="sm"/>
-        </>)}
-       </div>
-      </div>
-
-      {/* ─── SEMPLIFICAZIONI A CROCE ─── */}
-      <p className="text-sm font-bold text-amber-900 mt-4 mb-2 text-center">SEMPLIFICAZIONI A CROCE:</p>
-      <div className="space-y-2 text-sm">
-       {/* Pair 1: num1 ↔ den2, den1 ↔ num2 */}
-       <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
-        <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 1: 1ª frazione ↔ 2ª frazione</p>
-        <div className="grid grid-cols-2 gap-2">
-         {mcd1 > 1 ? (
-          <div className="text-center bg-orange-50/80 rounded px-2 py-1">
-           <p className="text-xs"><span className="text-orange-400 font-bold">{num1}</span> : <b>{mcd1}</b> = <span className="text-orange-400 font-bold">{num1Correct}</span></p>
-           <p className="text-xs"><span className="text-blue-400 font-bold">{Math.abs(nd2)}</span> : <b>{mcd1}</b> = <span className="text-blue-400 font-bold">{den2Correct}</span></p>
-           <p className="text-[10px] text-muted-foreground">MCD = {mcd1}</p>
-          </div>
-         ) : (
-          <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 1ª e den 2ª</div>
-         )}
-         {mcd2 > 1 ? (
-          <div className="text-center bg-sky-50/80 rounded px-2 py-1">
-           <p className="text-xs"><span className="text-sky-400 font-bold">{nd1}</span> : <b>{mcd2}</b> = <span className="text-sky-400 font-bold">{den1Correct}</span></p>
-           <p className="text-xs"><span className="text-red-400 font-bold">{Math.abs(num2)}</span> : <b>{mcd2}</b> = <span className="text-red-400 font-bold">{num2Correct}</span></p>
-           <p className="text-[10px] text-muted-foreground">MCD = {mcd2}</p>
-          </div>
-         ) : (
-          <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 1ª e num 2ª</div>
-         )}
-        </div>
+      <div className="flex justify-center items-end gap-3 sm:gap-4 my-2 flex-wrap font-serif text-center">
+       {/* ── Frazione 1 ── */}
+       <div className="flex flex-col items-center">
+        {/* Numeratore */}
+        <span className="relative inline-flex flex-col items-center">
+         {(() => { const f = typeof dNum1S === 'string' ? Number(dNum1S) : dNum1S; const o = num1; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+         <span className="relative inline-block">
+          <span className="font-bold font-serif text-[22px] text-orange-600">{num1}</span>
+          {(() => { const f = typeof dNum1S === 'string' ? Number(dNum1S) : dNum1S; return f !== num1 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+         </span>
+        </span>
+        {/* Linea di frazione */}
+        <div className="w-10 h-[2px] bg-black my-0.5" />
+        {/* Denominatore */}
+        <span className="relative inline-flex flex-col items-center">
+         <span className="relative inline-block">
+          <span className="font-bold font-serif text-[22px] text-sky-600">{nd1}</span>
+          {(() => { const f = typeof dDen1S === 'string' ? Number(dDen1S) : dDen1S; return f !== nd1 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+         </span>
+         {(() => { const f = typeof dDen1S === 'string' ? Number(dDen1S) : dDen1S; return f !== nd1 ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+        </span>
        </div>
 
-       {/* Pair 2: 2ª sempl. ↔ 3ª frazione */}
-       {showPair2 && (
-        <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
-         <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 2: 2ª frazione (sempl.) ↔ 3ª frazione</p>
-         <div className="grid grid-cols-2 gap-2">
-          {mcd3 > 1 ? (
-           <div className="text-center bg-green-50/80 rounded px-2 py-1">
-            <p className="text-xs"><span className="text-green-500 font-bold">{Math.abs(computed.actualNum3)}</span> : <b>{mcd3}</b> = <span className="text-green-500 font-bold">{num3Correct}</span></p>
-            <p className="text-xs"><span className="text-blue-400 font-bold">{den2Semplificato ?? computed.actualDen2}</span> : <b>{mcd3}</b> = <span className="text-blue-400 font-bold">{den2S2Correct}</span></p>
-            <p className="text-[10px] text-muted-foreground">MCD = {mcd3}</p>
-           </div>
-          ) : (
-           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 3ª e den 2ª sempl.</div>
-          )}
-          {mcd4 > 1 ? (
-           <div className="text-center bg-teal-50/80 rounded px-2 py-1">
-            <p className="text-xs"><span className="text-teal-500 font-bold">{Math.abs(computed.actualDen3)}</span> : <b>{mcd4}</b> = <span className="text-teal-500 font-bold">{den3Correct}</span></p>
-            <p className="text-xs"><span className="text-red-400 font-bold">{num2Semplificato ?? computed.actualNum2}</span> : <b>{mcd4}</b> = <span className="text-red-400 font-bold">{num2S2Correct}</span></p>
-            <p className="text-[10px] text-muted-foreground">MCD = {mcd4}</p>
-           </div>
-          ) : (
-           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 3ª e num 2ª sempl.</div>
-          )}
-         </div>
-        </div>
-       )}
+       <span className="text-[22px] font-bold -mb-1">×</span>
 
-       {/* Pair 3: 3ª sempl. ↔ 4ª frazione */}
-       {showPair3 && (
-        <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2">
-         <p className="font-semibold text-center text-xs mb-1.5">📐 Coppia 3: 3ª frazione (sempl.) ↔ 4ª frazione</p>
-         <div className="grid grid-cols-2 gap-2">
-          {mcd5 > 1 ? (
-           <div className="text-center bg-purple-50/80 rounded px-2 py-1">
-            <p className="text-xs"><span className="text-purple-500 font-bold">{Math.abs(computed.actualNum4)}</span> : <b>{mcd5}</b> = <span className="text-purple-500 font-bold">{num4Correct}</span></p>
-            <p className="text-xs"><span className="text-teal-500 font-bold">{den3Semplificato ?? computed.actualDen3}</span> : <b>{mcd5}</b> = <span className="text-teal-500 font-bold">{den3S2Correct}</span></p>
-            <p className="text-[10px] text-muted-foreground">MCD = {mcd5}</p>
-           </div>
-          ) : (
-           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra num 4ª e den 3ª sempl.</div>
-          )}
-          {mcd6 > 1 ? (
-           <div className="text-center bg-pink-50/80 rounded px-2 py-1">
-            <p className="text-xs"><span className="text-pink-500 font-bold">{Math.abs(computed.actualDen4)}</span> : <b>{mcd6}</b> = <span className="text-pink-500 font-bold">{den4Correct}</span></p>
-            <p className="text-xs"><span className="text-green-500 font-bold">{num3Semplificato ?? computed.actualNum3}</span> : <b>{mcd6}</b> = <span className="text-green-500 font-bold">{num3S2Correct}</span></p>
-            <p className="text-[10px] text-muted-foreground">MCD = {mcd6}</p>
-           </div>
-          ) : (
-           <div className="text-center text-xs text-muted-foreground rounded px-2 py-1">Nessun MCD<br/>tra den 4ª e num 3ª sempl.</div>
-          )}
-         </div>
-        </div>
-       )}
-      </div>
+       {/* ── Frazione 2 ── */}
+       <div className="flex flex-col items-center">
+        <span className="relative inline-flex flex-col items-center">
+         {(() => { const f = typeof dNum2S === 'string' ? Number(dNum2S) : dNum2S; const o = num2; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+         <span className="relative inline-block">
+          <span className="font-bold font-serif text-[22px] text-red-500">{num2}</span>
+          {(() => { const f = typeof dNum2S === 'string' ? Number(dNum2S) : dNum2S; return f !== num2 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+         </span>
+        </span>
+        <div className="w-10 h-[2px] bg-black my-0.5" />
+        <span className="relative inline-flex flex-col items-center">
+         <span className="relative inline-block">
+          <span className="font-bold font-serif text-[22px] text-blue-500">{nd2}</span>
+          {(() => { const f = typeof dDen2S === 'string' ? Number(dDen2S) : dDen2S; return f !== nd2 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+         </span>
+         {(() => { const f = typeof dDen2S === 'string' ? Number(dDen2S) : dDen2S; return f !== nd2 ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+        </span>
+       </div>
 
-      {/* ─── FRAZIONI SEMPLIFICATE ─── */}
-      <p className="text-sm font-bold text-amber-900 mt-4 mb-2 text-center">FRAZIONI SEMPLIFICATE:</p>
-      <div className="flex justify-center my-2">
-       <div className="flex items-center gap-3 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
-        <FractionDisplay numerator={dNum1S !== "..." ? Number(dNum1S) : (num1Semplificato ?? num1)} denominator={dDen1S !== "..." ? Number(dDen1S) : (den1Semplificato ?? nd1)} numClass="text-orange-400" denClass="text-sky-400" size="sm"/>
-        <span className="text-lg font-bold">×</span>
-        <FractionDisplay numerator={dNum2S !== "..." ? Number(dNum2S) : (num2Sempl2 ?? num2Semplificato ?? num2)} denominator={dDen2S !== "..." ? Number(dDen2S) : (den2Sempl2 ?? den2Semplificato ?? nd2)} numClass="text-red-400" denClass="text-blue-400" size="sm"/>
-        {computed.hasThird && (<>
-         <span className="text-lg font-bold">×</span>
-         <FractionDisplay numerator={dNum3S !== "..." ? Number(dNum3S) : (num3Sempl2 ?? num3Semplificato ?? num3!)} denominator={dDen3S !== "..." ? Number(dDen3S) : (den3Sempl2 ?? den3Semplificato ?? computed.nd3)} numClass="text-green-500" denClass="text-teal-500" size="sm"/>
-        </>)}
-        {computed.hasFourth && (<>
-         <span className="text-lg font-bold">×</span>
-         <FractionDisplay numerator={dNum4S !== "..." ? Number(dNum4S) : (num4Semplificato ?? num4!)} denominator={dDen4S !== "..." ? Number(dDen4S) : (den4Semplificato ?? computed.nd4)} numClass="text-purple-500" denClass="text-pink-500" size="sm"/>
-        </>)}
+       {/* ── Frazione 3 ── */}
+       {computed.hasThird && (<>
+        <span className="text-[22px] font-bold -mb-1">×</span>
+        <div className="flex flex-col items-center">
+         <span className="relative inline-flex flex-col items-center">
+          {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; const o = num3 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+          <span className="relative inline-block">
+           <span className="font-bold font-serif text-[22px] text-green-600">{num3}</span>
+           {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; return f !== (num3 ?? 0) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+          </span>
+         </span>
+         <div className="w-10 h-[2px] bg-black my-0.5" />
+         <span className="relative inline-flex flex-col items-center">
+          <span className="relative inline-block">
+           <span className="font-bold font-serif text-[22px] text-teal-600">{Math.abs(den3 ?? 1)}</span>
+           {(() => { const f = typeof dDen3S === 'string' ? Number(dDen3S) : dDen3S; return f !== Math.abs(den3 ?? 1) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+          </span>
+          {(() => { const f = typeof dDen3S === 'string' ? Number(dDen3S) : dDen3S; return f !== Math.abs(den3 ?? 1) ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+         </span>
+        </div>
+       </>)}
+
+       {/* ── Frazione 4 ── */}
+       {computed.hasFourth && (<>
+        <span className="text-[22px] font-bold -mb-1">×</span>
+        <div className="flex flex-col items-center">
+         <span className="relative inline-flex flex-col items-center">
+          {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; const o = num4 ?? 0; return f !== o ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+          <span className="relative inline-block">
+           <span className="font-bold font-serif text-[22px] text-purple-600">{num4}</span>
+           {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; return f !== (num4 ?? 0) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+          </span>
+         </span>
+         <div className="w-10 h-[2px] bg-black my-0.5" />
+         <span className="relative inline-flex flex-col items-center">
+          <span className="relative inline-block">
+           <span className="font-bold font-serif text-[22px] text-pink-600">{Math.abs(den4 ?? 1)}</span>
+           {(() => { const f = typeof dDen4S === 'string' ? Number(dDen4S) : dDen4S; return f !== Math.abs(den4 ?? 1) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
+          </span>
+          {(() => { const f = typeof dDen4S === 'string' ? Number(dDen4S) : dDen4S; return f !== Math.abs(den4 ?? 1) ? <span className="text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+         </span>
+        </div>
+       </>)}
+
+       {/* ── Uguale e risultato ── */}
+       <span className="text-[22px] font-bold -mb-1">=</span>
+       <div className="flex flex-col items-center">
+        <span className="font-bold font-serif text-[22px] text-black">{computed.numFinaleCorretto}</span>
+        <div className="w-10 h-[2px] bg-black my-0.5" />
+        <span className="font-bold font-serif text-[22px] text-black">{computed.denFinaleCorretto}</span>
        </div>
       </div>
-      </>
      )}
     </NotebookGuide>
 
@@ -2180,7 +2156,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         <p className="text-base text-center flex items-center justify-center gap-2 flex-wrap">
          <FractionDisplay numerator={numCalc} denominator={denCalc} size="sm" />
          <span className="font-bold">=</span>
-         <FractionDisplay numerator={computed.numFinaleCorretto} denominator={computed.denFinaleCorretto} size="sm" />
+         <FractionDisplay numerator={computed.computed.numFinaleCorretto} denominator={computed.computed.denFinaleCorretto} size="sm" />
         </p>
        )}
       </>);
