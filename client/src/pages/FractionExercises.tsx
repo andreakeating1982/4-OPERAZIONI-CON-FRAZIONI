@@ -1562,7 +1562,7 @@ function MulDivExercise({
  const nd2 = Math.abs(den2 ?? 1);
 
  const dNum1S = num1IntS ?? (num1Semplificato !== null ? num1Semplificato :"...");
- const dDen2S = den2Sempl2 ?? (den2Semplificato !== null ? den2Semplificato :"...");
+ const dDen2S = den2IntS ?? den2Sempl2 ?? (den2Semplificato !== null ? den2Semplificato :"...");
  const dDen1S = den1IntS ?? (den1Semplificato !== null ? den1Semplificato :"...");
  const dNum2S = num2IntS ?? num2Sempl2 ?? (num2Semplificato !== null ? num2Semplificato :"...");
  const dNum3S = num3IntS ?? num3Sempl2 ?? (num3Semplificato !== null ? num3Semplificato :"...");
