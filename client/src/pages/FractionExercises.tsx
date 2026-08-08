@@ -1765,7 +1765,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
     {showPair2 && (
      <div className="space-y-2">
       <p className="text-sm font-medium text-amber-900/80">📐 Coppia 2: 2ª frazione (sempl.) ↔ 3ª frazione</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="flex flex-wrap justify-center gap-3">
        {/* S3: num3 ↔ den2S */}
        <div className="bg-green-50/60 border border-green-200 rounded-lg p-3">
         <p className="text-xs font-medium text-center mb-2">
@@ -1852,7 +1852,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
     )}
 
     {/* ═══ RICOPIA SUL QUADERNO ═══ */}
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct)} forceOpen={generatingPdf}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct) && (!showInternal || allInternalDone)} forceOpen={generatingPdf}>
      {(!(mcd1 > 1) && !(mcd2 > 1) && !(mcd3 > 1) && !(mcd4 > 1) && !(mcd5 > 1) && !(mcd6 > 1)) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
