@@ -1512,16 +1512,16 @@ function MulDivExercise({
  // Sequential cross-simplification: S3/S4 only visible after previous steps correct
  const s12Correct = num1Semplificato === num1Correct && den2Semplificato === den2Correct && den1Semplificato === den1Correct && num2Semplificato === num2Correct;
  // S3: cross-simplify num3 (3rd fraction numerator) with den1Correct (running den1 from S2)
- const divCom3_seq = computed.hasThird ? trovaDivisoriComuni(den1Correct, Math.abs(computed.actualNum3)) : 0;
- const num3Correct = divCom3_seq ? Math.round(Math.abs(computed.actualNum3) / divCom3_seq) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
- const den4Correct = divCom3_seq ? Math.round(den1Correct / divCom3_seq) : den1Correct;
+ const divCom3_seq = computed.hasThird ? gcd(den1Correct, Math.abs(computed.actualNum3)) : 0;
+ const num3Correct = divCom3_seq > 1 ? Math.round(Math.abs(computed.actualNum3) / divCom3_seq) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
+ const den4Correct = divCom3_seq > 1 ? Math.round(den1Correct / divCom3_seq) : den1Correct;
  const den1AfterS3 = den4Correct;
  const s3Correct = num3Semplificato === num3Correct && (den4Semplificato ?? 1) === den4Correct;
  const showS3 = computed.hasThird && s12Correct;
  // S4: cross-simplify num4 (4th fraction numerator) with den1AfterS3
- const divCom4_seq = computed.hasFourth ? trovaDivisoriComuni(den1AfterS3, Math.abs(computed.actualNum4)) : 0;
- const num4Correct = divCom4_seq ? Math.round(Math.abs(computed.actualNum4) / divCom4_seq) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
- const den3Correct = divCom4_seq ? Math.round(den1AfterS3 / divCom4_seq) : den1AfterS3;
+ const divCom4_seq = computed.hasFourth ? gcd(den1AfterS3, Math.abs(computed.actualNum4)) : 0;
+ const num4Correct = divCom4_seq > 1 ? Math.round(Math.abs(computed.actualNum4) / divCom4_seq) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
+ const den3Correct = divCom4_seq > 1 ? Math.round(den1AfterS3 / divCom4_seq) : den1AfterS3;
  const s4Correct = num4Semplificato === num4Correct && (den3Semplificato ?? 1) === den3Correct;
  const showS4 = computed.hasFourth && s12Correct && s3Correct;
 
@@ -1696,7 +1696,7 @@ function MulDivExercise({
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 3:</span>{" "}
-       {divCom3_seq
+       {divCom3_seq > 1
         ? <>divido sia il <span className="text-green-500 font-bold">numeratore {computed.actualNum3}</span> che il <span className="text-teal-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1Correct}</span> per <span className="font-bold">{divCom3_seq}</span>, cioè <span className="text-green-500 font-bold">{computed.actualNum3} : {divCom3_seq}</span> e <span className="text-teal-500 font-bold">{den1Correct} : {divCom3_seq}</span></>
         : <>DOVREI SEMPLIFICARE <span className="text-green-500 font-bold">NUMERATORE {computed.actualNum3}</span> E <span className="text-teal-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1Correct}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum3} E {den1Correct}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
@@ -1743,7 +1743,7 @@ function MulDivExercise({
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 4:</span>{" "}
-       {divCom4_seq
+       {divCom4_seq > 1
         ? <>divido sia il <span className="text-purple-500 font-bold">numeratore {computed.actualNum4}</span> che il <span className="text-pink-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1AfterS3}</span> per <span className="font-bold">{divCom4_seq}</span>, cioè <span className="text-purple-500 font-bold">{computed.actualNum4} : {divCom4_seq}</span> e <span className="text-pink-500 font-bold">{den1AfterS3} : {divCom4_seq}</span></>
         : <>DOVREI SEMPLIFICARE <span className="text-purple-500 font-bold">NUMERATORE {computed.actualNum4}</span> E <span className="text-pink-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1AfterS3}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum4} E {den1AfterS3}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
@@ -1787,7 +1787,7 @@ function MulDivExercise({
     )}
 
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s3Correct) && (!computed.hasFourth || s4Correct)} forceOpen={generatingPdf}>
-     {(!computed.divCom1 && !computed.divCom2 && !divCom3_seq && !divCom4_seq) ? (
+     {(!computed.divCom1 && !computed.divCom2 && !(divCom3_seq > 1) && !(divCom4_seq > 1)) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
