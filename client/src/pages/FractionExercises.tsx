@@ -488,81 +488,33 @@ const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
     bodyHtml += `</div>`;
    }
    notebookContents.forEach((el) => {
-    bodyHtml += `<div style="margin-bottom:20px;text-align:center;page-break-inside:avoid">${el.innerHTML}</div>`;
+    bodyHtml += `<div style="margin-bottom:24px;text-align:center;page-break-inside:avoid">${el.innerHTML}</div>`;
+   });
+
+   // Copia TUTTI i fogli di stile dalla pagina corrente
+   let stylesHtml = '';
+   document.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+    stylesHtml += link.outerHTML;
+   });
+   document.querySelectorAll('style').forEach((style) => {
+    const text = style.textContent || '';
+    if (text.includes('__vite') || text.length > 200000) return;
+    stylesHtml += `<style>${text}</style>`;
    });
 
    const printHtml = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Quaderno — Operazioni con le Frazioni</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+${stylesHtml}
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cambria Math',Cambria,serif;color:#1a1a1a;max-width:100%;margin:0 auto;text-align:center;line-height:1.8}
-.text-primary,.text-primary *{color:#92400e!important;font-weight:bold!important}
-.text-orange-400,.text-orange-400 *{color:#ea580c!important}
-.text-blue-400,.text-blue-400 *{color:#2563eb!important}
-.text-sky-400,.text-sky-400 *{color:#0284c7!important}
-.text-red-400,.text-red-400 *{color:#dc2626!important}
-.text-success{color:#16a34a!important}
-.text-destructive,.text-destructive *{color:#dc2626!important}
-.text-amber-900,.text-amber-900 *{color:#78350f!important}
-.font-bold{font-weight:bold!important}
-.font-mono{font-family:'Cambria Math',Cambria,serif!important}
-.font-serif{font-family:'Cambria Math',Cambria,serif!important}
-.font-semibold{font-weight:600!important}
-.bg-muted{background:#f1f5f9!important;padding:8px 14px!important;border-radius:8px!important;display:inline-block!important}
-.rounded-lg{border-radius:8px!important}
-.flex{display:flex!important;justify-content:center!important}
-.inline-flex{display:inline-flex!important}
-.items-center{align-items:center!important}
-.justify-center{justify-content:center!important}
-.flex-col{flex-direction:column!important}
-.gap-2{gap:8px!important}.gap-3{gap:12px!important}
-.border-t{border-top:1px solid #000!important}
-.border-black{border-color:#000!important}
-.text-center{text-align:center!important}
-.block{display:block!important}
-.inline-block{display:inline-block!important}
-.mt-0{margin-top:0!important}.mt-1{margin-top:8px!important}.mt-2{margin-top:14px!important}
-.pt-1{padding-top:8px!important}
-.px-3{padding-left:12px!important;padding-right:12px!important}
-.px-4{padding-left:16px!important;padding-right:16px!important}
-.py-1{padding-top:8px!important;padding-bottom:8px!important}
-.py-2{padding-top:14px!important;padding-bottom:14px!important}
-.my-0\.5{margin-top:4px!important;margin-bottom:4px!important}
-.my-2{margin-top:14px!important;margin-bottom:14px!important}
-.mb-2{margin-bottom:14px!important}.mb-3{margin-bottom:20px!important}
-.space-y-1>*+*{margin-top:8px!important}
-.space-y-1\.5>*+*{margin-top:12px!important}
-.space-y-2>*+*{margin-top:16px!important}
-.space-y-4>*+*{margin-top:24px!important}
-.leading-loose{line-height:2.5!important}
-.leading-relaxed{line-height:2.2!important}
-.opacity-80{opacity:.8!important}
-.text-sm{font-size:14px!important}
-.text-base{font-size:16px!important}
-.text-xl{font-size:20px!important}
-.text-2xl{font-size:24px!important}
-.mx-1{margin-left:4px!important;margin-right:4px!important}
-.px-1{padding-left:4px!important;padding-right:4px!important}
-.align-middle{vertical-align:middle!important}
-.w-full{width:100%!important}
-.w-10{width:40px!important}.w-12{width:48px!important}
-.h-\[2px\]{height:2px!important}
-.min-w-\[32px\]{min-width:32px!important}
-.min-w-\[40px\]{min-width:40px!important}
-.min-w-\[56px\]{min-width:56px!important}
-.min-w-\[72px\]{min-width:72px!important}
-.bg-black{background:#000!important}
-.bg-foreground\/70{background:rgba(0,0,0,.7)!important}
-.px-3\\\\.5{padding-left:14px!important;padding-right:14px!important}
-@media print{body{padding:0;font-size:14px;line-height:1.65}@page{size:A4;margin:2.5cm 2cm 2cm 2cm}}
+*{box-sizing:border-box}
+@media print{body{padding:0!important;font-size:14px;line-height:1.65;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@page{size:A4;margin:2.5cm 2cm 2cm 2cm}}
 </style></head>
-<body>${bodyHtml}<script>window.onload=function(){window.print()}</script></body></html>`;
+<body>${bodyHtml}<script>window.onload=function(){window.print()}<\/script></body></html>`;
 
    const w = window.open('', '_blank');
    if (w) { w.document.write(printHtml); w.document.close(); }
    setGeneratingPdf(false);
-  }, 300);
+  }, 400);
  }, []);
 
  // ─── Add/Sub verification ─────────────────────────────────────────
