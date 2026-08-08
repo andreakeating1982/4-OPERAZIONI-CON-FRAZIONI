@@ -1496,6 +1496,8 @@ function MulDivExercise({
  const dDen4S = den4Semplificato !== null ? den4Semplificato :"...";
  const dDen3S = den3Semplificato !== null ? den3Semplificato :"...";
  const dNum4S = num4Semplificato !== null ? num4Semplificato :"...";
+ // Most up-to-date den1 value after sequential simplifications
+ const dDen1Final = computed.hasFourth && den3Semplificato !== null ? den3Semplificato : computed.hasThird && den4Semplificato !== null ? den4Semplificato : dDen1S;
 
  // Display the initial operation with colors
  const displayNum2 = computed.displayNum2;
@@ -1505,12 +1507,23 @@ function MulDivExercise({
  // Valori corretti per visibilità NotebookGuide (solo quando l'utente inserisce il risultato esatto)
  const num1Correct = computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1;
  const den2Correct = computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2;
- const num3Correct = computed.divCom3 ? Math.round(Math.abs(computed.actualNum3) / computed.divCom3) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
- const den4Correct = computed.divCom3 ? Math.round(computed.actualDen3 / computed.divCom3) : computed.actualDen3;
- const den3Correct = computed.divCom4 ? Math.round(nd1 / computed.divCom4) : nd1;
- const num4Correct = computed.divCom4 ? Math.round(Math.abs(computed.actualNum4) / computed.divCom4) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
  const den1Correct = computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1;
  const num2Correct = computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
+ // Sequential cross-simplification: S3/S4 only visible after previous steps correct
+ const s12Correct = num1Semplificato === num1Correct && den2Semplificato === den2Correct && den1Semplificato === den1Correct && num2Semplificato === num2Correct;
+ // S3: cross-simplify num3 (3rd fraction numerator) with den1Correct (running den1 from S2)
+ const divCom3_seq = computed.hasThird ? gcd(den1Correct, Math.abs(computed.actualNum3)) : 0;
+ const num3Correct = divCom3_seq ? Math.round(Math.abs(computed.actualNum3) / divCom3_seq) * (computed.actualNum3 < 0 ? -1 : 1) : computed.actualNum3;
+ const den4Correct = divCom3_seq ? Math.round(den1Correct / divCom3_seq) : den1Correct;
+ const den1AfterS3 = den4Correct;
+ const s3Correct = num3Semplificato === num3Correct && (den4Semplificato ?? 1) === den4Correct;
+ const showS3 = computed.hasThird && s12Correct;
+ // S4: cross-simplify num4 (4th fraction numerator) with den1AfterS3
+ const divCom4_seq = computed.hasFourth ? gcd(den1AfterS3, Math.abs(computed.actualNum4)) : 0;
+ const num4Correct = divCom4_seq ? Math.round(Math.abs(computed.actualNum4) / divCom4_seq) * (computed.actualNum4 < 0 ? -1 : 1) : computed.actualNum4;
+ const den3Correct = divCom4_seq ? Math.round(den1AfterS3 / divCom4_seq) : den1AfterS3;
+ const s4Correct = num4Semplificato === num4Correct && (den3Semplificato ?? 1) === den3Correct;
+ const showS4 = computed.hasFourth && s12Correct && s3Correct;
 
  // Auto-verifica: quando entrambi i valori sono inseriti, determina automaticamente il risultato
  const lastVerifiedRef = useRef<string>("");
@@ -1679,13 +1692,13 @@ function MulDivExercise({
       </div>
      </div>
     </div>
-    {computed.hasThird && (
+    {showS3 && (
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 3:</span>{" "}
-       {computed.divCom3
-        ? <>divido sia il <span className="text-green-500 font-bold">numeratore {computed.actualNum3}</span> che il <span className="text-teal-500 font-bold">denominatore {computed.actualDen3}</span> per <span className="font-bold">{computed.divCom3}</span>, cioè <span className="text-green-500 font-bold">{computed.actualNum3} : {computed.divCom3}</span> e <span className="text-teal-500 font-bold">{computed.actualDen3} : {computed.divCom3}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-green-500 font-bold">NUMERATORE {computed.actualNum3}</span> E <span className="text-teal-500 font-bold">DENOMINATORE {computed.actualDen3}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum3} E {computed.actualDen3}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+       {divCom3_seq
+        ? <>divido sia il <span className="text-green-500 font-bold">numeratore {computed.actualNum3}</span> che il <span className="text-teal-500 font-bold">den1 semplificato {den1Correct}</span> per <span className="font-bold">{divCom3_seq}</span>, cioè <span className="text-green-500 font-bold">{computed.actualNum3} : {divCom3_seq}</span> e <span className="text-teal-500 font-bold">{den1Correct} : {divCom3_seq}</span></>
+        : <>DOVREI SEMPLIFICARE <span className="text-green-500 font-bold">NUMERATORE {computed.actualNum3}</span> E <span className="text-teal-500 font-bold">DEN1 SEMPLIFICATO {den1Correct}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum3} E {den1Correct}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
@@ -1710,7 +1723,7 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den4Semplificato}
         onChange={setDen4Semplificato}
-        label="Denominatore verde acqua"
+        label="Nuovo den1"
         colorClass="text-teal-500"
         labelOnBottom
        />
@@ -1726,13 +1739,13 @@ function MulDivExercise({
      </div>
     )}
 
-{computed.hasFourth && (
+{showS4 && (
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 4:</span>{" "}
-       {computed.divCom4
-        ? <>divido sia il <span className="text-purple-500 font-bold">numeratore {computed.actualNum4}</span> che il <span className="text-pink-500 font-bold">denominatore {computed.actualDen4}</span> per <span className="font-bold">{computed.divCom4}</span>, cioè <span className="text-purple-500 font-bold">{computed.actualNum4} : {computed.divCom4}</span> e <span className="text-pink-500 font-bold">{computed.actualDen4} : {computed.divCom4}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-purple-500 font-bold">NUMERATORE {computed.actualNum4}</span> E <span className="text-pink-500 font-bold">DENOMINATORE {computed.actualDen4}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum4} E {computed.actualDen4}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+       {divCom4_seq
+        ? <>divido sia il <span className="text-purple-500 font-bold">numeratore {computed.actualNum4}</span> che il <span className="text-pink-500 font-bold">den1 semplificato {den1AfterS3}</span> per <span className="font-bold">{divCom4_seq}</span>, cioè <span className="text-purple-500 font-bold">{computed.actualNum4} : {divCom4_seq}</span> e <span className="text-pink-500 font-bold">{den1AfterS3} : {divCom4_seq}</span></>
+        : <>DOVREI SEMPLIFICARE <span className="text-purple-500 font-bold">NUMERATORE {computed.actualNum4}</span> E <span className="text-pink-500 font-bold">DEN1 SEMPLIFICATO {den1AfterS3}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum4} E {den1AfterS3}. QUINDI RISCRIVO GLI STESSI NUMERI</>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
@@ -1757,7 +1770,7 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den3Semplificato}
         onChange={setDen3Semplificato}
-        label="Denominatore fucsia"
+        label="Nuovo den1"
         colorClass="text-pink-500"
         labelOnBottom
        />
@@ -1773,8 +1786,8 @@ function MulDivExercise({
      </div>
     )}
 
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={den1Semplificato === den1Correct && num2Semplificato === num2Correct && (!computed.hasThird || (num3Semplificato === num3Correct && den4Semplificato === den4Correct)) && (!computed.hasFourth || (num4Semplificato === num4Correct && den3Semplificato === den3Correct))} forceOpen={generatingPdf}>
-     {(!computed.divCom1 && !computed.divCom2 && !computed.divCom3 && !computed.divCom4) ? (
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s3Correct) && (!computed.hasFourth || s4Correct)} forceOpen={generatingPdf}>
+     {(!computed.divCom1 && !computed.divCom2 && !divCom3_seq && !divCom4_seq) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
@@ -1785,7 +1798,7 @@ function MulDivExercise({
          {(dDen1S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span>
+          <span className="text-sky-400 font-bold font-serif text-base">{dDen1Final}</span>
          </>
          )}
         </div>
@@ -1807,7 +1820,7 @@ function MulDivExercise({
          {(dDen4S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-teal-500 font-bold font-serif text-base">{dDen4S}</span>
+          <span className="text-teal-500 font-bold font-serif text-base">{computed.displayDen3}</span>
          </>
          )}
         </div>
@@ -1821,7 +1834,7 @@ function MulDivExercise({
          {(dDen3S !== 1) && (
          <>
           <div className="w-10 h-[2px] bg-black my-0.5"/>
-          <span className="text-pink-500 font-bold font-serif text-base">{dDen3S}</span>
+          <span className="text-pink-500 font-bold font-serif text-base">{computed.displayDen4}</span>
          </>
          )}
         </div>
@@ -1858,7 +1871,7 @@ function MulDivExercise({
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
-       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{dDen4S}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{dDen3S}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
+       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
@@ -1900,8 +1913,8 @@ function MulDivExercise({
       const ds2 = den2Semplificato ?? 1;
       const ns3 = computed.hasThird ? (num3Semplificato ?? 1) : 1;
       const ns4 = computed.hasFourth ? (num4Semplificato ?? 1) : 1;
-      const ds3 = computed.hasThird ? (den3Semplificato ?? 1) : 1;
-      const ds4 = computed.hasFourth ? (den4Semplificato ?? 1) : 1;
+      const ds3 = computed.hasThird ? computed.displayDen3 : 1;
+      const ds4 = computed.hasFourth ? computed.displayDen4 : 1;
       const numCalc = ns1 * ns2 * ns3 * ns4;
       const denCalc = ds1 * ds2 * ds3 * ds4;
       const allEnt = num1Semplificato !== null && num2Semplificato !== null && (!computed.hasThird || num3Semplificato !== null) && (!computed.hasFourth || num4Semplificato !== null) && den1Semplificato !== null && den2Semplificato !== null && (!computed.hasThird || den4Semplificato !== null) && (!computed.hasFourth || den3Semplificato !== null);
