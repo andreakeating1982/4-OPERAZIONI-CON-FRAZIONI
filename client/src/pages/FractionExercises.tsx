@@ -334,10 +334,10 @@ export default function FractionExercises() {
    }
   }
 
-  const divCom1 = trovaDivisoriComuni(num1, actualDen2);
-  const divCom2 = trovaDivisoriComuni(nd1, actualNum2);
-  const divCom3 = hasThird ? trovaDivisoriComuni(nd1, actualNum3) : 0;
-  const divCom4 = hasFourth ? trovaDivisoriComuni(nd1, actualNum4) : 0;
+  const divCom1 = gcd(num1, actualDen2);
+  const divCom2 = gcd(nd1, actualNum2);
+  const divCom3 = hasThird ? gcd(nd1, actualNum3) : 0;
+  const divCom4 = hasFourth ? gcd(nd1, actualNum4) : 0;
 
   const numFinaleRaw = round2(num1 * actualNum2 * (hasThird ? actualNum3 : 1) * (hasFourth ? actualNum4 : 1));
   const denFinaleRaw = round2(nd1 * actualDen2 * (hasThird ? actualDen3 : 1) * (hasFourth ? actualDen4 : 1));
@@ -1505,10 +1505,10 @@ function MulDivExercise({
  const wrapParens = num2 < 0 && op ==="/";
 
  // Valori corretti per visibilità NotebookGuide (solo quando l'utente inserisce il risultato esatto)
- const num1Correct = computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1;
- const den2Correct = computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2;
- const den1Correct = computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1;
- const num2Correct = computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
+ const num1Correct = computed.divCom1 > 1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1;
+ const den2Correct = computed.divCom1 > 1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2;
+ const den1Correct = computed.divCom2 > 1 ? Math.round(nd1 / computed.divCom2) : nd1;
+ const num2Correct = computed.divCom2 > 1 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2;
  // Sequential cross-simplification: S3/S4 only visible after previous steps correct
  const s12Correct = num1Semplificato === num1Correct && den2Semplificato === den2Correct && den1Semplificato === den1Correct && num2Semplificato === num2Correct;
  // S3: cross-simplify num3 (3rd fraction numerator) with den1Correct (running den1 from S2)
@@ -1606,25 +1606,25 @@ function MulDivExercise({
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 1:</span>{" "}
-       {computed.divCom1
-        ? <>divido sia il <span className="text-orange-400 font-bold">numeratore {num1}</span> che il <span className="text-blue-400 font-bold">denominatore {computed.actualDen2}</span> per <span className="font-bold">{computed.divCom1}</span>, cioè <span className="text-orange-400 font-bold">{num1} : {computed.divCom1}</span> e <span className="text-blue-400 font-bold">{computed.actualDen2} : {computed.divCom1}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-orange-400 font-bold">NUMERATORE {num1}</span> E <span className="text-blue-400 font-bold">DENOMINATORE {computed.actualDen2}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {num1} E {computed.actualDen2}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+       {computed.divCom1 > 1
+        ? <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE:</span> divido il <span className="text-orange-400 font-bold">NUMERATORE {num1}</span> e il <span className="text-blue-400 font-bold">DENOMINATORE {computed.actualDen2}</span> per <span className="font-bold">{computed.divCom1}</span> → <span className="text-orange-400 font-bold">{num1} : {computed.divCom1}</span> e <span className="text-blue-400 font-bold">{computed.actualDen2} : {computed.divCom1}</span></>
+        : <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE:</span> NON C'È UN DIVISORE COMUNE tra <span className="text-orange-400 font-bold">{num1}</span> e <span className="text-blue-400 font-bold">{computed.actualDen2}</span>. Quindi <b>riscrivo gli stessi numeri</b></>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
        <NumberInputCanvas
         value={num1Semplificato}
         onChange={setNum1Semplificato}
-        label="Numeratore arancione"
+        label="Num. 1ª fraz. sempl."
         colorClass="text-orange-400"
         labelOnTop
        />
        {num1Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         num1Semplificato === (computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ?"text-success":"text-destructive",
+         num1Semplificato === (computed.divCom1 > 1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ?"text-success":"text-destructive",
         )}>
-         {num1Semplificato === (computed.divCom1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {num1Semplificato === (computed.divCom1 > 1 ? Math.round(Math.abs(num1) / computed.divCom1) * (num1 < 0 ? -1 : 1) : num1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
        {/* Linea di frazione */}
@@ -1639,9 +1639,9 @@ function MulDivExercise({
        {den2Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         (den2Semplificato ?? 1) === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"text-success":"text-destructive",
+         (den2Semplificato ?? 1) === (computed.divCom1 > 1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"text-success":"text-destructive",
         )}>
-         {(den2Semplificato ?? 1) === (computed.divCom1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {(den2Semplificato ?? 1) === (computed.divCom1 > 1 ? Math.round(computed.actualDen2 / computed.divCom1) : computed.actualDen2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
       </div>
@@ -1650,16 +1650,16 @@ function MulDivExercise({
      <div>
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 2:</span>{" "}
-       {computed.divCom2
-        ? <>divido sia il <span className="text-red-400 font-bold">numeratore {computed.actualNum2}</span> che il <span className="text-sky-400 font-bold">denominatore {nd1}</span> per <span className="font-bold">{computed.divCom2}</span>, cioè <span className="text-red-400 font-bold">{computed.actualNum2} : {computed.divCom2}</span> e <span className="text-sky-400 font-bold">{nd1} : {computed.divCom2}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-red-400 font-bold">NUMERATORE {computed.actualNum2}</span> E <span className="text-sky-400 font-bold">DENOMINATORE {nd1}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum2} E {nd1}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+       {computed.divCom2 > 1
+        ? <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE:</span> divido il <span className="text-red-400 font-bold">NUMERATORE {computed.actualNum2}</span> e il <span className="text-sky-400 font-bold">DENOMINATORE {nd1}</span> per <span className="font-bold">{computed.divCom2}</span> → <span className="text-red-400 font-bold">{computed.actualNum2} : {computed.divCom2}</span> e <span className="text-sky-400 font-bold">{nd1} : {computed.divCom2}</span></>
+        : <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE:</span> NON C'È UN DIVISORE COMUNE tra <span className="text-red-400 font-bold">{computed.actualNum2}</span> e <span className="text-sky-400 font-bold">{nd1}</span>. Quindi <b>riscrivo gli stessi numeri</b></>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
        <NumberInputCanvas
         value={num2Semplificato}
         onChange={setNum2Semplificato}
-        label="Numeratore rosso"
+        label="Num. 2ª fraz. sempl."
         colorClass="text-red-400"
         labelOnTop
         allowNegative
@@ -1667,9 +1667,9 @@ function MulDivExercise({
        {num2Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         num2Semplificato === (computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ?"text-success":"text-destructive",
+         num2Semplificato === (computed.divCom2 > 1 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ?"text-success":"text-destructive",
         )}>
-         {num2Semplificato === (computed.divCom2 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {num2Semplificato === (computed.divCom2 > 1 ? Math.round(Math.abs(computed.actualNum2) / computed.divCom2) * (computed.actualNum2 < 0 ? -1 : 1) : computed.actualNum2) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
        {/* Linea di frazione */}
@@ -1677,16 +1677,16 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den1Semplificato}
         onChange={setDen1Semplificato}
-        label="Denominatore azzurro"
+        label="Den. 1ª fraz. sempl."
         colorClass="text-sky-400"
         labelOnBottom
        />
        {den1Semplificato !== null && (
         <p className={cn(
         "text-base font-bold text-center",
-         (den1Semplificato ?? 1) === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"text-success":"text-destructive",
+         (den1Semplificato ?? 1) === (computed.divCom2 > 1 ? Math.round(nd1 / computed.divCom2) : nd1) ?"text-success":"text-destructive",
         )}>
-         {(den1Semplificato ?? 1) === (computed.divCom2 ? Math.round(nd1 / computed.divCom2) : nd1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
+         {(den1Semplificato ?? 1) === (computed.divCom2 > 1 ? Math.round(nd1 / computed.divCom2) : nd1) ?"CORRETTO": `RISULTATO SBAGLIATO. CALCOLA DI NUOVO`}
         </p>
        )}
       </div>
@@ -1697,15 +1697,15 @@ function MulDivExercise({
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 3:</span>{" "}
        {divCom3_seq > 1
-        ? <>divido sia il <span className="text-green-500 font-bold">numeratore {computed.actualNum3}</span> che il <span className="text-teal-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1Correct}</span> per <span className="font-bold">{divCom3_seq}</span>, cioè <span className="text-green-500 font-bold">{computed.actualNum3} : {divCom3_seq}</span> e <span className="text-teal-500 font-bold">{den1Correct} : {divCom3_seq}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-green-500 font-bold">NUMERATORE {computed.actualNum3}</span> E <span className="text-teal-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1Correct}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum3} E {den1Correct}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+        ? <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE (3ª frazione):</span> divido il <span className="text-green-500 font-bold">NUMERATORE {computed.actualNum3}</span> e il <span className="text-teal-500 font-bold">DENOMINATORE {den1Correct}</span> per <span className="font-bold">{divCom3_seq}</span> → <span className="text-green-500 font-bold">{computed.actualNum3} : {divCom3_seq}</span> e <span className="text-teal-500 font-bold">{den1Correct} : {divCom3_seq}</span></>
+        : <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE (3ª frazione):</span> NON C'È UN DIVISORE COMUNE tra <span className="text-green-500 font-bold">{computed.actualNum3}</span> e <span className="text-teal-500 font-bold">{den1Correct}</span>. Quindi <b>riscrivo gli stessi numeri</b></>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
        <NumberInputCanvas
         value={num3Semplificato}
         onChange={setNum3Semplificato}
-        label="Numeratore verde"
+        label="Num. 3ª fraz. sempl."
         colorClass="text-green-500"
         labelOnTop
         allowNegative
@@ -1723,7 +1723,7 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den4Semplificato}
         onChange={setDen4Semplificato}
-        label="Nuovo den1"
+        label="Den. 1ª fraz. sempl."
         colorClass="text-teal-500"
         labelOnBottom
        />
@@ -1744,15 +1744,15 @@ function MulDivExercise({
       <p className="text-base mb-2">
        <span className="text-amber-900 font-bold">SEMPLIFICAZIONE 4:</span>{" "}
        {divCom4_seq > 1
-        ? <>divido sia il <span className="text-purple-500 font-bold">numeratore {computed.actualNum4}</span> che il <span className="text-pink-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1AfterS3}</span> per <span className="font-bold">{divCom4_seq}</span>, cioè <span className="text-purple-500 font-bold">{computed.actualNum4} : {divCom4_seq}</span> e <span className="text-pink-500 font-bold">{den1AfterS3} : {divCom4_seq}</span></>
-        : <>DOVREI SEMPLIFICARE <span className="text-purple-500 font-bold">NUMERATORE {computed.actualNum4}</span> E <span className="text-pink-500 font-bold">DENOMINATORE PRIMA SEMPLIFICAZIONE {den1AfterS3}</span>. MA NON C'È NESSUN DIVISORE COMUNE TRA {computed.actualNum4} E {den1AfterS3}. QUINDI RISCRIVO GLI STESSI NUMERI</>
+        ? <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE (4ª frazione):</span> divido il <span className="text-purple-500 font-bold">NUMERATORE {computed.actualNum4}</span> e il <span className="text-pink-500 font-bold">DENOMINATORE {den1AfterS3}</span> per <span className="font-bold">{divCom4_seq}</span> → <span className="text-purple-500 font-bold">{computed.actualNum4} : {divCom4_seq}</span> e <span className="text-pink-500 font-bold">{den1AfterS3} : {divCom4_seq}</span></>
+        : <>🔍 <span className="text-amber-900 font-bold">SEMPLIFICAZIONE A CROCE (4ª frazione):</span> NON C'È UN DIVISORE COMUNE tra <span className="text-purple-500 font-bold">{computed.actualNum4}</span> e <span className="text-pink-500 font-bold">{den1AfterS3}</span>. Quindi <b>riscrivo gli stessi numeri</b></>
        }
       </p>
       <div className="flex flex-col items-center gap-3">
        <NumberInputCanvas
         value={num4Semplificato}
         onChange={setNum4Semplificato}
-        label="Numeratore viola"
+        label="Num. 4ª fraz. sempl."
         colorClass="text-purple-500"
         labelOnTop
         allowNegative
@@ -1770,7 +1770,7 @@ function MulDivExercise({
        <NumberInputCanvas
         value={den3Semplificato}
         onChange={setDen3Semplificato}
-        label="Nuovo den1"
+        label="Den. 1ª fraz. sempl."
         colorClass="text-pink-500"
         labelOnBottom
        />
@@ -1787,7 +1787,7 @@ function MulDivExercise({
     )}
 
     <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s3Correct) && (!computed.hasFourth || s4Correct)} forceOpen={generatingPdf}>
-     {(!computed.divCom1 && !computed.divCom2 && !(divCom3_seq > 1) && !(divCom4_seq > 1)) ? (
+     {(!(computed.divCom1 > 1) && !(computed.divCom2 > 1) && !(divCom3_seq > 1) && !(divCom4_seq > 1)) ? (
       <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
      ) : (
       <>
