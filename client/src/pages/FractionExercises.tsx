@@ -1571,7 +1571,7 @@ function MulDivExercise({
  const dNum4S = num4IntS ?? (num4Semplificato !== null ? num4Semplificato :"...");
  // Most up-to-date den1 value after sequential simplifications
  const dDen1Final = dDen1S;
-const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
+const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato : "...");
 
  // Display the initial operation with colors
  const displayNum2 = computed.displayNum2;
@@ -1947,20 +1947,20 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
         <span className="text-base font-bold">×</span>
         {/* 2nd fraction */}
         <div className="flex flex-col items-center">
-         <span className="text-red-400 font-bold font-serif text-base">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>
-         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span></>)}
+         <span className="text-red-400 font-bold font-serif text-base">{dNum2S}</span>
+         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{dDen2S}</span></>)}
         </div>
         {/* 3rd fraction */}
         {computed.hasThird && (<><span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
-         <span className="text-green-500 font-bold font-serif text-base">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span>
-         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}
+         <span className="text-green-500 font-bold font-serif text-base">{dNum3S}</span>
+         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{dDen3S}</span></>)}
         </div></>)}
         {/* 4th fraction */}
         {computed.hasFourth && (<><span className="text-base font-bold">×</span>
         <div className="flex flex-col items-center">
          <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
-         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S_final}</span></>)}
+         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S}</span></>)}
         </div></>)}
        </div>
       </div>
@@ -1979,7 +1979,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE NUMERATORI:</span>{" "}
-       <span className="text-orange-400 font-bold">{dNum1S}</span> · <span className="text-red-400 font-bold">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>{computed.hasThird && (<> · <span className="text-green-500 font-bold">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span></>)}{computed.hasFourth && (<> · <span className="text-purple-500 font-bold">{dNum4S}</span></>)} = <span>RISULTATO NUMERATORE FINALE</span>
+       <span className="text-orange-400 font-bold">{dNum1S}</span> · <span className="text-red-400 font-bold">{dNum2S}</span>{computed.hasThird && (<> · <span className="text-green-500 font-bold">{dNum3S}</span></>)}{computed.hasFourth && (<> · <span className="text-purple-500 font-bold">{dNum4S}</span></>)} = <span>RISULTATO NUMERATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={numeratoreFinaleUtente}
@@ -1993,7 +1993,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
      <div className="flex flex-col items-center">
       <p className="text-base mb-2">
        <span className="text-amber-900">MOLTIPLICAZIONE DENOMINATORI:</span>{" "}
-       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{dDen4S_final !== "..." ? dDen4S_final : computed.displayDen4}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
+       <span className="text-sky-400 font-bold">{dDen1S}</span> · <span className="text-blue-400 font-bold">{dDen2S}</span>{computed.hasThird && (<> · <span className="text-teal-500 font-bold">{dDen3S}</span></>)}{computed.hasFourth && (<> · <span className="text-pink-500 font-bold">{dDen4S}</span></>)} = <span>RISULTATO DENOMINATORE FINALE</span>
       </p>
       <NumberInputCanvas
        value={denominatoreFinaleUtente}
