@@ -1681,7 +1681,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
       <FractionDisplay numerator={computed.displayNum4} denominator={computed.displayDen4} numClass="text-purple-500"denClass="text-pink-500"/>
      </>)}
     </div>
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={num1Semplificato === num1Correct && den2Semplificato === den2Correct} forceOpen={generatingPdf}>
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={true} forceOpen={generatingPdf}>
      {op ==="/"&& (
       <div className="flex justify-center my-2">
        <div className="flex items-center gap-2 text-base font-mono bg-muted px-3.5 py-2 rounded-lg">
@@ -1765,7 +1765,7 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
     {showPair2 && (
      <div className="space-y-2">
       <p className="text-sm font-medium text-amber-900/80">📐 Coppia 2: 2ª frazione (sempl.) ↔ 3ª frazione</p>
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
        {/* S3: num3 ↔ den2S */}
        <div className="bg-green-50/60 border border-green-200 rounded-lg p-3">
         <p className="text-xs font-medium text-center mb-2">
@@ -1851,49 +1851,12 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
      </div>
     )}
 
-    {/* ═══ RICOPIA SUL QUADERNO ═══ */}
-    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct) && (!showInternal || allInternalDone)} forceOpen={generatingPdf}>
-     {(!(mcd1 > 1) && !(mcd2 > 1) && !(mcd3 > 1) && !(mcd4 > 1) && !(mcd5 > 1) && !(mcd6 > 1)) ? (
-      <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
-     ) : (
-      <>
-      <div className="flex justify-center my-2">
-       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
-        {/* 1st fraction */}
-        <div className="flex flex-col items-center">
-         <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
-         {(dDen1S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span></>)}
-        </div>
-        <span className="text-base font-bold">×</span>
-        {/* 2nd fraction */}
-        <div className="flex flex-col items-center">
-         <span className="text-red-400 font-bold font-serif text-base">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>
-         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span></>)}
-        </div>
-        {/* 3rd fraction */}
-        {computed.hasThird && (<><span className="text-base font-bold">×</span>
-        <div className="flex flex-col items-center">
-         <span className="text-green-500 font-bold font-serif text-base">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span>
-         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}
-        </div></>)}
-        {/* 4th fraction */}
-        {computed.hasFourth && (<><span className="text-base font-bold">×</span>
-        <div className="flex flex-col items-center">
-         <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
-         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S_final}</span></>)}
-        </div></>)}
-       </div>
-      </div>
-      </>
-     )}
-    </NotebookGuide>
-
     {/* INTERNAL SIMPLIFICATION */}
     {showInternal && (
      <div className="space-y-2 border-2 border-amber-300 rounded-lg p-4 bg-amber-50/40">
       <p className="text-sm font-bold text-amber-900">🔍 SEMPLIFICAZIONE INTERNA DELLE FRAZIONI</p>
       <p className="text-xs text-muted-foreground">Dopo le semplificazioni a croce, alcune frazioni possono ancora essere semplificate tra numeratore e denominatore.</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="flex flex-wrap justify-center gap-3">
        {gcdInt1 > 1 && (
         <div className="bg-orange-50/60 border border-orange-200 rounded-lg p-3">
          <p className="text-xs font-medium text-center mb-2">
@@ -1968,7 +1931,46 @@ const dDen4S_final = den4Semplificato !== null ? den4Semplificato : "...";
 
    </div>
 
-   {/* Step 3: Final multiplication */}
+   {/* ═══ RICOPIA SUL QUADERNO ═══ */}
+    <NotebookGuide title="RICOPIA SUL QUADERNO:"visible={s12Correct && (!computed.hasThird || s34Correct) && (!computed.hasFourth || s56Correct) && (!showInternal || allInternalDone)} forceOpen={generatingPdf}>
+     {(!(mcd1 > 1) && !(mcd2 > 1) && !(mcd3 > 1) && !(mcd4 > 1) && !(mcd5 > 1) && !(mcd6 > 1)) ? (
+      <p className="text-base text-center text-primary py-1">NESSUNA SEMPLIFICAZIONE DA FARE</p>
+     ) : (
+      <>
+      <div className="flex justify-center my-2">
+       <div className="flex items-center gap-2 text-base bg-muted px-3.5 py-2 rounded-lg flex-wrap justify-center">
+        {/* 1st fraction */}
+        <div className="flex flex-col items-center">
+         <span className="text-orange-400 font-bold font-serif text-base">{dNum1S}</span>
+         {(dDen1S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-sky-400 font-bold font-serif text-base">{dDen1S}</span></>)}
+        </div>
+        <span className="text-base font-bold">×</span>
+        {/* 2nd fraction */}
+        <div className="flex flex-col items-center">
+         <span className="text-red-400 font-bold font-serif text-base">{num2Sempl2 !== null ? num2Sempl2 : dNum2S}</span>
+         {(dDen2S !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-blue-400 font-bold font-serif text-base">{den2Sempl2 !== null ? den2Sempl2 : dDen2S}</span></>)}
+        </div>
+        {/* 3rd fraction */}
+        {computed.hasThird && (<><span className="text-base font-bold">×</span>
+        <div className="flex flex-col items-center">
+         <span className="text-green-500 font-bold font-serif text-base">{num3Sempl2 !== null ? num3Sempl2 : dNum3S}</span>
+         {(computed.displayDen3 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-teal-500 font-bold font-serif text-base">{den3Sempl2 !== null ? den3Sempl2 : computed.displayDen3}</span></>)}
+        </div></>)}
+        {/* 4th fraction */}
+        {computed.hasFourth && (<><span className="text-base font-bold">×</span>
+        <div className="flex flex-col items-center">
+         <span className="text-purple-500 font-bold font-serif text-base">{dNum4S}</span>
+         {(computed.displayDen4 !== 1) && (<><div className="w-10 h-[2px] bg-black my-0.5"/><span className="text-pink-500 font-bold font-serif text-base">{dDen4S_final}</span></>)}
+        </div></>)}
+       </div>
+      </div>
+      </>
+     )}
+    </NotebookGuide>
+
+    
+
+    {/* Step 3: Final multiplication */}
    <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
     <p className="text-base font-bold text-primary">3. Moltiplicazione finale</p>
 
