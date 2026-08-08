@@ -1620,7 +1620,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
  return (
   <div className="space-y-5 max-w-2xl mx-auto">
    {/* Step 1: Initial multiplication */}
-   <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose max-w-md mx-auto">
+   <div className="p-4 rounded-xl bg-card/40 border border-border space-y-6 leading-loose">
     <p className="text-base font-bold text-primary">1. Moltiplicazione e inversione</p>
 
     {/* Notebook Guide: Step 1 */}
