@@ -3,7 +3,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { AccessibilityToolbar } from "./components/AccessibilityToolbar";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { AccessibilityProvider } from "./contexts/AccessibilityContext";
 import Home from "./pages/Home";
 import FractionExercises from "./pages/FractionExercises";
 import WelcomePage from "./pages/WelcomePage";
@@ -34,8 +36,11 @@ function App() {
         defaultTheme="light"
       >
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <AccessibilityProvider>
+            <Toaster />
+            <AccessibilityToolbar />
+            <Router />
+          </AccessibilityProvider>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

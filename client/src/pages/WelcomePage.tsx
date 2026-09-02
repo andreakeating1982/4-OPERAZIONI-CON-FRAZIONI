@@ -43,7 +43,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <main className="lf-welcome flex min-h-[calc(100dvh-7rem)] items-center justify-center bg-background p-4 sm:min-h-[calc(100dvh-4.5rem)]">
       <div className="bg-[#FAF8F5] border border-[#E5E0D8] rounded-[20px] p-5 md:p-6 w-full max-w-[400px] shadow-[0_8px_25px_rgba(43,36,33,0.06)] flex flex-col items-center text-center">
         {/* Book icon — identico all'originale */}
         <div className="bg-[#F0E5DF] p-2.5 rounded-[12px] mb-3">
@@ -79,13 +79,15 @@ export default function WelcomePage() {
             value={cognome}
             onChange={(e) => setCognome(e.target.value)}
             placeholder="Cognome"
-            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
+            aria-label="Cognome"
+            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[OpenDyslexic,Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
           />
           <input
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             placeholder="Nome"
-            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
+            aria-label="Nome"
+            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[OpenDyslexic,Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
           />
         </div>
 
@@ -95,13 +97,15 @@ export default function WelcomePage() {
             value={data}
             onChange={(e) => setData(e.target.value)}
             placeholder="Data (es. 31/07/2026)"
-            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
+            aria-label="Data"
+            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[OpenDyslexic,Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
           />
           <input
             value={classe}
             onChange={(e) => setClasse(e.target.value)}
             placeholder="Classe (es. 2A)"
-            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
+            aria-label="Classe"
+            className="flex-1 bg-[#FAF8F5] border border-[#D6CEC4] rounded-[10px] px-3 py-2.5 text-sm text-foreground placeholder:text-[#8C827A] outline-none text-center font-[OpenDyslexic,Cambria,Georgia,serif] focus:border-[#D4B2A0] focus:ring-2 focus:ring-[#D4B2A0]/20 transition-all"
           />
         </div>
 
@@ -119,6 +123,6 @@ export default function WelcomePage() {
           ENTRA
         </button>
       </div>
-    </div>
+    </main>
   );
 }

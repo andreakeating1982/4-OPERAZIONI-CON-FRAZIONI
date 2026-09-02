@@ -503,13 +503,15 @@ const [num3Sempl2, setNum3Sempl2] = useState<number | null>(null);
    });
 
    const printHtml = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Quaderno — Operazioni con le Frazioni</title>
+<html><head><meta charset="utf-8"><base href="${window.location.origin}/"><title>Quaderno — Operazioni con le Frazioni</title>
 ${stylesHtml}
 <style>
+@font-face{font-family:'OpenDyslexic';src:url('/fonts/OpenDyslexic-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'OpenDyslexic';src:url('/fonts/OpenDyslexic-Bold.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
 *{box-sizing:border-box}
-body{font-family:'Cambria Math',Cambria,serif!important;font-size:12pt!important;color:#1a1a1a;max-width:100%;margin:0 auto;text-align:center;line-height:1.6;background:#fff}
-/* Forza Cambria Math 12pt su OGNI elemento testuale */
-*,*::before,*::after{font-family:'Cambria Math',Cambria,serif!important}
+body{font-family:'OpenDyslexic','Cambria Math',Cambria,serif!important;font-size:12pt!important;color:#1a1a1a;max-width:100%;margin:0 auto;text-align:center;line-height:1.6;background:#fff}
+/* Forza OpenDyslexic (fallback Cambria Math) 12pt su OGNI elemento testuale */
+*,*::before,*::after{font-family:'OpenDyslexic','Cambria Math',Cambria,serif!important}
 body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u,small,sup,sub,code,pre,blockquote{font-size:12pt!important;line-height:1.55!important}
 /* Preserva la dimensione delle linee di frazione (non testuali) */
 .fraction-line,.frac-line,[class*="h-["]{font-size:inherit!important}
