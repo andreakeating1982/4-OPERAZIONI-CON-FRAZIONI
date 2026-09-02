@@ -954,10 +954,6 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
     )}
    </main>
 
-   {/* Footer */}
-   <footer className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-    Realizzato da Andrea Centinaro
-   </footer>
   </div>
  );
 }
