@@ -1,0 +1,69 @@
+========================================
+   PACCHETTO — OPERAZIONI CON LE FRAZIONI
+   (ex "Math Input Panel")
+========================================
+
+Hai scaricato il progetto completo dell'app didattica
+"Operazioni con le Frazioni".
+
+
+DA DOVE COMINCIARE (leggi questi file):
+
+  1. GUIDA-IA.md        -> Guida per l'intelligenza artificiale:
+                           come RICOSTRUIRE e VARIARE l'app
+                           (operazioni, lingua, quiz, altre frazioni).
+
+  2. DEPLOY-RENDER.md   -> Come trasferire l'app su RENDER
+                           usando un repository GitHub.
+
+  3. ACCESSIBILITA.md   -> Sezione ACCESSIBILITA': tutte le
+                           misure BES/DSA (OpenDyslexic, ecc.)
+                           portabili su altre app.
+
+  4. README.md          -> Documentazione generale + embed.
+
+
+L'APP È GIÀ ONLINE (produzione Easy-Peasy.AI):
+  https://math-input-panel.easy-peasy.site
+
+
+VARIANTI POSSIBILI (tramite l'IA):
+
+  * Cambiare le operazioni (aggiungere potenze, radici, decimali)
+    -> vedi GUIDA-IA.md (sezione Varianti)
+
+  * Cambiare la LINGUA (inglese, spagnolo, francese)
+    -> vedi GUIDA-IA.md (sezione Varianti)
+
+  * Quiz con set di domande (VERO/FALSO, 3 o 4 opzioni)
+    -> vedi GUIDA-IA.md (sezione Varianti)
+
+
+TRASFERIRE SU RENDER (via GitHub):
+
+  1. Crea un repository su github.com
+  2. Carica TUTTI i file di questo pacchetto (root del repo)
+  3. Vai su render.com -> New -> Blueprint
+  4. Collega il repository: Render legge render.yaml
+     e crea il Web Service automaticamente.
+
+  Dettagli: DEPLOY-RENDER.md
+
+
+STRUTTURA DEL PROGETTO:
+
+  client/            Frontend React + Vite + Tailwind
+  server/            Server Express (serving statico)
+  shared/            Costanti condivise
+  cornice-dinamica/  Embed Blogger (dedicata, lite, universale,
+                     autosufficiente)
+  render.yaml        Blueprint Render
+  .github/workflows/ CI (build automatica)
+
+
+SEZIONE ACCESSIBILITA' (BES/DSA):
+  -> ACCESSIBILITA.md  (tutte le misure: OpenDyslexic, barra
+     accessibilità, lettura ad alta voce, ecc.)
+
+
+BUON LAVORO! 📐

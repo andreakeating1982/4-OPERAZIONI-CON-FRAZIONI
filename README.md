@@ -1,48 +1,60 @@
-# 🧮 Operazioni con le Frazioni — Widget Metacognitivo
+# 🧮 Operazioni con le Frazioni
 
-Un'app didattica interattiva per esercitarsi con le **operazioni tra frazioni** (addizione, sottrazione, moltiplicazione, divisione). L'app guida lo studente passo dopo passo — dal calcolo del m.c.m. alla semplificazione incrociata e al risultato finale — con riconoscimento della scrittura a mano e generazione automatica del quaderno in PDF. Approccio metacognitivo, adatto anche ad alunni BES e DSA.
+Un'app didattica interattiva per esercitarsi con le **operazioni tra frazioni** (addizione, sottrazione, moltiplicazione, divisione). L'app guida lo studente passo dopo passo — dal calcolo del m.c.m. alla semplificazione incrociata e al risultato finale — con riconoscimento della scrittura a mano e generazione automatica del quaderno in PDF. Approccio metacognitivo, adatto anche ad alunni **BES e DSA**.
 
 > **Live**: [https://math-input-panel.easy-peasy.site](https://math-input-panel.easy-peasy.site)
 
 ---
 
-## 🚀 Deploy su Easy-Peasy.AI (già attivo)
+## 📚 Documentazione inclusa (leggi prima questi file)
 
-L'app è già online su Easy-Peasy.AI. Per aggiornarla:
-
-1. Carica questo repository su GitHub (pubblico)
-2. Collega il dominio Easy-Peasy.AI: **[https://math-input-panel.easy-peasy.site](https://math-input-panel.easy-peasy.site)**
+| File | Descrizione |
+|---|---|
+| **`GUIDA-IA.md`** | 🤖 Guida per l'**intelligenza artificiale**: come ricostruire e variare l'app partendo da GitHub |
+| **`DEPLOY-RENDER.md`** | 🚀 Come trasferire l'app su **Render** via GitHub (Blueprint `render.yaml`) |
+| **`ACCESSIBILITA.md`** | ♿ **SEZIONE ACCESSIBILITÀ**: tutte le misure BES/DSA (OpenDyslexic, ecc.) portabili su altre app |
+| **`ISTRUZIONI-GITHUB.txt`** | Riepilogo rapido: da dove cominciare |
+| **`cornice-dinamica/README.md`** | 🖼️ La cornice dinamica (embed Blogger a altezza automatica) |
 
 ---
 
-## 🖼️ Embed nel blog (Blogger)
+## ♿ Accessibilità e inclusione (BES/DSA)
 
-Copia il file `embed.html` e incollalo in modalità HTML su Blogger. L'iframe si auto-ridimensiona via `postMessage` (`labvisivo:height`).
+L'app include una **barra di accessibilità** con 5 moduli — **Font** (A−/A+), **Interlinea**, **Righello**, **Modalità** (alto contrasto), **Ascolto** (lettura ad alta voce in italiano) — oltre a **font OpenDyslexic** auto-ospitato, **focus visibile**, **`prefers-reduced-motion`**, **PDF in OpenDyslexic** e **preferenze persistenti**.
+
+> **Sezione completa**: **[`ACCESSIBILITA.md`](ACCESSIBILITA.md)** — con la tabella delle 14 misure e le istruzioni per portarle su altre app simili.
+
+---
+
+## 🖼️ Cornice dinamica (embed Blogger)
+
+La cartella **`cornice-dinamica/`** contiene il blocco HTML da incollare su Blogger (o qualsiasi sito) per mostrare l'app in un **iframe a altezza automatica**, con font OpenDyslexic, **Schermo intero**, **Ricarica** e **isolamento multi-embed (impermeabile, v3)**.
+
+- ⭐ **`embed-frazioni-dedicata.html`** — versione consigliata (v3 impermeabile + anti-loop)
+- **`embed-frazioni-lite.html`** — versione minima riutilizzabile (`?app=URL`)
+- **`embed-universale.html`** — template universale per altre app
+- **`embed-frazioni.html`** — versione autosufficiente (font in base64)
+
+> Il protocollo altezza dinamica è implementato in `client/src/lib/heightSync.ts`
+> (inizializzato da `client/src/main.tsx`).
+
+---
+
+## 🚀 Deploy su Easy-Peasy.AI (già attivo)
+
+L'app è già online su Easy-Peasy.AI: **[https://math-input-panel.easy-peasy.site](https://math-input-panel.easy-peasy.site)**.
+
+Per trasferirla su **Render** (o un altro host) via GitHub, segui **[`DEPLOY-RENDER.md`](DEPLOY-RENDER.md)** — il pacchetto include già `render.yaml` (Blueprint) e la CI GitHub (`.github/workflows/ci.yml`).
 
 ---
 
 ## 📱 Come si usa
 
-1. **Scegli la modalità**: Addizione e Sottrazione oppure Moltiplicazione e Divisione (simboli matematici sopra il testo, centrati)
-2. **Scrivi le frazioni**: scrivi numeratore e denominatore a mano libera nei canvas; il riconoscimento ONNX converte la scrittura in cifre
+1. **Scegli la modalità**: Addizione e Sottrazione oppure Moltiplicazione e Divisione
+2. **Scrivi le frazioni**: a mano libera nei canvas (riconoscimento ONNX) oppure con **✎ digita il valore** (tastiera)
 3. **Avvia l'esercizio**: clicca su «CALCOLA»
 4. **Segui i passi guidati** con feedback immediato a ogni risposta
 5. **Scarica il PDF** del quaderno completo
-
----
-
-## 🎨 Stile e convenzioni
-
-| Elemento | Sezione | Stile |
-|---|---|---|
-| **Pulsanti modalità** | Tutte | Simboli (`+ / −`, `× / ÷`) in alto, testo sotto (`flex-col`), centrati |
-| **Label NUMERATORE/DENOMINATORE** | AddSub | Marrone (`text-amber-900`), no grassetto |
-| **Label NUMERATORE/DENOMINATORE** | MulDiv | Arancione/blu, grassetto |
-| **Label colorati** (Numeratore arancione, Denominatore blu, Denominatore azzurro, Numeratore rosso) | MulDiv | Colori vivaci, grassetto |
-| **Inline span** (NUMERATORE/DENOMINATORE) | MulDiv | Arancione/rosso/blu/azzurro, grassetto |
-| **Footer** | Tutte | "Realizzato da Andrea Centinaro" |
-| **PDF** | Tutte | Cambria Math, centrato, senza intestazioni, spaziatura aumentata |
-| **Decimali** | Tutte | Arrotondati a max 2 decimali via `round2()` |
 
 ---
 
@@ -51,39 +63,46 @@ Copia il file `embed.html` e incollalo in modalità HTML su Blogger. L'iframe si
 ```
 math-input-panel/
 ├── README.md
-├── embed.html                  ← Codice embed per Blogger
-├── post-blog.html              ← Testo del post di presentazione
+├── GUIDA-IA.md                  ← Guida per l'IA (ricostruzione e varianti)
+├── DEPLOY-RENDER.md             ← Trasferimento su Render via GitHub
+├── ACCESSIBILITA.md             ← ♿ Sezione accessibilità (14 misure)
+├── ISTRUZIONI-GITHUB.txt        ← Riepilogo rapido
+├── render.yaml                  ← Blueprint Render
+├── .github/workflows/ci.yml     ← CI GitHub (check + build)
+├── embed.html                   ← Codice embed per Blogger
+├── post-blog.html               ← Testo del post di presentazione
+├── cornice-dinamica/            ← Cornice dinamica (embed v3 impermeabile)
 ├── package.json
 ├── vite.config.ts
 ├── client/
 │   ├── index.html
 │   ├── public/
-│   │   └── models/comer/       ← Modelli ONNX
+│   │   ├── fonts/               ← Font OpenDyslexic
+│   │   └── models/comer/        ← Modelli ONNX
 │   └── src/
 │       ├── App.tsx
-│       ├── main.tsx
-│       ├── index.css            ← Tema globale
+│       ├── main.tsx             ← initHeightSync() (cornice dinamica)
+│       ├── index.css            ← Tema + accessibilità + lf-embedded
 │       ├── pages/
-│       │   └── FractionExercises.tsx  ← ⭐ Componente principale (~1430 righe)
+│       │   ├── WelcomePage.tsx
+│       │   ├── FractionExercises.tsx  ← ⭐ Componente principale
+│       │   └── Home.tsx
 │       ├── components/
-│       │   ├── FractionDisplay.tsx    ← Render frazioni
-│       │   ├── MathDrawCanvas.tsx     ← Canvas scrittura
-│       │   └── NumberInputCanvas.tsx  ← Input + riconoscimento
+│       │   ├── AccessibilityToolbar.tsx  ← Barra di accessibilità
+│       │   ├── FractionDisplay.tsx
+│       │   ├── MathDrawCanvas.tsx
+│       │   └── NumberInputCanvas.tsx     ← Input + riconoscimento + digita il valore
+│       ├── contexts/
+│       │   └── AccessibilityContext.tsx
+│       ├── hooks/
+│       │   └── useReadAloud.ts           ← Lettura ad alta voce (TTS)
 │       └── lib/
+│           └── heightSync.ts             ← Cornice dinamica
 ├── server/
-│   └── index.ts
+│   └── index.ts                 ← Express + COOP/COEP + CORS /fonts
 └── shared/
     └── const.ts
 ```
-
-### Il file principale: `FractionExercises.tsx`
-
-| Sezione | Descrizione |
-|---|---|
-| **Math utilities** | `gcd`, `lcm`, `semplificaFrazione`, `fattorizzazionePrimi`, `round2` (2 decimali) |
-| **Computed values** | `addSubComputed` (m.c.m., fattorizzazione, risultato), `mulDivComputed` (semplificazione incrociata, risultato) |
-| **State** | input frazioni, risposte studente, feedback, generazione PDF |
-| **PDF** | `handleScaricaPdf` — raccoglie `.notebook-content`, applica Cambria Math, centrato, senza intestazioni |
 
 ---
 
@@ -91,9 +110,10 @@ math-input-panel/
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:3000
-pnpm build      # build di produzione
-pnpm start      # server produzione
+pnpm check       # type-check TypeScript
+pnpm dev         # http://localhost:5173
+pnpm build       # build di produzione (client + server)
+pnpm start       # server produzione
 ```
 
 ---
@@ -116,7 +136,3 @@ pnpm start      # server produzione
 ## 📄 Licenza
 
 MIT
-
----
-
-Realizzato da **Andrea Centinaro**
