@@ -12,12 +12,24 @@
 function currentHeight(): number {
   const docEl = document.documentElement;
   const body = document.body;
-  return Math.max(
-    docEl ? docEl.scrollHeight : 0,
-    docEl ? docEl.offsetHeight : 0,
+  /* IMPORTANTE: NON usare documentElement.scrollHeight come riferimento
+     assoluto. Quando il contenuto è più corto dell'iframe, lo scrollHeight
+     del documento resta "gonfiato" all'altezza del viewport dell'iframe
+     (mai meno), quindi la cornice dinamica non potrebbe MAI restringersi
+     e la prima pagina mostrerebbe un grande vuoto. Usiamo invece l'altezza
+     reale del contenuto (body + offsetHeight del documento) e aggiungiamo
+     documentElement.scrollHeight SOLO quando il contenuto supera davvero
+     il viewport. */
+  const viewportH = window.innerHeight || (docEl ? docEl.clientHeight : 0);
+  let h = Math.max(
     body ? body.scrollHeight : 0,
-    body ? body.offsetHeight : 0
+    body ? body.offsetHeight : 0,
+    docEl ? docEl.offsetHeight : 0
   );
+  if (docEl && docEl.scrollHeight > viewportH) {
+    h = Math.max(h, docEl.scrollHeight);
+  }
+  return h;
 }
 
 function getCorniceToken(): string | null {
