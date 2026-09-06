@@ -10,6 +10,7 @@ Un'app didattica interattiva per esercitarsi con le **operazioni tra frazioni** 
 
 | File | Descrizione |
 |---|---|
+| **`AGENTS.md`** | 🤖 Istruzioni rapide per agenti IA (Copilot, Claude, MARKY): comandi, file critici, regole anti-regressione |
 | **`GUIDA-IA.md`** | 🤖 Guida per l'**intelligenza artificiale**: come ricostruire e variare l'app partendo da GitHub |
 | **`DEPLOY-RENDER.md`** | 🚀 Come trasferire l'app su **Render** via GitHub (Blueprint `render.yaml`) |
 | **`ACCESSIBILITA.md`** | ♿ **SEZIONE ACCESSIBILITÀ**: tutte le misure BES/DSA (OpenDyslexic, ecc.) portabili su altre app |

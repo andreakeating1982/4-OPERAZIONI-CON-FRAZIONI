@@ -66,7 +66,7 @@ feedback immediato CORRETTO/SBAGLIATO, PDF finale.
 | File | Ruolo |
 |------|-------|
 | `client/src/pages/FractionExercises.tsx` | **Tutta l'app**: state, computed values, passi guidati, NotebookGuide, PDF, RICOPIA SUL QUADERNO (~2178 righe) |
-| `client/src/pages/WelcomePage.tsx` | Schermata iniziale (Cognome, Nome, Data, Classe) + scelta modalità |
+| `client/src/pages/WelcomePage.tsx` | Schermata iniziale (Cognome, Nome, Data, Classe) + scelta modalità. Layout **compatto** (card subito sotto la barra, niente vuoto), aggiunge la classe `lf-welcome-top` su `<html>` quando `window.self === window.top` |
 | `client/src/pages/Home.tsx` | Pannello (informazioni sul progetto) |
 | `client/src/components/NumberInputCanvas.tsx` | Canvas input con riconoscimento ONNX + alternativa "✎ digita il valore" |
 | `client/src/components/MathDrawCanvas.tsx` | Canvas disegno puro (penna, gomma), ResizeObserver, rendering stroke |
@@ -315,6 +315,19 @@ autonomo da incollare su Blogger (o qualsiasi sito) che mostra l'app in un ifram
 - **Fix anti-loop**: quando l'app è dentro un iframe aggiunge la classe `lf-embedded` a
   `<html>` e il CSS disattiva `min-h-screen`/`min-h-dvh` (vedi `client/src/index.css`),
   così l'altezza misurata non dipende dall'altezza dell'iframe.
+- **Fix misura altezza (`currentHeight` in `heightSync.ts`)** ⚠️ CRITICO: NON usare
+  `documentElement.scrollHeight` come riferimento assoluto — quando il contenuto è più
+  corto dell'iframe resta gonfiato all'altezza del viewport e la cornice NON si restringe
+  mai. Usare `body.scrollHeight`/`body.offsetHeight` + `documentElement.offsetHeight`, e
+  aggiungere `documentElement.scrollHeight` SOLO se supera `window.innerHeight`.
+- **Prima pagina (WelcomePage) — layout compatto e margini simmetrici**: il `<main>` usa
+  `lf-welcome flex flex-col items-center` con un inner wrapper `pt-4 sm:pt-8` (NON
+  `min-h-[calc(100dvh-…)]` + `items-center justify-center`, che crea il grande vuoto sopra
+  la card). Dentro l'iframe `html.lf-embedded .lf-welcome` applica
+  `padding-top: 20px; padding-bottom: 24px` (con l'`mb-1` della barra = 24px simmetrici
+  sopra/sotto) e `html.lf-embedded .lf-welcome > div:first-child { padding-top: 0 }` azzera
+  il `pt-*` dell'inner wrapper. In vista autonoma `html.lf-welcome-top body` è bianco con
+  dissolvenza crema→bianco sotto la card (`html.lf-welcome-top .lf-welcome::after`).
 
 ### Adattare la cornice a un'altra app
 
