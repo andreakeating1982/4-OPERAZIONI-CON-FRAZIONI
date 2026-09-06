@@ -1912,12 +1912,12 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
      ) : (
       <div className="flex justify-center items-center gap-3 sm:gap-4 my-2 flex-wrap font-serif text-center">
        {/* ── Frazione 1 ── */}
-       <div className="flex flex-col items-center py-3">
+       <div className="flex flex-col items-center py-4">
         {/* Numeratore */}
         <span className="relative inline-flex flex-col items-center">
          <span className="relative inline-block">
           <span className="font-bold font-serif text-[22px] leading-none text-orange-600">{num1}</span>
-          {(() => { const f = typeof dNum1S === 'string' ? Number(dNum1S) : dNum1S; const o = num1; return f !== o ? <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+          {(() => { const f = typeof dNum1S === 'string' ? Number(dNum1S) : dNum1S; const o = num1; return f !== o ? <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
           {(() => { const f = typeof dNum1S === 'string' ? Number(dNum1S) : dNum1S; return f !== num1 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
          </span>
         </span>
@@ -1927,7 +1927,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         <span className="relative inline-flex flex-col items-center">
          <span className="relative inline-block">
           <span className="font-bold font-serif text-[22px] leading-none text-sky-600">{nd1}</span>
-          {(() => { const f = typeof dDen1S === 'string' ? Number(dDen1S) : dDen1S; return f !== nd1 ? (<span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
+          {(() => { const f = typeof dDen1S === 'string' ? Number(dDen1S) : dDen1S; return f !== nd1 ? (<span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
           {(() => { const f = typeof dDen1S === 'string' ? Number(dDen1S) : dDen1S; return f !== nd1 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
          </span>
         </span>
@@ -1936,11 +1936,11 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
        <span className="text-[22px] font-bold">×</span>
 
        {/* ── Frazione 2 ── */}
-       <div className="flex flex-col items-center py-3">
+       <div className="flex flex-col items-center py-4">
         <span className="relative inline-flex flex-col items-center">
          <span className="relative inline-block">
           <span className="font-bold font-serif text-[22px] leading-none text-red-500">{num2}</span>
-          {(() => { const f = typeof dNum2S === 'string' ? Number(dNum2S) : dNum2S; const o = num2; return f !== o ? <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+          {(() => { const f = typeof dNum2S === 'string' ? Number(dNum2S) : dNum2S; const o = num2; return f !== o ? <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
           {(() => { const f = typeof dNum2S === 'string' ? Number(dNum2S) : dNum2S; return f !== num2 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
          </span>
         </span>
@@ -1948,7 +1948,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
         <span className="relative inline-flex flex-col items-center">
          <span className="relative inline-block">
           <span className="font-bold font-serif text-[22px] leading-none text-blue-500">{nd2}</span>
-          {(() => { const f = typeof dDen2S === 'string' ? Number(dDen2S) : dDen2S; return f !== nd2 ? (<span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
+          {(() => { const f = typeof dDen2S === 'string' ? Number(dDen2S) : dDen2S; return f !== nd2 ? (<span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
           {(() => { const f = typeof dDen2S === 'string' ? Number(dDen2S) : dDen2S; return f !== nd2 ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
          </span>
         </span>
@@ -1957,11 +1957,11 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
        {/* ── Frazione 3 ── */}
        {computed.hasThird && (<>
         <span className="text-[22px] font-bold">×</span>
-        <div className="flex flex-col items-center py-3">
+        <div className="flex flex-col items-center py-4">
          <span className="relative inline-flex flex-col items-center">
           <span className="relative inline-block">
            <span className="font-bold font-serif text-[22px] leading-none text-green-600">{num3}</span>
-           {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; const o = num3 ?? 0; return f !== o ? <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+           {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; const o = num3 ?? 0; return f !== o ? <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
            {(() => { const f = typeof dNum3S === 'string' ? Number(dNum3S) : dNum3S; return f !== (num3 ?? 0) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
           </span>
          </span>
@@ -1969,7 +1969,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
          <span className="relative inline-flex flex-col items-center">
           <span className="relative inline-block">
            <span className="font-bold font-serif text-[22px] leading-none text-teal-600">{Math.abs(den3 ?? 1)}</span>
-           {(() => { const f = typeof dDen3S === 'string' ? Number(dDen3S) : dDen3S; return f !== Math.abs(den3 ?? 1) ? (<span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
+           {(() => { const f = typeof dDen3S === 'string' ? Number(dDen3S) : dDen3S; return f !== Math.abs(den3 ?? 1) ? (<span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
            {(() => { const f = typeof dDen3S === 'string' ? Number(dDen3S) : dDen3S; return f !== Math.abs(den3 ?? 1) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
           </span>
          </span>
@@ -1979,11 +1979,11 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
        {/* ── Frazione 4 ── */}
        {computed.hasFourth && (<>
         <span className="text-[22px] font-bold">×</span>
-        <div className="flex flex-col items-center py-3">
+        <div className="flex flex-col items-center py-4">
          <span className="relative inline-flex flex-col items-center">
           <span className="relative inline-block">
            <span className="font-bold font-serif text-[22px] leading-none text-purple-600">{num4}</span>
-           {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; const o = num4 ?? 0; return f !== o ? <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
+           {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; const o = num4 ?? 0; return f !== o ? <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span> : null; })()}
            {(() => { const f = typeof dNum4S === 'string' ? Number(dNum4S) : dNum4S; return f !== (num4 ?? 0) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
           </span>
          </span>
@@ -1991,7 +1991,7 @@ const dDen4S_final = den4IntS ?? (den4Semplificato !== null ? den4Semplificato :
          <span className="relative inline-flex flex-col items-center">
           <span className="relative inline-block">
            <span className="font-bold font-serif text-[22px] leading-none text-pink-600">{Math.abs(den4 ?? 1)}</span>
-           {(() => { const f = typeof dDen4S === 'string' ? Number(dDen4S) : dDen4S; return f !== Math.abs(den4 ?? 1) ? (<span className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
+           {(() => { const f = typeof dDen4S === 'string' ? Number(dDen4S) : dDen4S; return f !== Math.abs(den4 ?? 1) ? (<span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[12px] leading-none text-muted-foreground">{f}</span>) : null; })()}
            {(() => { const f = typeof dDen4S === 'string' ? Number(dDen4S) : dDen4S; return f !== Math.abs(den4 ?? 1) ? (<svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="4" y1="94" x2="96" y2="6" stroke="#dc2626" strokeWidth="3" strokeLinecap="round" opacity="0.8"/></svg>) : null; })()}
           </span>
          </span>
