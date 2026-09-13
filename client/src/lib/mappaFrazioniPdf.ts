@@ -627,14 +627,14 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
   const diag1a = Math.abs(v.n1), diag1b = v.invDen, diag2a = v.nd1, diag2b = v.invNum;
   const diag1 = svolta
     ? (v.g1 > 1
-        ? `divisore comune <b>${v.g1}</b>: ${diag1a} : ${v.g1} = <b>${v.s1n}</b> e ${diag1b} : ${v.g1} = <b>${v.s2d}</b>`
-        : "nessun divisore comune")
-    : "divisore comune? …";
+        ? `DIVISORE COMUNE <b>${v.g1}</b>: ${diag1a} : ${v.g1} = <b>${v.s1n}</b> e ${diag1b} : ${v.g1} = <b>${v.s2d}</b>`
+        : "NESSUN DIVISORE COMUNE")
+    : "DIVISORE COMUNE? …";
   const diag2 = svolta
     ? (v.g2 > 1
-        ? `divisore comune <b>${v.g2}</b>: ${diag2a} : ${v.g2} = <b>${v.s1d}</b> e ${diag2b} : ${v.g2} = <b>${v.s2n}</b>`
-        : "nessun divisore comune")
-    : "divisore comune? …";
+        ? `DIVISORE COMUNE <b>${v.g2}</b>: ${diag2a} : ${v.g2} = <b>${v.s1d}</b> e ${diag2b} : ${v.g2} = <b>${v.s2n}</b>`
+        : "NESSUN DIVISORE COMUNE")
+    : "DIVISORE COMUNE? …";
   const croceConclusion = svolta
     ? (v.croceFatta ? "Ho semplificato in croce PRIMA di moltiplicare." : "In questo esercizio non c'è niente da semplificare: procedo così.")
     : "Se c'è, semplifico PRIMA di moltiplicare.";
