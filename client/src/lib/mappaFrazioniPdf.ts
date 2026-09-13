@@ -627,14 +627,14 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
   const diag1a = Math.abs(v.n1), diag1b = v.invDen, diag2a = v.nd1, diag2b = v.invNum;
   const diag1 = svolta
     ? (v.g1 > 1
-        ? `DIVISORE COMUNE <b>${v.g1}</b>: ${diag1a} : ${v.g1} = <b>${v.s1n}</b> e ${diag1b} : ${v.g1} = <b>${v.s2d}</b>`
-        : "NESSUN DIVISORE COMUNE")
-    : "DIVISORE COMUNE? …";
+        ? `<span style="color:#2E7D32">DIVISORE COMUNE</span> <b>${v.g1}</b>: ${diag1a} : ${v.g1} = <b>${v.s1n}</b> e ${diag1b} : ${v.g1} = <b>${v.s2d}</b>`
+        : `<span style="color:#2E7D32">NESSUN DIVISORE COMUNE</span>`)
+    : `<span style="color:#2E7D32">DIVISORE COMUNE?</span> …`;
   const diag2 = svolta
     ? (v.g2 > 1
-        ? `DIVISORE COMUNE <b>${v.g2}</b>: ${diag2a} : ${v.g2} = <b>${v.s1d}</b> e ${diag2b} : ${v.g2} = <b>${v.s2n}</b>`
-        : "NESSUN DIVISORE COMUNE")
-    : "DIVISORE COMUNE? …";
+        ? `<span style="color:#2E7D32">DIVISORE COMUNE</span> <b>${v.g2}</b>: ${diag2a} : ${v.g2} = <b>${v.s1d}</b> e ${diag2b} : ${v.g2} = <b>${v.s2n}</b>`
+        : `<span style="color:#2E7D32">NESSUN DIVISORE COMUNE</span>`)
+    : `<span style="color:#2E7D32">DIVISORE COMUNE?</span> …`;
   const croceConclusion = svolta
     ? (v.croceFatta ? "Ho semplificato in croce PRIMA di moltiplicare." : "In questo esercizio non c'è niente da semplificare: procedo così.")
     : "Se c'è, semplifico PRIMA di moltiplicare.";
@@ -642,8 +642,8 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
     stepBox(
       eMoltiplicazione ? "② PASSO 2 · SEMPLIFICAZIONE A CROCE (se posso)" : "② PASSO 2 · COME LA MOLTIPLICAZIONE (semplifico a croce se posso)",
       `<div class="guida">
-        <p>■ DIAGONALE 1: <b>${diag1a}</b> e <b>${diag1b}</b> → ${diag1}</p>
-        <p>■ DIAGONALE 2: <b>${diag2a}</b> e <b>${diag2b}</b> → ${diag2}</p>
+        <p>■ <span style="color:#2E7D32">DIAGONALE 1</span>: <b>${diag1a}</b> e <b>${diag1b}</b> → ${diag1}</p>
+        <p>■ <span style="color:#2E7D32">DIAGONALE 2</span>: <b>${diag2a}</b> e <b>${diag2b}</b> → ${diag2}</p>
         <p>→ ${croceConclusion}</p>
        </div>
        ${figuraCroce(v, svolta, !eMoltiplicazione)}`,
