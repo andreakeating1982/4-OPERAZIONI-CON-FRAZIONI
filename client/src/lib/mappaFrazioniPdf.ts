@@ -11,13 +11,15 @@
  *
  * Se l'utente ha inserito un'addizione, la mappa mostra SOLO l'addizione;
  * se una sottrazione, SOLO la sottrazione; se una moltiplicazione, SOLO la
- * moltiplicazione (con le DUE FIGURE allegate: «a croce» nel passo di
- * semplificazione, «in linea» nel passo di moltiplicazione); se una divisione,
- * SOLO la divisione (dopo l'inversione valgono le figure della moltiplicazione).
+ * moltiplicazione (con le DUE FIGURE: «a croce» nel passo di semplificazione,
+ * «in linea» nel passo di moltiplicazione); se una divisione, SOLO la divisione
+ * (dopo l'inversione valgono le figure della moltiplicazione).
  *
- * Le due figure (client/public/mappa-fig-mol-in-linea.png e
- * client/public/mappa-fig-mol-a-croce.png) vengono incorporate come data URI
- * base64 al momento dell'apertura: il PDF resta AUTOCONTENUTO.
+ * Le due figure NON sono più immagini statiche: sono SVG disegnati al momento
+ * dell'apertura con i NUMERI EFFETTIVI dell'esercizio (frazioni, M.C.D. delle
+ * diagonali, valori semplificati, prodotti). Nella MAPPA CONCETTUALE i
+ * risultati diventano puntini «da completare». Il PDF resta AUTOCONTENUTO
+ * (figure vettoriali inline, nessun file esterno).
  *
  * Architettura (da Equazioni Biquadratiche, mappaPdf.ts): impaginazione a
  * MISURAZIONE REALE NEL DOM (PAGE_BUDGET ≈ 900 px visuali), margini 2,5 cm
@@ -44,16 +46,6 @@ export interface MappaFrazioneData {
   /** riga studente (opzionale, dai parametri URL) */
   studentLabel?: string;
 }
-
-export interface MappaFigures {
-  /** data URI della figura «moltiplicazione in linea» (frecce orizzontali) */
-  inline?: string;
-  /** data URI della figura «semplificazione a croce» (frecce incrociate) */
-  croce?: string;
-}
-
-const FIG_INLINE_URL = "/mappa-fig-mol-in-linea.png";
-const FIG_CROCE_URL = "/mappa-fig-mol-a-croce.png";
 
 // ─── Formattazione ────────────────────────────────────────────────
 
@@ -140,10 +132,121 @@ function solidBox(text: string, color: string, extraClass = ""): string {
   return `<div class="solid ${extraClass}" style="background:${color}">${text}</div>`;
 }
 
-/** Figura incorporata (data URI) con didascalia */
-function figura(src: string | undefined, alt: string, cap: string): string {
-  if (!src) return "";
-  return `<img class="fig" src="${src}" alt="${alt}"><p class="fig-cap">${cap}</p>`;
+// ─── FIGURE DINAMICHE (SVG con i numeri REALI dell'utente) ────────
+//
+// Le due figure didattiche («semplificazione a croce» e «moltiplicazione in
+// linea») NON sono più immagini statiche: vengono disegnate come SVG al
+// momento dell'apertura della mappa con i numeri effettivi dell'esercizio
+// (frazioni, M.C.D. delle diagonali, valori semplificati, prodotti).
+// Nella MAPPA CONCETTUALE (da completare) i risultati diventano puntini.
+
+const FIG_NUM = "#1F4E9C";   // numeratori (stesso colore di fracLatex)
+const FIG_DEN = "#2E7D32";   // denominatori (stesso colore di fracLatex)
+const FIG_D1 = "#E67E22";    // freccia diagonale «\»: n1 → denominatore 2ª frazione
+const FIG_D2 = "#C0392B";    // freccia diagonale «/»: numeratore 2ª → denominatore 1ª
+const FIG_HOR = "#0E7490";   // frecce orizzontali «in linea»
+const FIG_GRAY = "#6B7280";  // annotazioni grigie (valori semplificati)
+const FIG_BLANKC = "#9CA3AF";// puntini «da completare» (stesso colore di blank())
+const FIG_INK = "#1a1a1a";
+const FIG_FAMILY = "OpenDyslexic,'Cambria Math',Cambria,serif";
+
+/** Frazioni effettivamente moltiplicate al PASSO 3 (semplificate se la croce
+ *  ha prodotto semplificazioni, altrimenti quelle originali). */
+function mulShown(v: MulDivVals): { n1: number; d1: number; n2: number; d2: number } {
+  return {
+    n1: v.g1 > 1 ? v.s1n : Math.abs(v.n1),
+    d1: v.g2 > 1 ? v.s1d : v.nd1,
+    n2: v.g2 > 1 ? v.s2n : v.invNum,
+    d2: v.g1 > 1 ? v.s2d : v.invDen,
+  };
+}
+
+let figMarkerSeq = 0;
+
+function figText(x: number, y: number, s: string, o: { size?: number; fill?: string; w?: number; halo?: boolean } = {}): string {
+  const size = o.size ?? 19;
+  const style = o.halo
+    ? ` style="paint-order:stroke;stroke:#ffffff;stroke-width:${Math.max(4, Math.round(size / 2.5))};stroke-linejoin:round"`
+    : "";
+  return `<text x="${x}" y="${y}" font-family="${FIG_FAMILY}" font-size="${size}" font-weight="${o.w ?? 700}" fill="${o.fill ?? FIG_INK}" text-anchor="middle"${style}>${s}</text>`;
+}
+
+/** Una frazione centrata su cx: numero sopra, barra, numero sotto,
+ *  con eventuali annotazioni grigie (valore semplificato) sopra/sotto. */
+function figFrazione(cx: number, num: string, den: string, numAnn = "", denAnn = ""): string {
+  const parts = [
+    numAnn ? figText(cx, 24, numAnn, { size: 13.5, fill: FIG_GRAY, w: 400 }) : "",
+    figText(cx, 52, num, { fill: FIG_NUM }),
+    `<line x1="${cx - 30}" y1="61.5" x2="${cx + 30}" y2="61.5" stroke="${FIG_INK}" stroke-width="2.4" stroke-linecap="round"/>`,
+    figText(cx, 90, den, { fill: FIG_DEN }),
+    denAnn ? figText(cx, 118, denAnn, { size: 13.5, fill: FIG_GRAY, w: 400 }) : "",
+  ];
+  return parts.filter(Boolean).join("");
+}
+
+/** Punta di freccia riutilizzabile (id univoco per documento) */
+function figArrow(color: string): { def: string; id: string } {
+  const id = `fig-arrow-${++figMarkerSeq}`;
+  return {
+    id,
+    def: `<defs><marker id="${id}" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0.8 L9 5 L0 9.2 z" fill="${color}"/></marker></defs>`,
+  };
+}
+
+function figLine(x1: number, y1: number, x2: number, y2: number, color: string, markerId: string, width = 2.6): string {
+  return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${width}" stroke-linecap="round" marker-end="url(#${markerId})"/>`;
+}
+
+function figWrap(svg: string, alt: string, cap: string): string {
+  return `<div class="fig" role="img" aria-label="${alt}">${svg}</div><p class="fig-cap">${cap}</p>`;
+}
+
+/** FIGURA 1 · SEMPLIFICAZIONE A CROCE — le due frazioni (dopo l'eventuale
+ *  inversione) con le frecce diagonali; su ogni freccia il M.C.D. reale e
+ *  accanto a ogni numero il valore semplificato (puntini se da completare). */
+function figuraCroce(v: MulDivVals, svolta: boolean, isDivisione: boolean): string {
+  // Nella mappa svolta l'annotazione grigia compare SOLO se quel lato si è
+  // davvero semplificato (MCD > 1); nella mappa da completare sempre puntini.
+  const ann = (x: number, g: number): string => (svolta ? (g > 1 ? String(x) : "") : "…");
+  const a1 = figArrow(FIG_D1);
+  const a2 = figArrow(FIG_D2);
+  const svg = `<svg viewBox="0 0 400 134" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">`
+    + a1.def + a2.def
+    + figFrazione(78, String(Math.abs(v.n1)), String(v.nd1), ann(v.s1n, v.g1), ann(v.s1d, v.g2))
+    + figFrazione(322, String(v.invNum), String(v.invDen), ann(v.s2n, v.g2), ann(v.s2d, v.g1))
+    + figLine(108, 46, 290, 100, FIG_D1, a1.id)
+    + figLine(292, 46, 110, 100, FIG_D2, a2.id)
+    + figText(200, 82, "×", { size: 30, halo: true })
+    // Etichette MCD nel segmento ESTERNO inferiore della propria diagonale
+    // (accanto alla punta della freccia): associazione visiva inequivocabile.
+    + figText(253, 110, svolta ? `MCD = ${v.g1}` : "MCD = …", { size: 13, fill: FIG_D1, halo: true })
+    + figText(147, 110, svolta ? `MCD = ${v.g2}` : "MCD = …", { size: 13, fill: FIG_D2, halo: true })
+    + `</svg>`;
+  const cap = `La semplificazione a croce: frecce in diagonale con i M.C.D. dei tuoi numeri${isDivisione ? " (dopo aver capovolto la seconda frazione)" : ""}`;
+  return figWrap(svg, "Schema della semplificazione a croce con i numeri dell'esercizio: frecce diagonali tra i numeratori e i denominatori, con i rispettivi MCD e i valori semplificati", cap);
+}
+
+/** FIGURA 2 · MOLTIPLICAZIONE IN LINEA — le frazioni effettivamente
+ *  moltiplicate al PASSO 3 con le frecce orizzontali e i prodotti reali
+ *  (solo l'operazione «a × b» se la mappa è da completare). */
+function figuraInline(v: MulDivVals, svolta: boolean, isDivisione: boolean): string {
+  const f = svolta ? mulShown(v) : { n1: Math.abs(v.n1), d1: v.nd1, n2: v.invNum, d2: v.invDen };
+  const topLbl = `${f.n1} × ${f.n2}${svolta ? ` = ${Math.round(f.n1 * f.n2)}` : ""}`;
+  const botLbl = `${f.d1} × ${f.d2}${svolta ? ` = ${Math.round(f.d1 * f.d2)}` : ""}`;
+  const a1 = figArrow(FIG_HOR);
+  const a2 = figArrow(FIG_HOR);
+  const svg = `<svg viewBox="0 0 400 134" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">`
+    + a1.def + a2.def
+    + figText(200, 20, topLbl, { size: 13.5, fill: FIG_HOR, halo: true })
+    + figLine(106, 40, 294, 40, FIG_HOR, a1.id)
+    + figFrazione(78, String(f.n1), String(f.d1))
+    + figFrazione(322, String(f.n2), String(f.d2))
+    + figText(200, 78, "×", { size: 30, halo: true })
+    + figLine(106, 98, 294, 98, FIG_HOR, a2.id)
+    + figText(200, 124, botLbl, { size: 13.5, fill: FIG_HOR, halo: true })
+    + `</svg>`;
+  const cap = `La moltiplicazione in linea: numeratore × numeratore, denominatore × denominatore${isDivisione ? " (con la seconda frazione già capovolta)" : ""}`;
+  return figWrap(svg, "Schema della moltiplicazione in linea con i numeri dell'esercizio: freccia orizzontale sui numeratori e freccia orizzontale sui denominatori, con i prodotti", cap);
 }
 
 function formuleAddSub(): string {
@@ -192,6 +295,7 @@ body{font-family:'OpenDyslexic','Cambria Math',Cambria,serif;color:#1a1a1a;backg
 .guida{margin:4px auto 2px;max-width:560px;text-align:left;font-size:13px}
 .guida p{margin:2px 0}
 .fig{display:block;max-width:360px;width:82%;height:auto;margin:8px auto 2px;border-radius:8px}
+.fig svg{display:block;width:100%;height:auto}
 .fig-cap{font-size:11.5px;color:#6b7280;margin:0 0 4px}
 .risultato-blank{max-width:720px;margin:0 auto 10px;border:2.5px dashed #5C35A6;border-radius:12px;height:56px;page-break-inside:avoid;break-inside:avoid}
 .formule{max-width:720px;margin:0 auto 10px;border:2.5px solid #0E7490;border-radius:12px;overflow:hidden;page-break-inside:avoid;break-inside:avoid}
@@ -209,7 +313,7 @@ const PAGE_BUDGET = 900;
 function estimateHeight(html: string): number {
   const displays = (html.match(/class="katex-display"/g) || []).length;
   const paras = (html.match(/<p[\s>]/g) || []).length;
-  const imgs = (html.match(/<img /g) || []).length;
+  const imgs = (html.match(/<img |class="fig"/g) || []).length;
   return 60 + displays * 60 + paras * 22 + imgs * 210;
 }
 
@@ -472,7 +576,7 @@ function addSubItems(level: 0 | 1, d: MappaFrazioneData): string[] {
 
 // ─── MOLTIPLICAZIONE / DIVISIONE (con le due figure allegate) ─────
 
-function mulDivItems(level: 0 | 1, d: MappaFrazioneData, figs: MappaFigures): string[] {
+function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
   const v = computeMulDiv(d);
   const svolta = level === 0;
   const b = blank();
@@ -542,24 +646,21 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData, figs: MappaFigures): st
         <p>■ Diagonale 2: <b>${diag2a}</b> e <b>${diag2b}</b> → ${diag2}</p>
         <p>→ ${croceConclusion}</p>
        </div>
-       ${figura(figs.croce, "Schema della semplificazione a croce: frecce incrociate tra numeratori e denominatori delle due frazioni", "La semplificazione a croce (frecce in diagonale)")}`,
+       ${figuraCroce(v, svolta, !eMoltiplicazione)}`,
       C.passo2,
       !svolta
     )
   );
 
   // PASSO 3 · moltiplicazione in linea (+ figura «in linea»)
-  const mN1 = v.g1 > 1 ? v.s1n : Math.abs(v.n1);
-  const mD2 = v.g1 > 1 ? v.s2d : v.invDen;
-  const mD1 = v.g2 > 1 ? v.s1d : v.nd1;
-  const mN2 = v.g2 > 1 ? v.s2n : v.invNum;
+  const { n1: mN1, d1: mD1, n2: mN2, d2: mD2 } = mulShown(v);
   const finaleDisplay = v.finN !== v.numFin || v.finD !== v.denFin ? ` = ${fracLatex(v.finN, v.finD)}` : "";
   const linBody = svolta
     ? `${katexBlock(`${fracLatex(mN1, mD1)} \\times ${fracLatex(mN2, mD2)} = ${fracLatex(`${mN1} \\times ${mN2}`, `${mD1} \\times ${mD2}`)} = ${fracLatex(v.numFin, v.denFin)}${finaleDisplay}`)}
        <p class="note">Numeratore × numeratore, denominatore × denominatore.</p>
-       ${figura(figs.inline, "Schema della moltiplicazione in linea: frecce orizzontali che attraversano i numeratori e i denominatori", "La moltiplicazione in linea (frecce orizzontali)")}`
+       ${figuraInline(v, svolta, !eMoltiplicazione)}`
     : `${katexBlock(`${fracLatex(d.num1, d.den1)} \\times ${fracLatex(b, b)} = ${fracLatex(`${b} \\times ${b}`, `${b} \\times ${b}`)} = ${fracLatex(b, b)}`)}
-       ${figura(figs.inline, "Schema della moltiplicazione in linea: frecce orizzontali che attraversano i numeratori e i denominatori", "La moltiplicazione in linea (frecce orizzontali)")}`;
+       ${figuraInline(v, svolta, !eMoltiplicazione)}`;
   items.push(
     stepBox(eMoltiplicazione ? "③ PASSO 3 · MOLTIPLICO IN LINEA" : "③ PASSO 3 · MOLTIPLICO", linBody, C.passo3, !svolta)
   );
@@ -581,20 +682,20 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData, figs: MappaFigures): st
 
 type Parte = { label: string; items: string[] };
 
-function buildParti(d: MappaFrazioneData, figs: MappaFigures): Parte[] {
+function buildParti(d: MappaFrazioneData): Parte[] {
   const builder = d.mode === "addsub" ? addSubItems : mulDivItems;
 
   // MAPPA SVOLTA — l'esercizio dell'utente risolto con i suoi numeri
   const a: string[] = [];
   if (d.studentLabel) a.push(`<div class="student">Studente: <b>${d.studentLabel}</b></div>`);
   a.push(solidBox(`MAPPA · ${opTitle(d.op)} TRA FRAZIONI`, C.title, "title-box"));
-  a.push(...builder(0, d, figs));
+  a.push(...builder(0, d));
 
   // MAPPA CONCETTUALE — la stessa mappa da completare (ex livello 1)
   const c: string[] = [];
   c.push(solidBox(`MAPPA CONCETTUALE`, C.title, "title-box"));
   c.push(`<div class="eq-banner">Completa i puntini con i valori del tuo esercizio di ${opWord(d.op)}.</div>`);
-  c.push(...builder(1, d, figs));
+  c.push(...builder(1, d));
   c.push(`<div class="risultato-blank"></div>`);
 
   return [
@@ -607,10 +708,9 @@ function buildParti(d: MappaFrazioneData, figs: MappaFigures): Parte[] {
 
 export function buildMappaFrazioniHtml(
   d: MappaFrazioneData,
-  figs: MappaFigures = {},
   mode?: "estimate" | "measure"
 ): string {
-  const parti = buildParti(d, figs);
+  const parti = buildParti(d);
 
   const hFn =
     mode === "measure" && typeof document !== "undefined"
@@ -647,28 +747,11 @@ ${rendered}
 </body></html>`;
 }
 
-/** Converte una immagine dell'app in data URI base64 (per il PDF autocontenuto) */
-async function fileToDataUri(url: string): Promise<string | undefined> {
-  try {
-    const r = await fetch(url);
-    if (!r.ok) return undefined;
-    const blob = await r.blob();
-    return await new Promise<string | undefined>((res) => {
-      const fr = new FileReader();
-      fr.onload = () => res(typeof fr.result === "string" ? fr.result : undefined);
-      fr.onerror = () => res(undefined);
-      fr.readAsDataURL(blob);
-    });
-  } catch {
-    return undefined;
-  }
-}
-
 /** Apre la finestra di stampa con la mappa costruita sull'esercizio reale.
  * La finestra vuota viene aperta SUBITO nel gesto utente (niente popup-blocker);
- * poi le figure vengono caricate come data URI, i box MISURATI nel DOM e il
- * documento scritto con le pagine PIENE. Se la misura fallisce si ricade sulla
- * stima prudenziale; se una figura non carica, la mappa resta valida senza. */
+ * poi i box vengono MISURATI nel DOM e il documento scritto con le pagine
+ * PIENE. Le figure sono SVG inline con i numeri reali: niente caricamenti.
+ * Se la misura fallisce si ricade sulla stima prudenziale. */
 export async function openMappaFrazioniPdf(d: MappaFrazioneData): Promise<void> {
   let w: Window | null = null;
   try {
@@ -691,17 +774,12 @@ export async function openMappaFrazioniPdf(d: MappaFrazioneData): Promise<void> 
     }
   };
   const go = async () => {
-    const [inline, croce] = await Promise.all([
-      fileToDataUri(FIG_INLINE_URL),
-      fileToDataUri(FIG_CROCE_URL),
-    ]);
-    const figs: MappaFigures = { inline, croce };
     let html: string;
     try {
       await ensureMeasureFonts();
-      html = withMeasureStyles(() => buildMappaFrazioniHtml(d, figs, "measure"));
+      html = withMeasureStyles(() => buildMappaFrazioniHtml(d, "measure"));
     } catch {
-      html = buildMappaFrazioniHtml(d, figs);
+      html = buildMappaFrazioniHtml(d);
     }
     write(html);
   };

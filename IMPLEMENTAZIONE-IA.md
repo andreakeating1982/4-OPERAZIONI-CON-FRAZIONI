@@ -246,15 +246,13 @@ export interface MappaFrazioneData {
   num2: number; den2: number;
   studentLabel?: string;       // riga studente dai parametri URL
 }
-export interface MappaFigures { inline?: string; croce?: string; } // data URI base64
-
-export function buildMappaFrazioniHtml(d: MappaFrazioneData, figs?: MappaFigures, mode?: "estimate" | "measure"): string;
+export function buildMappaFrazioniHtml(d: MappaFrazioneData, mode?: "estimate" | "measure"): string;
 // HTML AUTOCONTENUTO delle 2 mappe (KaTeX CSS via CDN + font OpenDyslexic relativi
 // a window.location.origin), pronto per essere scritto in una finestra
 
 export async function openMappaFrazioniPdf(d: MappaFrazioneData): Promise<void>;
-// apre la finestra SUBITO nel gesto utente (niente popup-blocker), poi carica le
-// due figure come data URI, misura i box nel DOM e scrive l'HTML; window.print()
+// apre la finestra SUBITO nel gesto utente (niente popup-blocker), poi misura
+// i box nel DOM e scrive l'HTML; window.print(). Le figure sono SVG inline.
 ```
 
 Il PULSANTE vive in `FractionExercises.tsx` (`handleMappaConcettuale`, accanto a
@@ -270,11 +268,20 @@ SCARICA PDF, solo in `phase === "exercise"`) e passa lo stato REALE:
   `(m:den)×num`, risultato) e `computeMulDiv` (inversione per ÷, gcd a croce
   `g1=gcd(|num1|,den2eff)`, `g2=gcd(den1,num2eff)`, prodotto e risultato semplificato)
   — le stesse formule di `addSubComputed`/`mulDivComputed` in `FractionExercises.tsx`.
-- **Le due figure** (`client/public/mappa-fig-mol-in-linea.png` con le frecce
-  orizzontali e `client/public/mappa-fig-mol-a-croce.png` con le frecce incrociate)
-  vengono convertite in data URI base64 da `fileToDataUri` e incorporate con
-  `figura(...)`: il PDF resta autocontenuto; se una figura non carica, la mappa
-  resta valida senza.
+- **Le due figure SONO SVG DINAMICI (Settembre 2026, non più PNG)**: `figuraCroce(v,
+  svolta, isDivisione)` e `figuraInline(v, svolta, isDivisione)` in
+  `mappaFrazioniPdf.ts` disegnano al momento dell'apertura le frecce con i NUMERI
+  EFFETTIVI dell'esercizio (da `computeMulDiv`): frazioni reali (numeratori blu
+  `#1F4E9C`, denominatori verdi `#2E7D32`, come `fracLatex`), diagonali con
+  `MCD = g1/g2` reali e valori semplificati grigi SOLO se quel lato si semplifica
+  (MCD > 1); in mappa da completare i risultati diventano puntini `…` e le
+  etichette `MCD = …`, mentre le frazioni restano reali. La figura «in linea»
+  mostra le frazioni effettivamente moltiplicate al PASSO 3 (semplificate se la
+  croce ha prodotto semplificazioni, tramite `mulShown(v)`) con i prodotti reali
+  sulle frecce; per la divisione la seconda frazione è già capovolta (e le
+  didascalie lo dicono). Le etichette MCD stanno nel segmento ESTERNO inferiore
+  della propria diagonale (accanto alla punta) per evitare ambiguità. I PNG
+  `mappa-fig-mol-*.png` restano in `client/public/` ma non sono più usati dal codice.
 - **Paginazione con misurazione reale**: i box vengono misurati NEL DOM
   (`PAGE_BUDGET ≈ 900 px` utile per pagina, larghezza misura 636,5 px con
   `zoom:0.95`), ogni pagina è piena fino al margine, con fallback prudenziale a
