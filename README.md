@@ -32,14 +32,18 @@ orizzontali NON sono leggibili dall'OCR, quindi numeratore e denominatore vengon
 ricostruiti dalla POSIZIONE (numero in alto = numeratore). Flag fuzzy + toast quando
 il riconoscimento è incerto: lo studente controlla sempre prima di premere CALCOLA.
 
-## 🗺️ Mappa concettuale (PDF a 4 livelli di supporto)
+## 🗺️ Mappa concettuale (PDF sull'esercizio reale dello studente)
 
-Il pulsante **MAPPA CONCETTUALE (PDF)** genera la mappa «Le regole per le operazioni
-con le frazioni» in **4 parti** (numerazione pagine riparte da 1 per parte): PARTE A
-svolta sui tre percorsi (3/4 + 1/6, 2/3 × 4/5, 3/4 ÷ 2/5) + **LIVELLO 1** supporto
-massimo (valori puntinati), **LIVELLO 2** supporto medio, **LIVELLO 3** supporto
-minimo — per il fade-out del supporto nella didattica inclusiva BES/DSA. Numeratori
-blu, denominatori verdi, OpenDyslexic, paginazione a misurazione DOM reale.
+Nella **terza pagina** (accanto a SCARICA PDF) il pulsante **🗺️ MAPPA CONCETTUALE**
+genera un PDF con **due sole mappe** costruite sull'OPERAZIONE EFFETTIVA inserita
+dallo studente (numeri esatti, solo i contenuti di quel tipo di operazione):
+**MAPPA SVOLTA** (l'esercizio risolto passo-passo con i suoi numeri: m.c.m.,
+trasformazioni, semplificazioni a croce, risultato) e **MAPPA CONCETTUALE** (la stessa
+struttura da completare con valori puntinati). Nelle mappe di moltiplicazione e
+divisione compaiono le due figure didattiche allegate: la **semplificazione a croce**
+(frecce incrociate) e la **moltiplicazione in linea** (frecce orizzontali), incorporate
+in base64 così il PDF resta autocontenuto. Numeratori blu, denominatori verdi,
+OpenDyslexic, paginazione a misurazione DOM reale.
 
 ## 📜 Il Quaderno PDF «Matematica Facile»
 

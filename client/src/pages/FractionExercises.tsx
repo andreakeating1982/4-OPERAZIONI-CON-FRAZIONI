@@ -728,6 +728,25 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
   }
  };
 
+ // ─── Mappa concettuale (terza pagina): costruita sull'ESERCIZIO REALE ─
+ const handleMappaConcettuale = useCallback(() => {
+  if (num1 === null || num2 === null) return;
+  if (mode === "muldiv" && mulDivOp === "/" && num2 === 0) {
+   toast.error("Divisione per zero: la mappa non può essere generata.");
+   return;
+  }
+  openMappaFrazioniPdf({
+   mode,
+   op: mode === "addsub" ? addSubOp : mulDivOp,
+   num1,
+   den1: den1 ?? 1,
+   num2,
+   den2: den2 ?? 1,
+   studentLabel,
+  });
+  toast.success("Mappa concettuale generata sul tuo esercizio: si apre la finestra di stampa (Salva come PDF).");
+ }, [mode, addSubOp, mulDivOp, num1, den1, num2, den2, studentLabel]);
+
  // ─── Render ────────────────────────────────────────────────────────
 
  const allFilled = num1 !== null && num2 !== null && (!showThirdFraction || num3 !== null) && (!showFourthFraction || num4 !== null);
@@ -744,7 +763,8 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
       {studentLabel}
      </p>
     )}
-    {/* Quaderno + Mappa concettuale (PDF) — pill nell'header, stile Latino Facile */}
+    {/* Quaderno (PDF) — pill nell'header, stile Latino Facile. Il pulsante della
+        MAPPA CONCETTUALE sta nella TERZA PAGINA, accanto a SCARICA PDF. */}
     <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
      <a
       href="/quaderno-matematica-facile-v4.pdf"
@@ -756,15 +776,6 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
       <ScrollText className="h-3.5 w-3.5" aria-hidden="true" />
       IL QUADERNO PDF
      </a>
-     <button
-      type="button"
-      onClick={() => { openMappaFrazioniPdf(studentLabel); toast.success("Mappa concettuale generata: si apre la finestra di stampa (Salva come PDF)."); }}
-      aria-label="Genera la mappa concettuale delle regole per le operazioni con le frazioni, in PDF (versione svolta e 3 livelli da completare)"
-      className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs sm:text-sm font-bold uppercase text-primary-foreground shadow-[2px_3px_0_rgba(46,32,24,0.35)] hover:shadow-[1px_2px_0_rgba(46,32,24,0.35)] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all bg-primary hover:bg-primary/90"
-     >
-      <Map className="h-3.5 w-3.5" aria-hidden="true" />
-      MAPPA CONCETTUALE (PDF)
-     </button>
     </div>
     <div className="text-center mt-3 mb-5">
      <a
@@ -1159,14 +1170,22 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
      </div>
     )}
 
-    {/* SCARICA PDF button */}
+    {/* SCARICA PDF + MAPPA CONCETTUALE — azioni della TERZA PAGINA */}
     {phase === "exercise" && (
-     <div className="flex justify-center pt-4 pb-2">
+     <div className="flex flex-wrap items-center justify-center gap-3 pt-4 pb-2">
       <button
        onClick={handleScaricaPdf}
        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 font-bold text-base tracking-widest transition-all shadow-sm"
       >
        📄 SCARICA PDF
+      </button>
+      <button
+       onClick={handleMappaConcettuale}
+       aria-label="Genera la mappa concettuale di questo esercizio in PDF: mappa svolta con i tuoi numeri e mappa concettuale da completare"
+       className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 border border-primary text-primary-foreground font-bold text-base tracking-widest transition-all shadow-sm"
+      >
+       <Map className="h-5 w-5" aria-hidden="true" />
+       🗺️ MAPPA CONCETTUALE
       </button>
      </div>
     )}

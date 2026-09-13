@@ -5,7 +5,7 @@
 > mediante IA** le aree chiave di questa app:
 >
 > 1. **Scattare foto → ritaglio foto → riconoscimento → trascrizione** (OCR delle frazioni)
-> 2. **Produzione di mappe concettuali specifiche** (PDF dinamico a 4 livelli di supporto)
+> 2. **Produzione di mappe concettuali specifiche** (PDF dinamico costruito sull'ESERCIZIO REALE dello studente)
 > 3. **Debug del "tremolio"** (iframe che vibrano nell'embed del blog)
 > 4. **Il Quaderno PDF** («Matematica Facile», 5 anni, liceo linguistico, obiettivi minimi)
 >
@@ -148,66 +148,83 @@ eseguire `ocrImageDetailed` + `normalizeFrazioneOcrSmart` → atteso
 
 ### 2.1 A che serve
 
-Con il pulsante viola **🗺️ MAPPA CONCETTUALE (PDF)** nell'header dell'esercizio,
-l'app genera la **mappa «Le regole per le operazioni con le frazioni»** (stesso
-contenuto della mappa allegata di riferimento, 12 pagine) in **QUATTRO parti**, ognuna
-con numerazione pagine che riparte da 1:
+Nella **TERZA PAGINA** dell'app (esercizio guidato, accanto a SCARICA PDF) il pulsante
+**🗺️ MAPPA CONCETTUALE** genera un PDF con **DUE sole mappe**, costruite
+sull'OPERAZIONE EFFETTIVA inserita dallo studente (stessi numeri esatti, solo i
+contenuti del tipo di operazione scelto):
 
-- **PARTE A — MAPPA SVOLTA**: i tre percorsi (Addizione/Sottrazione con m.c.m.,
-  Moltiplicazione con semplificazione a croce, Divisione con inversione) completamente
-  risolti sugli esempi 3/4 + 1/6, 2/3 × 4/5, 3/4 ÷ 2/5; box SCRIVO I RISULTATI e
-  RICORDA LE FORMULE.
-- **MAPPA LIVELLO 1 · SUPPORTO MASSIMO**: da completare, tutti i passi guidati
-  visibili, valori puntinati (`\dots` grigi).
-- **MAPPA LIVELLO 2 · SUPPORTO MEDIO**: titoli, regole ed esercizi visibili, passi
-  con meno guidati intermedi.
-- **MAPPA LIVELLO 3 · SUPPORTO MINIMO**: solo i banner dei percorsi, gli esercizi e
-  i riquadri vuoti (`risultato-blank`) — il docente stampa il livello adatto a ogni
-  studente (didattica inclusiva BES/DSA, fade-out del supporto).
+- **MAPPA SVOLTA**: l'esercizio dello studente risolto passo-passo con i SUOI numeri
+  (m.c.m. dei suoi denominatori, trasformazioni con i suoi valori, semplificazioni a
+  croce con i suoi gcd, suo risultato); box SCRIVO IL RISULTATO e RICORDA LE FORMULE
+  (solo le formule dell'operazione in uso).
+- **MAPPA CONCETTUALE**: la stessa struttura «da completare» (ex «livello 1»):
+  stessi passi guidati visibili, valori puntinati (`\dots` grigi).
 
-Numeratori in BLU (`#1F4E9C`) e denominatori in VERDE (`#2E7D32`) con
-`\textcolor`, come nell'allegato. Font OpenDyslexic, margini 2,5 cm, alto contrasto.
+Se lo studente ha inserito un'**addizione**, la mappa mostra SOLO l'addizione; una
+sottrazione → SOLO la sottrazione; una moltiplicazione → SOLO la moltiplicazione (con
+le **DUE FIGURE allegate**: «a croce» nel passo di semplificazione, «in linea» nel
+passo di moltiplicazione); una divisione → SOLO la divisione (dopo l'inversione
+valgono le figure della moltiplicazione). Per addizione/sottrazione NON compaiono
+figure (non c'è un «reparto» opportuno). Numeratori BLU (`#1F4E9C`), denominatori
+VERDI (`#2E7D32`), font OpenDyslexic, margini 2,5 cm, alto contrasto.
 
 ### 2.2 Le funzioni esportate (`client/src/lib/mappaFrazioniPdf.ts`)
 
 ```ts
-export function buildMappaFrazioniHtml(studentLabel?: string, mode?: "estimate" | "measure"): string;
-// ritorna l'HTML AUTOCONTENUTO della mappa (KaTeX CSS via CDN + font OpenDyslexic
-// relativi a window.location.origin), pronto per essere scritto in una finestra
+export interface MappaFrazioneData {
+  mode: "addsub" | "muldiv";   // modalità scelta nella prima pagina
+  op: "+" | "-" | "*" | "/";   // operazione effettiva dell'utente
+  num1: number; den1: number;  // le DUE frazioni inserite dall'utente
+  num2: number; den2: number;
+  studentLabel?: string;       // riga studente dai parametri URL
+}
+export interface MappaFigures { inline?: string; croce?: string; } // data URI base64
 
-export function openMappaFrazioniPdf(studentLabel?: string): void;
-// apre una finestra SUBITO nel gesto utente (niente popup-blocker), misura i box
-// nel DOM e scrive l'HTML; window.print() al load → "Salva come PDF"
+export function buildMappaFrazioniHtml(d: MappaFrazioneData, figs?: MappaFigures, mode?: "estimate" | "measure"): string;
+// HTML AUTOCONTENUTO delle 2 mappe (KaTeX CSS via CDN + font OpenDyslexic relativi
+// a window.location.origin), pronto per essere scritto in una finestra
+
+export async function openMappaFrazioniPdf(d: MappaFrazioneData): Promise<void>;
+// apre la finestra SUBITO nel gesto utente (niente popup-blocker), poi carica le
+// due figure come data URI, misura i box nel DOM e scrive l'HTML; window.print()
 ```
 
-`studentLabel` (es. «Rossi Mario — CLASSE 3B — 12/05/2025») è la riga studente
-derivata dai parametri URL dell'app (`?nome=…&cognome=…&classe=…&data=…`).
+Il PULSANTE vive in `FractionExercises.tsx` (`handleMappaConcettuale`, accanto a
+SCARICA PDF, solo in `phase === "exercise"`) e passa lo stato REALE:
+`{ mode, op: addSubOp|mulDivOp, num1, den1, num2, den2, studentLabel }`.
 
 ### 2.3 Struttura interna (cosa produce, esattamente)
 
-- **Un builder per percorso** (`percorso1Items/percorso2Items/percorso3Items`) con
-  parametro `level: 0|1|2|3` (0 = svolta, 1-3 = livelli di supporto): lo STESSO
-  contenuto cambia solo per i valori (numeri veri vs `\dots`) e per i box mostrati.
+- **Un builder per famiglia** (`addSubItems` / `mulDivItems`) con parametro
+  `level: 0|1` (0 = svolta, 1 = mappa concettuale): lo STESSO contenuto cambia solo
+  per i valori (numeri veri dell'utente vs `\dots`).
+- **Calcoli interni identici all'app**: `computeAddSub` (lcm, trasformazioni
+  `(m:den)×num`, risultato) e `computeMulDiv` (inversione per ÷, gcd a croce
+  `g1=gcd(|num1|,den2eff)`, `g2=gcd(den1,num2eff)`, prodotto e risultato semplificato)
+  — le stesse formule di `addSubComputed`/`mulDivComputed` in `FractionExercises.tsx`.
+- **Le due figure** (`client/public/mappa-fig-mol-in-linea.png` con le frecce
+  orizzontali e `client/public/mappa-fig-mol-a-croce.png` con le frecce incrociate)
+  vengono convertite in data URI base64 da `fileToDataUri` e incorporate con
+  `figura(...)`: il PDF resta autocontenuto; se una figura non carica, la mappa
+  resta valida senza.
 - **Paginazione con misurazione reale**: i box vengono misurati NEL DOM
   (`PAGE_BUDGET ≈ 900 px` utile per pagina, larghezza misura 636,5 px con
   `zoom:0.95`), ogni pagina è piena fino al margine, con fallback prudenziale a
   stima in caso di errore; footer «Pagina N di M» che **riparte da 1 per ogni
-  parte**; margini 2,5 cm su A4 (`@page{size:A4;margin:2.5cm 2.5cm 1cm 2.5cm}`).
-- **Palette**: oggetto costante `C` in testa al file (viola titolo, blu/verde/
-  arancio per i tre percorsi, oro/celeste per formule e controllo).
+  mappa**; margini 2,5 cm su A4 (`@page{size:A4;margin:2.5cm 2.5cm 1cm 2.5cm}`).
 - **CSS scoping durante la misura**: `MAPPA_CSS_MEASURE` riscrive `body{` solo come
-  selettore completo e usa `:where(#mappa-measure-wrap) *{` (specificità zero) —
-  le due insidie di scoping verificate sul campo nell'app sorgente.
+  selettore completo e usa `:where(#mappa-measure-wrap) *{` (specificità zero).
 
 ### 2.4 Personalizzazioni tipiche (checklist IA)
 
 | Obiettivo | Dove intervenire |
 |---|---|
-| Cambiare gli esercizi guida della mappa | `percorso1Items/2/3` (esempi 3/4+1/6, 2/3×4/5, 3/4÷2/5) |
+| Cambiare testi/istruzioni dei passi | `addSubItems` / `mulDivItems` |
 | Cambiare titoli/intestazioni | `buildParti` + i `solidBox` di titolo |
-| Cambiare colori | oggetto `C` in testa a `mappaFrazioniPdf.ts` |
-| Aggiungere un livello di supporto | aggiungere un valore a `level` (es. `4`) e le condizioni nei builder |
+| Cambiare colori per operazione | `opColor` e oggetto `C` in testa al file |
+| Sostituire le figure | stessi nomi file in `client/public/` (oppure cambiare `FIG_*_URL`) |
 | Nuovi box | SOLO tramite `stepBox/solidBox` nel builder — MAI PDF «a occhio» con stime fisse: la paginazione è a misurazione DOM |
+| Estendere a terze/quarte frazioni | aggiungere i campi a `MappaFrazioneData` e gestirli in `computeAddSub`/`computeMulDiv` + builder |
 
 ---
 
