@@ -66,7 +66,6 @@ TEMPLATE = """<!-- ============================================================
     display: block;
     height: 600px;
     min-width: 100%;
-    transition: height 0.25s ease;
     width: 1px;
   }
 </style>
@@ -75,7 +74,7 @@ TEMPLATE = """<!-- ============================================================
   <div id="frEmbedHead">
     <div id="frEmbedTitle">OPERAZIONI CON LE FRAZIONI</div>
   </div>
-  <iframe id="frIframe" loading="lazy" title="Operazioni con le frazioni — esercitati con le operazioni tra frazioni" src="https://math-input-panel.easy-peasy.site/"></iframe>
+  <iframe id="frIframe" title="Operazioni con le frazioni — esercitati con le operazioni tra frazioni" src="https://math-input-panel.easy-peasy.site/"></iframe>
 </div>
 
 <script>
