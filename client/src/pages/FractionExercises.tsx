@@ -5,7 +5,7 @@ import { CropDialog } from"@/components/CropDialog";
 import { ocrImageDetailed, OCR_PSM_SPARSE, OCR_FRAZIONI_WHITELIST } from"@/lib/ocr";
 import { normalizePhoto } from"@/lib/imagePrep";
 import { normalizeFrazioneOcrSmart } from"@/lib/frazioneOcr";
-import { Camera, Image as ImageIcon, Loader2, ScrollText, Map } from "lucide-react";
+import { Camera, Image as ImageIcon, Loader2, Map } from "lucide-react";
 import { toast } from "sonner";
 import { openMappaFrazioniPdf } from "@/lib/mappaFrazioniPdf";
 import { cn } from"@/lib/utils";
@@ -798,20 +798,6 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
       {studentLabel}
      </p>
     )}
-    {/* Quaderno (PDF) — pill nell'header, stile Latino Facile. Il pulsante della
-        MAPPA CONCETTUALE sta nella TERZA PAGINA, accanto a SCARICA PDF. */}
-    <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
-     <a
-      href="/quaderno-matematica-facile-v4.pdf"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Apri il quaderno di matematica e geometria in PDF (5 anni, liceo linguistico, obiettivi minimi)"
-      className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs sm:text-sm font-bold uppercase text-primary-foreground shadow-[2px_3px_0_rgba(46,32,24,0.35)] hover:shadow-[1px_2px_0_rgba(46,32,24,0.35)] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all bg-primary hover:bg-primary/90"
-     >
-      <ScrollText className="h-3.5 w-3.5" aria-hidden="true" />
-      IL QUADERNO PDF
-     </a>
-    </div>
     <div className="text-center mt-3 mb-5">
      <a
       href="/"
@@ -1205,9 +1191,10 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
      </div>
     )}
 
-    {/* SCARICA PDF + MAPPA CONCETTUALE — azioni della TERZA PAGINA */}
+    {/* SCARICA PDF + MAPPA CONCETTUALE — azioni della TERZA PAGINA.
+        SCARICA PDF in alto, MAPPA CONCETTUALE centrata SOTTO (una sola icona). */}
     {phase === "exercise" && (
-     <div className="flex flex-wrap items-center justify-center gap-3 pt-4 pb-2">
+     <div className="flex flex-col items-center justify-center gap-3 pt-4 pb-2">
       <button
        onClick={handleScaricaPdf}
        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-900 font-bold text-base tracking-widest transition-all shadow-sm"
@@ -1220,7 +1207,7 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 border border-primary text-primary-foreground font-bold text-base tracking-widest transition-all shadow-sm"
       >
        <Map className="h-5 w-5" aria-hidden="true" />
-       🗺️ MAPPA CONCETTUALE
+       MAPPA CONCETTUALE
       </button>
      </div>
     )}
