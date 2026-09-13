@@ -7,11 +7,12 @@
  *   `/tessdata`: l'app imposta COOP/COEP sui documenti, quindi niente CDN —
  *   tutto arriva dallo stesso dominio (funziona anche offline dopo il primo
  *   caricamento e su Render senza configurazioni extra).
- * - Il testo grezzo viene poi normalizzato da `normalizeEquationOcr`
- *   (vedi `@/lib/eqOcr`).
+ * - Il testo grezzo viene poi ricostruito da `normalizeFrazioneOcrSmart`
+ *   (vedi `@/lib/frazioneOcr`) con passaggi multipli (SPARSE_TEXT + whitelist
+ *   cifre/operatori) quando il primo tentativo non basta.
  */
 import { createWorker, PSM } from "tesseract.js";
-import { enhanceForOcr } from "@/lib/imagePrep";
+import { enhanceForOcr, type EnhanceOptions } from "@/lib/imagePrep";
 
 type OcrWorker = Awaited<ReturnType<typeof createWorker>>;
 
@@ -49,6 +50,15 @@ export interface OcrWord {
   y1: number;
 }
 
+/** PSM alternativo per il secondo tentativo: testo SPARSO — recupera le
+ *  frazioni impilate quando SINGLE_BLOCK non segmenta bene le parole. */
+export const OCR_PSM_SPARSE = PSM.SPARSE_TEXT;
+
+/** Whitelist per il terzo tentativo: SOLO cifre e simboli di operazione.
+ *  Costringe il classificatore a scegliere tra glifi sensati: le confusioni
+ *  tipiche (4→A, 1→l, 7→T…) cadono da sole perché la lettera non è ammessa. */
+export const OCR_FRAZIONI_WHITELIST = "0123456789+*-/:\u00D7\u00F7\u00B7xX?=";
+
 /** Riconosce il testo in una foto (o nel ritaglio di una foto). */
 export async function ocrImage(
   file: File | Blob,
@@ -64,21 +74,46 @@ export async function ocrImage(
  * Tesseract NON legge le barre di frazione orizzontali (come non leggeva gli
  * apici x⁴ nell'app biquadratica) — numeratore e denominatore vanno ricostruiti
  * dalla POSIZIONE (numero in alto = numeratore, numero in basso = denominatore).
+ *
+ * `psm` e `charWhitelist` permettono i TENTATIVI MULTIPLI di runOcr (vedi
+ * FractionExercises.tsx): 1º passaggio SINGLE_BLOCK senza restrizioni,
+ * 2º SPARSE_TEXT, 3º SINGLE_BLOCK + whitelist cifre/operatori. I parametri
+ * sono SEMPRE ripristinati dopo il recognize (il worker è condiviso).
  */
 export async function ocrImageDetailed(
   file: File | Blob,
-  onProgress?: (p: number) => void
+  onProgress?: (p: number) => void,
+  psm?: PSM,
+  charWhitelist?: string,
+  enhanceOptions?: EnhanceOptions
 ): Promise<{ text: string; words: OcrWord[] }> {
   onProgress?.(0.05);
   let prepared: Blob = file;
   try {
-    prepared = await enhanceForOcr(file);
+    prepared = await enhanceForOcr(file, enhanceOptions);
   } catch {
     prepared = file;
   }
   onProgress?.(0.12);
   const worker = await getWorker(onProgress);
-  const { data } = await worker.recognize(prepared, {}, { text: true, blocks: true });
+  // Parametri per QUESTO passaggio (poi sempre ripristinati: il worker è
+  // condiviso tra i tentativi, una whitelist dimenticata inquinerebbe il successivo)
+  if (psm !== undefined || charWhitelist !== undefined) {
+    await worker.setParameters({
+      tessedit_pageseg_mode: psm ?? PSM.SINGLE_BLOCK,
+      ...(charWhitelist !== undefined ? { tessedit_char_whitelist: charWhitelist } : {}),
+    });
+  }
+  let data: any;
+  try {
+    const res = await worker.recognize(prepared, {}, { text: true, blocks: true });
+    data = res.data;
+  } finally {
+    await worker.setParameters({
+      tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
+      tessedit_char_whitelist: "",
+    }).catch(() => undefined);
+  }
   const words: OcrWord[] = [];
   for (const block of (data as any).blocks ?? []) {
     for (const par of block?.paragraphs ?? []) {

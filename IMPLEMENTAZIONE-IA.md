@@ -144,6 +144,74 @@ eseguire `ocrImageDetailed` + `normalizeFrazioneOcrSmart` → atteso
 
 ---
 
+### 1.6 La catena di robustezza OCR (sessione «5 tentativi + best-of», MISURATA)
+
+Un solo tentativo OCR non basta: su 9 sonde sintetiche (E1–E9: operatori
+`+ − × ÷`, in linea, manoscritto, due cifre, rumore, foto grande con sfondo
+beige) il primo tentativo sbagliava o mancava su 5. La catena finale risolve
+**8/9** (l'unico fallimento restituisce `null` → errore onesto, MAI un risultato
+sbagliato). Struttura in `runOcr` (`FractionExercises.tsx`):
+
+1. **Pass 1** — base (`enhanceForOcr`): grigio → contrasto → **mediano 3×3**
+   ALLA RISOLUZIONE ORIGINALE (il despeckle prima dell'upscale: un puntino di
+   2px a ×3,4 diventerebbe una macchia da 7px che il mediano non tocca più) →
+   scala base (min-edge 1100 / max 2200) → **rimozione barre alla risoluzione
+   piena** → unsharp. Il risultato è messo in **cache WeakMap sul Blob**: le
+   5 letture condividono lo stesso base (una sola elaborazione pesante).
+2. **Pass 2** — PSM SPARSE (numeri sparsi: a volte trova ciò che SINGLE_BLOCK
+   non vede; è il pass che legge «7» come «/» e il rescue lo riconverte).
+3. **Pass 3** — whitelist `0123456789+-*/:.,()` (i glifi 4→A, 1→l cadono da soli).
+4. **Pass 4–5** — **immagine piccola**: `enhanceForOcr(file, { targetHeight: 90 })`
+   riduce dal base GIÀ PULITO (barre rimosse, rumore via, contrasto steso) a
+   altezza 90px → cifre ~20px a QUALSIASI risoluzione della foto. Tesseract
+   legge le cifre delle frazioni MOLTO meglio a 20-30px che a 100-240px (sonde
+   A/B: a font 70px «2»→«y» e «5»→«0»; a font 20px legge tutto corretto).
+   Pass 5 = piccolo + SPARSE. UN maxEdge fisso NON funziona: su foto grandi
+   cancella i gap barra-cifra e le barre sopravvivono → serve l'altezza target.
+5. **BEST-OF a 4 livelli** (non «il primo che arriva»): non-fuzzy (3) > fuzzy
+   con operatore (2) > fuzzy senza operatore e senza zero (1) > fuzzy con zero
+   sospetto (0). Si continua finché il miglior punteggio è < 3. Motivazione
+   misurata: E3 pass 1 leggeva i residui «|» delle barre come cifra 1
+   (`{2,1,4,1}`) mentre il pass 4 leggeva tutto corretto; E5 pass 1 leggeva
+   «5»→«O» mentre il pass 4 leggeva «5» corretto ma senza operatore.
+
+**Dettagli critici della rimozione barre (`eraseFractionBars` in
+`imagePrep.ts`), tutti da regressioni reali:**
+
+| Criterio | Valore | Perché |
+|---|---|---|
+| maggioranza colonne con contenuto sopra E sotto | **≥ 20%** | Nei libri la barra è spesso molto più larga delle cifre (sonda E9: cifra 94px su barra 348px = 27% — con 30% la barra sopravviveva e avvelenava Tesseract: token «—» spurii). |
+| gap del contenuto sopra/sotto | **≥ GAP e ≤ lunghezza barra** | Le cifre stanno SUBITO sopra/sotto; le righe di un altro esercizio (foto di pagina intera) stanno molto più lontano → un «−» lungo con testo sopra e sotto non scatta come barra. |
+| margine di cancellazione | **±2px** oltre il bbox | I bordi anti-alias sopravvissuti al flood-fill diventano righe sottili che Tesseract legge come «\|» → il parser le scambiava per la cifra 1 (sonda E3). |
+
+**Dettagli critici del contrasto (`contrastStretchGray`):** i percentile 2%/98%
+BASTANO su pagine bianche con testo abbondante, ma su foto chiare con poco testo
+(ritagli piccoli, cifre grandi: testo < 2% dei pixel) il percentile scuro cade
+nel FONDO e lo stiramento esplode (hi−lo ≈ 10 → scala ×25: lo sfondo diventa un
+gradiente full-range e Tesseract legge il vuoto — sonda E9, 98% pixel non bianchi).
+Fix: mediana = livello dello sfondo; se sfondo ≥ 160 (foto chiare: carta, libri)
+`lo = min(lo, bg − 140)` — lo si ancora saldamente SOTTO lo sfondo.
+
+**Dettagli critici del parser (`frazioneOcr.ts`):**
+
+- guardia anti-linea: un token «\|» con bbox più LARGA che alta è un residuo di
+  barra, non la cifra 1 → scartato;
+- numeratore 0: quasi sempre un «5»/«9» male letto (sonda E8: 12/34 + 5/6 →
+  «50» letto «06») → non rifiutato ma `fuzzy = true`, così il best-of continua
+  a cercare un passaggio migliore (il denominatore 0 resta rifiutato: divisione
+  per zero impossibile);
+- il «÷» resta il glifo più fragile (spesso non letto o letto come «/», «,»):
+  i numeri vengono comunque letti, l'operatore resta quello scelto nella UI con
+  avviso fuzzy — comportamento accettato.
+
+**Suite di verifica end-to-end** (console del browser su `/esercizio`, dev server
+attivo — replica ESATTA della catena di `runOcr`): disegnare i 9 casi su canvas
+(`fillRect` per le barre), `toBlob('image/png')`, eseguire la catena, confrontare
+`[num1, den1, num2, den2]`. Risultato misurato 2026-09-13: E1 ✓ E2 ✓ E3 ✓ E4 ✓
+E5 ✓ E6 ✓ E7 ✓ E8 ✓ (8/9; E9 = Georgia 120px «5» letto «0» in tutti i pass →
+`null` → errore onesto). Qualsiasi modifica a `imagePrep.ts` / `ocr.ts` /
+`frazioneOcr.ts` / `runOcr` DEVE ribattere questa suite.
+
 ## Area 2 — Produzione di mappe concettuali specifiche
 
 ### 2.1 A che serve

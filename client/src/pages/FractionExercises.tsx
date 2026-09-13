@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useMemo, useRef } from"react";
 import { NumberInputCanvas } from"@/components/NumberInputCanvas";
 import { FractionDisplay } from"@/components/FractionDisplay";
 import { CropDialog } from"@/components/CropDialog";
-import { ocrImageDetailed } from"@/lib/ocr";
+import { ocrImageDetailed, OCR_PSM_SPARSE, OCR_FRAZIONI_WHITELIST } from"@/lib/ocr";
 import { normalizePhoto } from"@/lib/imagePrep";
 import { normalizeFrazioneOcrSmart } from"@/lib/frazioneOcr";
 import { Camera, Image as ImageIcon, Loader2, ScrollText, Map } from "lucide-react";
@@ -181,8 +181,41 @@ export default function FractionExercises() {
   setOcrError(null);
   setOcrProgress(0);
   try {
-   const { text: raw, words } = await ocrImageDetailed(file, setOcrProgress);
-   const res = normalizeFrazioneOcrSmart(raw, words);
+   // TENTATIVI MULTIPLI (il primo da solo non bastava su foto storte/spaziose):
+   //  1) SINGLE_BLOCK standard → 2) SPARSE_TEXT (numeri sparsi) →
+   //  3) whitelist cifre/operatori (4→A, 1→l ecc. cadono da sole) →
+   //  4-5) IMMAGINE PICCOLA (altezza 90px → cifre ~20px a QUALSIASI risoluzione:
+   //       sonde A/B, Tesseract legge le cifre delle frazioni molto meglio
+   //       piccole che giganti; si riduce dall'immagine GIÀ senza barre)
+   const { text: raw, words } = await ocrImageDetailed(file, (p) => setOcrProgress(Math.min(p * 0.4, 0.4)));
+   let res = normalizeFrazioneOcrSmart(raw, words, mode);
+   const tries: Array<{ psm?: typeof OCR_PSM_SPARSE; wl?: string; small?: boolean }> = [
+    { psm: OCR_PSM_SPARSE },
+    { wl: OCR_FRAZIONI_WHITELIST },
+    { small: true },
+    { small: true, psm: OCR_PSM_SPARSE },
+   ];
+   // BEST-OF a 4 livelli: non-fuzzy (3) > fuzzy con operatore (2) > fuzzy
+   // senza operatore ma senza zero sospetti (1) > fuzzy con zero sospetti (0).
+   // Si continua finché il miglior punteggio è < 3: un passaggio successivo più
+   // pulito (es. immagine piccola, sonde A/B) può superare il primo (sonda E3:
+   // il pass 1 leggeva «|» come cifra 1, il pass 4 leggeva tutto corretto;
+   // sonda E5: il pass 1 legge «5»→«O», il pass 4 legge «5» corretto)
+   const score = (r: typeof res): number =>
+    r === null ? -1 : !r.fuzzy ? 3 : r.op ? 2 : r.num1 === 0 || r.num2 === 0 ? 0 : 1;
+   for (let i = 0; i < tries.length && score(res) < 3; i++) {
+    const t = tries[i];
+    const lo = 0.4 + i * 0.12;
+    const p = await ocrImageDetailed(
+     file,
+     (pr) => setOcrProgress(Math.min(lo + pr * 0.12, 0.99)),
+     t.psm,
+     t.wl,
+     t.small ? { targetHeight: 90 } : undefined
+    );
+    const r2 = normalizeFrazioneOcrSmart(p.text, p.words, mode);
+    if (score(r2) > score(res)) res = r2;
+   }
    if (!res) throw new Error("nessuna frazione riconosciuta");
    setNum1(res.num1);
    setDen1(res.den1);
@@ -199,7 +232,9 @@ export default function FractionExercises() {
      toast.info(`La foto sembra contenere una ${opName}: controlla la modalità e l'operazione selezionata.`);
     }
    }
-   if (res.fuzzy) {
+   if (res.op === null) {
+    toast.warning("Operatore non riconosciuto con certezza: controlla il segno (+, −, ×, ÷) prima di premere CALCOLA.");
+   } else if (res.fuzzy) {
     toast.warning("Riconoscimento incerto: controlla i numeri trascritti prima di premere CALCOLA.");
    } else {
     toast.success("Frazioni riconosciute dalla foto: controlla i numeri e premi CALCOLA.");
