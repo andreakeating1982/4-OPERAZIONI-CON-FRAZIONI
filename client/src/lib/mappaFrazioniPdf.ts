@@ -629,12 +629,12 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
     ? (v.g1 > 1
         ? `divisore comune <b>${v.g1}</b>: ${diag1a} : ${v.g1} = <b>${v.s1n}</b> e ${diag1b} : ${v.g1} = <b>${v.s2d}</b>`
         : "nessun divisore comune")
-    : `divisore comune? ${b}`;
+    : "divisore comune? …";
   const diag2 = svolta
     ? (v.g2 > 1
         ? `divisore comune <b>${v.g2}</b>: ${diag2a} : ${v.g2} = <b>${v.s1d}</b> e ${diag2b} : ${v.g2} = <b>${v.s2n}</b>`
         : "nessun divisore comune")
-    : `divisore comune? ${b}`;
+    : "divisore comune? …";
   const croceConclusion = svolta
     ? (v.croceFatta ? "Ho semplificato in croce PRIMA di moltiplicare." : "In questo esercizio non c'è niente da semplificare: procedo così.")
     : "Se c'è, semplifico PRIMA di moltiplicare.";
@@ -642,8 +642,8 @@ function mulDivItems(level: 0 | 1, d: MappaFrazioneData): string[] {
     stepBox(
       eMoltiplicazione ? "② PASSO 2 · SEMPLIFICAZIONE A CROCE (se posso)" : "② PASSO 2 · COME LA MOLTIPLICAZIONE (semplifico a croce se posso)",
       `<div class="guida">
-        <p>■ Diagonale 1: <b>${diag1a}</b> e <b>${diag1b}</b> → ${diag1}</p>
-        <p>■ Diagonale 2: <b>${diag2a}</b> e <b>${diag2b}</b> → ${diag2}</p>
+        <p>■ DIAGONALE 1: <b>${diag1a}</b> e <b>${diag1b}</b> → ${diag1}</p>
+        <p>■ DIAGONALE 2: <b>${diag2a}</b> e <b>${diag2b}</b> → ${diag2}</p>
         <p>→ ${croceConclusion}</p>
        </div>
        ${figuraCroce(v, svolta, !eMoltiplicazione)}`,
