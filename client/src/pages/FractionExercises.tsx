@@ -2,9 +2,9 @@ import React, { useState, useCallback, useEffect, useMemo, useRef } from"react";
 import { NumberInputCanvas } from"@/components/NumberInputCanvas";
 import { FractionDisplay } from"@/components/FractionDisplay";
 import { CropDialog } from"@/components/CropDialog";
-import { ocrImage } from"@/lib/ocr";
+import { ocrImageDetailed } from"@/lib/ocr";
 import { normalizePhoto } from"@/lib/imagePrep";
-import { normalizeFrazioneOcrDetailed } from"@/lib/frazioneOcr";
+import { normalizeFrazioneOcrSmart } from"@/lib/frazioneOcr";
 import { Camera, Image as ImageIcon, Loader2, ScrollText, Map } from "lucide-react";
 import { toast } from "sonner";
 import { openMappaFrazioniPdf } from "@/lib/mappaFrazioniPdf";
@@ -181,8 +181,8 @@ export default function FractionExercises() {
   setOcrError(null);
   setOcrProgress(0);
   try {
-   const raw = await ocrImage(file, setOcrProgress);
-   const res = normalizeFrazioneOcrDetailed(raw);
+   const { text: raw, words } = await ocrImageDetailed(file, setOcrProgress);
+   const res = normalizeFrazioneOcrSmart(raw, words);
    if (!res) throw new Error("nessuna frazione riconosciuta");
    setNum1(res.num1);
    setDen1(res.den1);

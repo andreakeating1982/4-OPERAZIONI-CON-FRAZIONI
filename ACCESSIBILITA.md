@@ -148,6 +148,19 @@ all'avvio, su tutte le pagine.
 
 ---
 
+## Strumenti compensativi aggiunti (Settembre 2026)
+
+Tre strumenti compensativi **aggiunti** all'app (principio: solo aggiungere inclusione,
+mai togliere), portati dall'app EQUAZIONI DI QUARTO GRADO BIQUADRATICHE:
+
+| # | Strumento | Valore inclusivo | Dove |
+|---|---|---|---|
+| 15 | **Input fotografico con OCR** (scatta → ritaglia → riconosci → trascrivi) | Chi non riesce a scrivere a mano o a digitare può **fotografare l'esercizio dal libro**: il riconoscimento ricostruisce le frazioni DALLA POSIZIONE (le barre di frazione non sono leggibili dall'OCR) e chiede sempre di CONTROLLARE la trascrizione (flag fuzzy + toast) | `CropDialog.tsx`, `imagePrep.ts`, `ocr.ts`, `frazioneOcr.ts`, `client/public/tess/` + `tessdata/` |
+| 16 | **Mappa concettuale PDF a 4 livelli di supporto** | Fade-out del supporto: PARTE A svolta + LIVELLO 1 (valori puntinati) → LIVELLO 2 (meno guidati) → LIVELLO 3 (autonomia): il docente stampa il livello adatto a ogni studente. Numeratori blu / denominatori verdi, OpenDyslexic, margini 2,5 cm | `mappaFrazioniPdf.ts` (pulsante nell'header) |
+| 17 | **Quaderno «Matematica Facile»** (53 pagine PDF/UA-1) | Matematica e geometria per **obiettivi minimi, 5 anni, liceo linguistico**: un anno per capitolo, codice colore, box TRUCCO/IN SINTESI, verifiche, mappa finale | `client/public/quaderno-matematica-facile-v4.pdf` + sorgenti `docs/quaderno-matematica/` |
+
+---
+
 ## Riferimenti
 
 - **OpenDyslexic** — font libero (licenza OFL) per la dislessia.

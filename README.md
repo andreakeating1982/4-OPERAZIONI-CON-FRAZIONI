@@ -14,10 +14,40 @@ Un'app didattica interattiva per esercitarsi con le **operazioni tra frazioni** 
 | **`GUIDA-IA.md`** | 🤖 Guida per l'**intelligenza artificiale**: come ricostruire e variare l'app partendo da GitHub |
 | **`DEPLOY-RENDER.md`** | 🚀 Come trasferire l'app su **Render** via GitHub (Blueprint `render.yaml`) |
 | **`ACCESSIBILITA.md`** | ♿ **SEZIONE ACCESSIBILITÀ**: tutte le misure BES/DSA (OpenDyslexic, ecc.) portabili su altre app |
+| **`IMPLEMENTAZIONE-IA.md`** | 🧭 Documento operativo per implementare mediante IA le 4 aree chiave (foto/OCR, mappe, tremolio, quaderno) |
 | **`ISTRUZIONI-GITHUB.txt`** | Riepilogo rapido: da dove cominciare |
 | **`cornice-dinamica/README.md`** | 🖼️ La cornice dinamica (embed Blogger a altezza automatica) |
+| **`docs/quaderno-matematica/`** | 📜 Sorgenti del Quaderno «Matematica Facile» (8 sezioni HTML + build.py WeasyPrint) |
 
 ---
+
+## 🆕 Foto → ritaglio → riconoscimento → trascrizione (OCR)
+
+Nella fase di input lo studente può **fotografare l'esercizio dal libro** (o caricarlo /
+trascinarlo / incollarlo con Ctrl+V), **ritagliarlo** con la finestra libera a 4 bordi +
+4 angoli (+ rotazione ±90°), e l'app **riconosce le due frazioni e l'operazione** e le
+trascrive nei campi. Il riconoscimento usa Tesseract.js self-hosted (funziona offline e
+su Render) con **ricostruzione geometrica dalle bounding box**: le barre di frazione
+orizzontali NON sono leggibili dall'OCR, quindi numeratore e denominatore vengono
+ricostruiti dalla POSIZIONE (numero in alto = numeratore). Flag fuzzy + toast quando
+il riconoscimento è incerto: lo studente controlla sempre prima di premere CALCOLA.
+
+## 🗺️ Mappa concettuale (PDF a 4 livelli di supporto)
+
+Il pulsante **MAPPA CONCETTUALE (PDF)** genera la mappa «Le regole per le operazioni
+con le frazioni» in **4 parti** (numerazione pagine riparte da 1 per parte): PARTE A
+svolta sui tre percorsi (3/4 + 1/6, 2/3 × 4/5, 3/4 ÷ 2/5) + **LIVELLO 1** supporto
+massimo (valori puntinati), **LIVELLO 2** supporto medio, **LIVELLO 3** supporto
+minimo — per il fade-out del supporto nella didattica inclusiva BES/DSA. Numeratori
+blu, denominatori verdi, OpenDyslexic, paginazione a misurazione DOM reale.
+
+## 📜 Il Quaderno PDF «Matematica Facile»
+
+Il pulsante **IL QUADERNO PDF** apre il quaderno inclusivo **«Matematica Facile»**
+(53 pagine PDF/UA-1 a flusso continuo): matematica e geometria per **obiettivi minimi,
+5 anni, liceo linguistico** — un anno per capitolo con codice colore, box TRUCCO/IN
+SINTESI, verifiche e mappa finale. I sorgenti completi (HTML + build.py WeasyPrint)
+sono in `docs/quaderno-matematica/`.
 
 ## ♿ Accessibilità e inclusione (BES/DSA)
 

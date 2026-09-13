@@ -40,11 +40,35 @@ function getWorker(onProgress?: (p: number) => void): Promise<OcrWorker> {
   return workerPromise;
 }
 
+/** Parola riconosciuta con la sua posizione (bbox in px sull'immagine). */
+export interface OcrWord {
+  text: string;
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
 /** Riconosce il testo in una foto (o nel ritaglio di una foto). */
 export async function ocrImage(
   file: File | Blob,
   onProgress?: (p: number) => void
 ): Promise<string> {
+  const { text } = await ocrImageDetailed(file, onProgress);
+  return text;
+}
+
+/**
+ * Riconoscimento con GEOMETRIA: oltre al testo restituisce la bounding box
+ * di ogni parola. Serve alla ricostruzione delle frazioni (frazioneOcr.ts):
+ * Tesseract NON legge le barre di frazione orizzontali (come non leggeva gli
+ * apici x⁴ nell'app biquadratica) — numeratore e denominatore vanno ricostruiti
+ * dalla POSIZIONE (numero in alto = numeratore, numero in basso = denominatore).
+ */
+export async function ocrImageDetailed(
+  file: File | Blob,
+  onProgress?: (p: number) => void
+): Promise<{ text: string; words: OcrWord[] }> {
   onProgress?.(0.05);
   let prepared: Blob = file;
   try {
@@ -54,6 +78,19 @@ export async function ocrImage(
   }
   onProgress?.(0.12);
   const worker = await getWorker(onProgress);
-  const { data } = await worker.recognize(prepared);
-  return data.text ?? "";
+  const { data } = await worker.recognize(prepared, {}, { text: true, blocks: true });
+  const words: OcrWord[] = [];
+  for (const block of (data as any).blocks ?? []) {
+    for (const par of block?.paragraphs ?? []) {
+      for (const line of par?.lines ?? []) {
+        for (const w of line?.words ?? []) {
+          const t = (w?.text ?? "").trim();
+          if (t && w?.bbox) {
+            words.push({ text: t, x0: w.bbox.x0, y0: w.bbox.y0, x1: w.bbox.x1, y1: w.bbox.y1 });
+          }
+        }
+      }
+    }
+  }
+  return { text: data.text ?? "", words };
 }

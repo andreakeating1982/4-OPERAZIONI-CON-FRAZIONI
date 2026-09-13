@@ -39,6 +39,12 @@ pnpm start     # server di produzione
 | `client/src/contexts/AccessibilityContext.tsx` | Provider accessibilità (font/interlinea/righello/contrasto) |
 | `client/src/components/AccessibilityToolbar.tsx` | Barra di accessibilità |
 | `client/src/hooks/useReadAloud.ts` | Lettura ad alta voce (TTS italiano) |
+| `client/src/components/CropDialog.tsx` | Modale di ritaglio foto (4 bordi + 4 angoli + rotazione) |
+| `client/src/lib/imagePrep.ts` / `ocr.ts` | Preparazione foto (PNG lossless, upscale a passi) + OCR Tesseract self-hosted con bbox |
+| `client/src/lib/frazioneOcr.ts` | Ricostruzione geometrica dell'esercizio dalle posizioni (le barre di frazione NON sono nel testo OCR) |
+| `client/src/lib/mappaFrazioniPdf.ts` | Mappa concettuale PDF a 4 livelli di supporto (svolta + L1/L2/L3) |
+| `client/public/quaderno-matematica-facile-v4.pdf` | Il Quaderno «Matematica Facile» (sorgenti in `docs/quaderno-matematica/`) |
+| `client/public/test-tremolio.html` | Strumento di misura del tremolio (mode=bad / mode=v3, `window.__report()`) |
 | `server/index.ts` | Express: statico + COOP/COEP + CORS `/fonts` |
 | `cornice-dinamica/` | Embed Blogger (dedicata ⭐, lite, universale, autosufficiente) |
 

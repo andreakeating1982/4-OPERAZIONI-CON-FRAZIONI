@@ -24,7 +24,11 @@ DA DOVE COMINCIARE (leggi questi file):
                            misure BES/DSA (OpenDyslexic, ecc.)
                            portabili su altre app.
 
-  5. README.md          -> Documentazione generale + embed.
+  5. IMPLEMENTAZIONE-IA.md -> Documento operativo per implementare
+                           mediante IA le 4 aree chiave: foto/OCR,
+                           mappe concettuali, tremolio, quaderno.
+
+  6. README.md          -> Documentazione generale + embed.
 
 
 L'APP È GIÀ ONLINE (produzione Easy-Peasy.AI):

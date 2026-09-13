@@ -341,4 +341,16 @@ Per i dettagli completi (Schermo intero, stato, ping, mobile, accessibilità) le
 
 ---
 
+## 12. Aree avanzate
+
+Le **quattro aree avanzate** (foto/OCR con ricostruzione geometrica, mappa concettuale
+PDF a 4 livelli, debug del tremolio con `test-tremolio.html`, Quaderno «Matematica
+Facile») sono documentate passo-passo, con le regole non negoziabili e le checklist di
+modifica, nel documento dedicato **[`IMPLEMENTAZIONE-IA.md`](IMPLEMENTAZIONE-IA.md)**:
+leggerlo PRIMA di toccare `CropDialog.tsx`, `imagePrep.ts`, `ocr.ts`, `frazioneOcr.ts`,
+`mappaFrazioniPdf.ts`, `heightSync.ts`, `client/public/tess*` o
+`docs/quaderno-matematica/`.
+
+---
+
 *Documento generato per il pacchetto esportabile di "Operazioni con le Frazioni" — Settembre 2026.*
