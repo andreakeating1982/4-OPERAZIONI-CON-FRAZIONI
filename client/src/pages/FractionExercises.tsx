@@ -1,6 +1,13 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from"react";
 import { NumberInputCanvas } from"@/components/NumberInputCanvas";
 import { FractionDisplay } from"@/components/FractionDisplay";
+import { CropDialog } from"@/components/CropDialog";
+import { ocrImage } from"@/lib/ocr";
+import { normalizePhoto } from"@/lib/imagePrep";
+import { normalizeFrazioneOcrDetailed } from"@/lib/frazioneOcr";
+import { Camera, Image as ImageIcon, Loader2, ScrollText, Map } from "lucide-react";
+import { toast } from "sonner";
+import { openMappaFrazioniPdf } from "@/lib/mappaFrazioniPdf";
 import { cn } from"@/lib/utils";
 
 /** Estrae i parametri studente dalla URL (supporta path e hash routing) */
@@ -157,6 +164,120 @@ export default function FractionExercises() {
  // ─── Phase tracking ────────────────────────────────────────────────
  const [phase, setPhase] = useState<"input"|"exercise">("input");
  const [submitted, setSubmitted] = useState(false);
+
+ /* ---- Foto dell'esercizio: scatta/carica → ritaglia → OCR → trascrivi ---- */
+ const cameraInputRef = useRef<HTMLInputElement>(null);
+ const photoFileInputRef = useRef<HTMLInputElement>(null);
+ const [cropImage, setCropImage] = useState<{ url: string } | null>(null);
+ const [dragOver, setDragOver] = useState(false);
+ const [ocrBusy, setOcrBusy] = useState(false);
+ const [ocrProgress, setOcrProgress] = useState(0);
+ const [ocrError, setOcrError] = useState<string | null>(null);
+ const MAX_OCR_BYTES = 18 * 1024 * 1024;
+
+ /** Riconoscimento OCR vero e proprio (sul ritaglio confermato) */
+ const runOcr = async (file: File) => {
+  setOcrBusy(true);
+  setOcrError(null);
+  setOcrProgress(0);
+  try {
+   const raw = await ocrImage(file, setOcrProgress);
+   const res = normalizeFrazioneOcrDetailed(raw);
+   if (!res) throw new Error("nessuna frazione riconosciuta");
+   setNum1(res.num1);
+   setDen1(res.den1);
+   setNum2(res.num2);
+   setDen2(res.den2);
+   // Allinea l'operazione se riconosciuta e coerente con la modalità
+   if (res.op) {
+    if (mode === "addsub" && (res.op === "+" || res.op === "-")) {
+     setAddSubOp(res.op);
+    } else if (mode === "muldiv" && (res.op === "*" || res.op === "/")) {
+     setMulDivOp(res.op);
+    } else {
+     const opName = res.op === "+" ? "addizione" : res.op === "-" ? "sottrazione" : res.op === "*" ? "moltiplicazione" : "divisione";
+     toast.info(`La foto sembra contenere una ${opName}: controlla la modalità e l'operazione selezionata.`);
+    }
+   }
+   if (res.fuzzy) {
+    toast.warning("Riconoscimento incerto: controlla i numeri trascritti prima di premere CALCOLA.");
+   } else {
+    toast.success("Frazioni riconosciute dalla foto: controlla i numeri e premi CALCOLA.");
+   }
+  } catch {
+   setOcrError("Non sono riuscito a leggere le frazioni. Riprova con una foto più nitida e dritta (solo la riga dell'esercizio), oppure scrivi i numeri a mano.");
+   toast.error("Foto non leggibile: riprova o scrivi i numeri a mano.");
+  } finally {
+   setOcrBusy(false);
+   setOcrProgress(0);
+  }
+ };
+
+ /** Le foto (fotocamera/caricamento/drag&drop/incolla) passano prima dal taglio dei margini */
+ const handleOcrFile = async (file: File) => {
+  if (ocrBusy) return;
+  if (file.size > MAX_OCR_BYTES) {
+   setOcrError("Il file è troppo grande (massimo 18 MB). Scatta o ritaglia una foto più piccola e riprova.");
+   return;
+  }
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const isImage = file.type.startsWith("image/") || ["png", "jpg", "jpeg", "webp", "bmp"].includes(ext);
+  if (!isImage) {
+   setOcrError("Formato non supportato: usa una foto (JPG, PNG, WEBP).");
+   return;
+  }
+  try {
+   const straight = await normalizePhoto(file);
+   const url = URL.createObjectURL(straight);
+   setCropImage((prev) => {
+    if (prev) URL.revokeObjectURL(prev.url);
+    return { url };
+   });
+  } catch {
+   const url = URL.createObjectURL(file);
+   setCropImage((prev) => {
+    if (prev) URL.revokeObjectURL(prev.url);
+    return { url };
+   });
+  }
+ };
+
+ /** Chiude il modale di taglio senza riconoscere nulla */
+ const closeCrop = () => {
+  setCropImage((prev) => {
+   if (prev) URL.revokeObjectURL(prev.url);
+   return null;
+  });
+ };
+
+ /** Ritaglio confermato: avvia l'OCR sul file ritagliato */
+ const onCropConfirm = (croppedFile: File) => {
+  setCropImage((prev) => {
+   if (prev) URL.revokeObjectURL(prev.url);
+   return null;
+  });
+  void runOcr(croppedFile);
+ };
+
+ /* Incolla un'immagine dagli appunti con Ctrl+V (solo nella fase di input) */
+ useEffect(() => {
+  if (phase !== "input") return;
+  const onPaste = (e: ClipboardEvent) => {
+   const items = e.clipboardData?.items;
+   if (!items) return;
+   for (const item of items) {
+    if (item.kind === "file" && item.type.startsWith("image/")) {
+     e.preventDefault();
+     const file = item.getAsFile();
+     if (file) void handleOcrFile(file);
+     return;
+    }
+   }
+  };
+  window.addEventListener("paste", onPaste);
+  return () => window.removeEventListener("paste", onPaste);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, [phase]);
 
  // ─── Exercise state (common) ───────────────────────────────────────
  // Add/Sub exercise fields
@@ -623,6 +744,28 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
       {studentLabel}
      </p>
     )}
+    {/* Quaderno + Mappa concettuale (PDF) — pill nell'header, stile Latino Facile */}
+    <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+     <a
+      href="/quaderno-matematica-facile-v4.pdf"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Apri il quaderno di matematica e geometria in PDF (5 anni, liceo linguistico, obiettivi minimi)"
+      className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs sm:text-sm font-bold uppercase text-primary-foreground shadow-[2px_3px_0_rgba(46,32,24,0.35)] hover:shadow-[1px_2px_0_rgba(46,32,24,0.35)] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all bg-primary hover:bg-primary/90"
+     >
+      <ScrollText className="h-3.5 w-3.5" aria-hidden="true" />
+      IL QUADERNO PDF
+     </a>
+     <button
+      type="button"
+      onClick={() => { openMappaFrazioniPdf(studentLabel); toast.success("Mappa concettuale generata: si apre la finestra di stampa (Salva come PDF)."); }}
+      aria-label="Genera la mappa concettuale delle regole per le operazioni con le frazioni, in PDF (versione svolta e 3 livelli da completare)"
+      className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs sm:text-sm font-bold uppercase text-primary-foreground shadow-[2px_3px_0_rgba(46,32,24,0.35)] hover:shadow-[1px_2px_0_rgba(46,32,24,0.35)] hover:translate-y-[1px] active:translate-y-[2px] active:shadow-none transition-all bg-primary hover:bg-primary/90"
+     >
+      <Map className="h-3.5 w-3.5" aria-hidden="true" />
+      MAPPA CONCETTUALE (PDF)
+     </button>
+    </div>
     <div className="text-center mt-3 mb-5">
      <a
       href="/"
@@ -829,6 +972,81 @@ body,body *,p,span,div,h1,h2,h3,h4,h5,h6,li,td,th,a,button,label,strong,em,b,i,u
         )}
        </div>
       )}
+
+      {/* ── Foto dell'esercizio: scatta → ritaglia → riconosci ── */}
+      <div
+       className={`max-w-2xl mx-auto w-full rounded-xl border-2 border-dashed p-4 transition-colors ${
+        dragOver ? "border-primary bg-primary/10" : "border-primary/30 bg-card/60"
+       }`}
+       onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+       onDragLeave={() => setDragOver(false)}
+       onDrop={(e) => {
+        e.preventDefault();
+        setDragOver(false);
+        const f = e.dataTransfer.files?.[0];
+        if (f) void handleOcrFile(f);
+       }}
+      >
+       {ocrBusy ? (
+        <div className="text-center" role="status" aria-live="polite">
+         <p className="flex items-center justify-center gap-2 text-sm font-bold tracking-widest text-primary">
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+          RICONOSCIMENTO... {Math.round(ocrProgress * 100)}%
+         </p>
+         <div className="mx-auto mt-2 h-2 w-full max-w-sm overflow-hidden rounded-full bg-muted">
+          <div className="h-full bg-primary transition-all" style={{ width: `${Math.max(4, Math.round(ocrProgress * 100))}%` }} />
+         </div>
+        </div>
+       ) : (
+        <>
+         <div className="flex flex-col items-stretch justify-center gap-2 sm:flex-row sm:items-center sm:gap-3">
+          <button
+           type="button"
+           onClick={() => cameraInputRef.current?.click()}
+           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-2.5 px-4 text-sm font-bold tracking-widest text-primary-foreground shadow-sm transition-all hover:bg-primary/90 sm:flex-none"
+          >
+           <Camera className="h-4 w-4" aria-hidden="true" />
+           SCATTA UNA FOTO
+          </button>
+          <button
+           type="button"
+           onClick={() => photoFileInputRef.current?.click()}
+           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-2.5 px-4 text-sm font-bold tracking-widest text-primary-foreground shadow-sm transition-all hover:bg-primary/90 sm:flex-none"
+          >
+           <ImageIcon className="h-4 w-4" aria-hidden="true" />
+           CARICA IMMAGINE
+          </button>
+         </div>
+         <p className="mt-2 text-center text-xs text-muted-foreground">
+          Fotografa l'esercizio del libro: trascina qui un'immagine o premi Ctrl+V. Riconosco le due frazioni e l'operazione.
+         </p>
+        </>
+       )}
+       {ocrError && !ocrBusy && (
+        <p className="mt-2 text-center text-sm text-destructive" role="alert">{ocrError}</p>
+       )}
+       <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) void handleOcrFile(f); e.target.value = ""; }}
+       />
+       <input
+        ref={photoFileInputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp,image/bmp"
+        className="hidden"
+        onChange={(e) => { const f = e.target.files?.[0]; if (f) void handleOcrFile(f); e.target.value = ""; }}
+       />
+       <CropDialog
+        open={!!cropImage}
+        imageUrl={cropImage?.url ?? null}
+        onConfirm={onCropConfirm}
+        onClose={closeCrop}
+       />
+      </div>
 
       {/* Calculate button */}
       <button

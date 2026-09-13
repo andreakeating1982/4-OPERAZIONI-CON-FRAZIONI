@@ -46,7 +46,12 @@ pnpm start     # server di produzione
 
 1. **MAI saltare `pnpm check`** prima del deploy.
 2. **Divisione**: si invertono TUTTE le frazioni tranne la prima (non solo la seconda).
-3. **Segni `×`**: usare `items-center` (NON `items-end` + margini negativi).
+3. **Segni `×`**: usare `items-center` (NON `items-end` + margini negativi). Le
+   **annotazioni semplificate** della RICOPIA vanno `absolute` dentro lo `relative
+   inline-block` (`-top-4` numeratore / `-bottom-4` denominatore, `leading-none` sui
+   numeri, `py-4` sul contenitore): MAI in-flow (sibling nel flex-col), altrimenti le
+   barre di frazione si disallineano. Nel risultato intero (`den === 1` di
+   `FractionDisplay.tsx`) usare `justify-center` per centrarlo.
 4. **Canale postMessage**: `labvisivo:height` — non cambiarlo.
 5. **`heightSync.ts` → `currentHeight()`**: NON usare `documentElement.scrollHeight`
    come riferimento assoluto (resta gonfiato all'altezza del viewport dell'iframe e la
